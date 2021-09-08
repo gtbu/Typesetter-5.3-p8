@@ -846,7 +846,7 @@ namespace gp\tool{
 
 			if( !empty($info['method']) ){
 				if( method_exists($object, $info['method']) ){
-					$args[0] = call_user_func_array([$object, $info['method']], $args);
+					$args[0] = call_user_func_array([$object, $info['method']], array_values($args));
 				}elseif( $has_script ){
 					self::ExecError(\CMS_NAME . ' Error: Addon hook method doesn\'t exist (1).', $info, 'method');
 				}
@@ -876,7 +876,7 @@ namespace gp\tool{
 			}
 
 			if( is_callable($callback) ){
-				$args[0] = call_user_func_array($callback, $args);
+				$args[0] = call_user_func_array($callback, array_values($args));
 			}elseif( $has_script ){
 				self::ExecError(\CMS_NAME.' Error: Addon hook method doesn\'t exist (2).', $info, 'method');
 			}
