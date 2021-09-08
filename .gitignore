@@ -1,0 +1,8 @@
+x_*
+X_*
+data/_*
+xx_*
+lock_admin
+coverage.xml
+composer.lock
+/vendor/*

@@ -1,0 +1,51 @@
+@import 'variables.scss';
+
+body.gpAdmin #admincontent_panel.fixed {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	min-height: 30px;
+	z-index: 9001;
+
+	&:hover{
+		z-index: 9003;
+	}
+}
+
+
+#admincontent_panel a.msg_publish_draft {
+	background-color: $gp_teal;
+}
+
+#admincontent_panel a.msg_publish_draft:hover {
+	background: lighten($gp_teal, 5%);
+}
+
+#admincontent_panel a.msg_publish_draft_disabled,
+#admincontent_panel a.msg_publish_draft_disabled:hover {
+	background: darken($gp_teal, 10%);
+	color: rgba(240, 240, 240, 0.667) !important;
+	cursor: not-allowed;
+	display: none;
+}
+
+#admincontent_panel a.msg_saving_draft,
+#admincontent_panel a.msg_saving_draft:hover {
+	background: lighten($gp_panel_bg, 10%);
+	cursor: not-allowed;
+	display: none;
+}
+
+
+/**
+ * Fixed Position Adjustment when admin toolbar is displayed
+ *
+ */
+html:not(.admin_body) {
+	margin-top: $gp_nav_height;
+
+	.gp-fixed-adjust {
+		margin-top: 30px;
+	}
+}

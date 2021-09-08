@@ -1,0 +1,99 @@
+// Theme Bootswatch 4 Scss
+// Layout Flatly 4.0.0
+//
+// For all Bootstrap 4 variables see /include/thirdparty/Bootstrap4/scss/bootstrap/_variables.scss
+
+// Color system
+$white:      #fff;
+$gray-100:   #f8f9fa;
+$gray-200:   #ecf0f1;
+$gray-300:   #dee2e6;
+$gray-400:   #ced4da;
+$gray-500:   #b4bcc2;
+$gray-600:   #95a5a6;
+$gray-700:   #7b8a8b;
+$gray-800:   #343a40;
+$gray-900:   #212529;
+$black:      #000;
+
+$blue:       #2C3E50;
+$indigo:     #6610f2;
+$purple:     #6f42c1;
+$pink:       #e83e8c;
+$red:        #E74C3C;
+$orange:     #fd7e14;
+$yellow:     #F39C12;
+$green:      #18BC9C;
+$teal:       #20c997;
+$cyan:       #3498DB;
+
+$primary:    $blue;
+$secondary:  $gray-600;
+$success:    $green;
+$info:       $cyan;
+$warning:    $yellow;
+$danger:     $red;
+$light:      $gray-200;
+$dark:       $gray-700;
+
+// Links
+$link-color: $success;
+
+// Fonts
+$web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic";
+$font-family-sans-serif: Lato, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$font-size-base: 0.9375rem;
+$navbar-font-size: 0.9375rem;
+$footer-font-size: 0.875rem;
+$h1-font-size: 3rem;
+$h2-font-size: 2.5rem;
+$h3-font-size: 2rem;
+
+// Tables
+$table-accent-bg: $gray-200;
+
+// Dropdowns
+$dropdown-link-color: $gray-700;
+$dropdown-link-hover-color: $white;
+$dropdown-link-hover-bg: $primary;
+
+// Navs
+$nav-link-padding-y: 0.5rem;
+$nav-link-padding-x: 2rem;
+$nav-link-disabled-color: $gray-600;
+$nav-tabs-border-color: $gray-200;
+
+// Navbar
+$navbar-padding-y: 1rem;
+$navbar-dark-color: $white;
+$navbar-dark-hover-color: $success;
+
+// Pagination
+$pagination-color: $white;
+$pagination-bg: $success;
+$pagination-border-width: 0;
+$pagination-border-color: transparent;
+$pagination-hover-color: $white;
+$pagination-hover-bg: darken($success, 15%);
+$pagination-hover-border-color: transparent;
+$pagination-active-bg: $pagination-hover-bg;
+$pagination-active-border-color: transparent;
+$pagination-disabled-color: $gray-200;
+$pagination-disabled-bg: lighten($success, 15%);
+$pagination-disabled-border-color: transparent;
+
+// Progress bars
+$progress-height: 10px;
+$progress-font-size: 10px;
+
+// List group
+$list-group-hover-bg: $gray-200;
+$list-group-disabled-bg: $gray-200;
+
+// Close
+$close-color: $white;
+$close-text-shadow: none;
+
+// Footer
+$footer-bg: $gray-300;
+// For more footer variables see /themes/Bootswatch4_Scss/_common/footer.scss

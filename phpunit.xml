@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    processIsolation	= "false"
+    stopOnFailure		= "true"
+    stopOnError			= "true"
+    stopOnIncomplete	= "true"
+    stopOnSkipped		= "false"
+    bootstrap			= "phpunit/bootstrap.php"
+	verbose				= "true"
+    >
+
+    <testsuites>
+
+        <testsuite name="Tools">
+            <directory>phpunit/Tool</directory>
+			<directory>phpunit/Include</directory>
+			<directory>phpunit/Settings</directory>
+        </testsuite>
+
+        <testsuite name="Installation">
+            <directory>phpunit/Install</directory>
+            <directory>phpunit/Admin</directory>
+        </testsuite>
+
+        <testsuite name="Admin">
+            <directory>phpunit/Admin</directory>
+        </testsuite>
+
+    </testsuites>
+
+	<logging>
+	    <log type="testdox-text" target="php://stdout"/>
+		<log type="coverage-clover" target="x_coverage/unit-tests.clover"/>
+	</logging>
+
+
+	<filter>
+        <whitelist>
+            <directory suffix=".php">./include</directory>
+			<exclude>
+			      <directory suffix=".php">./include/thirdparty</directory>
+		  	</exclude>
+        </whitelist>
+    </filter>
+</phpunit>

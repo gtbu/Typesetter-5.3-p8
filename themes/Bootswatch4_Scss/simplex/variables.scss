@@ -1,0 +1,95 @@
+// Theme Bootswatch 4 Scss
+// Layout Simplex 4.0.0
+//
+// For all Bootstrap 4 variables see /include/thirdparty/Bootstrap4/scss/bootstrap/_variables.scss
+
+// Color system
+$white:     #fff;
+$gray-100:  #f8f9fa;
+$gray-200:  #ddd;
+$gray-300:  #ccc;
+$gray-400:  #bbb;
+$gray-500:  #adb5bd;
+$gray-600:  #777;
+$gray-700:  #444;
+$gray-800:  #373a3c;
+$gray-900:  #212529;
+$black:     #000;
+
+$blue:      #007bff;
+$indigo:    #6610f2;
+$purple:    #9B479F;
+$pink:      #e83e8c;
+$red:       #D9230F;
+$orange:    #D9831F;
+$yellow:    #ffc107;
+$green:     #469408;
+$teal:      #20c997;
+$cyan:      #029ACF;
+
+$primary:   $red;
+$secondary: $white;
+$success:   $green;
+$info:      $cyan;
+$warning:   $purple;
+$danger:    $orange;
+$light:     $white;
+$dark:      $gray-800;
+
+// Body
+$body-bg: #FCFCFC;
+
+// Fonts
+$web-font-path: "https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i";
+$font-family-sans-serif: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$font-size-base: 0.875rem;
+$navbar-font-size: 0.875rem;
+$footer-font-size: 0.875rem;
+
+// Dropdowns
+$dropdown-link-hover-color: $white;
+$dropdown-link-hover-bg: $primary;
+
+// Navs
+$nav-link-padding-y: 0.9rem;
+$nav-link-disabled-color: $gray-400;
+$nav-tabs-border-color: darken(#fff, 6.5%);
+
+// Navbar
+$navbar-dark-color: rgba($white, 0.75);
+$navbar-dark-hover-color: $white;
+
+// Pagination
+$pagination-border-color: $nav-tabs-border-color;
+$pagination-hover-color: $white;
+$pagination-hover-bg: $primary;
+$pagination-hover-border-color: $primary;
+$pagination-disabled-color: $gray-400;
+$pagination-disabled-border-color: $pagination-border-color;
+
+// Jumbotron
+$jumbotron-bg: $nav-tabs-border-color;
+
+// Cards
+$card-border-color: $nav-tabs-border-color;
+
+// Popovers
+$popover-border-color: $nav-tabs-border-color;
+
+// Modals
+$modal-content-border-color: $nav-tabs-border-color;
+$modal-header-border-color: $nav-tabs-border-color;
+
+// Progress bars
+$progress-bar-color: $primary;
+
+// List group
+$list-group-border-color: $nav-tabs-border-color;
+$list-group-disabled-bg: $nav-tabs-border-color;
+
+// Breadcrumbs
+$breadcrumb-bg: $white;
+
+// Footer
+$footer-bg: $gray-200;
+// For more footer variables see /themes/Bootswatch4_Scss/_common/footer.scss

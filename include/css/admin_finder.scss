@@ -1,0 +1,93 @@
+@import 'variables.scss';
+
+html,
+body,
+#gp_admin_html,
+#admincontainer,
+#gpx_content,
+#admincontent {
+  position: relative;
+  height: 100vh;
+  padding: 0 !important;
+}
+
+#admincontent_inner {
+	padding: 0;
+	position: relative;
+	height: calc(100vh - 54px);
+	border: 0 none !important;
+	background: #ededed !important;
+	overflow: visible !important;
+}
+
+#elfinder {
+	position: absolute;
+	z-index: 25;
+	top: 0 !important;
+	left: 0 !important;
+	right: 0 !important;
+	height: 100% !important;
+	border: 0 none !important;
+	border-radius: 0 !important;
+	overflow: hidden;
+	+ #gp_admin_html {
+		display: none;
+	}
+	* {
+		font-family: $font_family_sans;
+		font-size: $font-size-base;
+	}
+	pre {
+		background: none transparent;
+		border-left: none;
+		margin-left: auto;
+		padding: unset;
+		white-space: pre-wrap;
+		word-wrap: normal;
+	}
+	> .ui-resizable-handle.ui-resizable-se {
+	  display: none !important;
+	}
+	.elfinder-file-edit {
+		font-family: $font_family_monospace;
+		width: 100% !important;
+	}
+	.elfinder-dialog-minimized {
+		margin-right: 3px;
+	}
+	.elfinder-bottomtray {
+		left: auto;
+		right: 0;
+		bottom: 22px;
+	}
+}
+
+/**
+ * add left margin to quicklook fullscreen when in #gp_admin_html context
+ */
+#gp_admin_html #elfinder {
+	position: relative;
+	.elfinder-bottomtray {
+		max-width: calc(100% - $simplepanel_width);
+	}
+	.elfinder-quicklook-fullscreen {
+		left: $simplepanel_width;
+		width: auto;
+	}
+	.elfinder-maximized {
+		left: 182px !important;
+		width: calc(100% - $simplepanel_width) !important;
+	}
+}
+
+/**
+ * fix for long file names overlapping buttons in preview window header
+ */
+.elfinder-quicklook-title {
+	max-width: 100%;
+	text-overflow: ellipsis;
+}
+
+.elfinder-quicklook-titlebar {
+	padding: 0 40px;
+}
