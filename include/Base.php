@@ -24,7 +24,7 @@ abstract class Base{
 	public function RunCommands($cmd){
 
 		// POST commands
-		if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['cmd']) && $_POST['cmd'] === $cmd ){
+		if( ($_SERVER['REQUEST_METHOD'] === 'POST') && isset($_POST['cmd']) && $_POST['cmd'] === $cmd ){
 			if( $this->_RunCommands($cmd, $this->cmds_post) ){
 				return;
 			}

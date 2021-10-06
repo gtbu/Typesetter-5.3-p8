@@ -55,7 +55,7 @@ class gp_resized{
 
 		//make sure the index is set
 		gp_resized::SetIndex();
-		$index		= \gp\tool::ArrayKey($_GET['i'], self::$index );
+		$index		= \gp\tool::ArrayKey($_GET['i'], (array)self::$index );
 		if( !$index ){
 			self::Send404();
 			//dies
@@ -159,7 +159,7 @@ class gp_resized{
 
 		//check to see if the reduced image exists
 		$info['name'] = $width.'x'.$height.'.'.$info['extension'];
-		$info['index'] = array_search($img,self::$index);
+		$info['index'] = array_search($img,(array)self::$index);
 		return $info;
 	}
 
@@ -237,7 +237,7 @@ class gp_resized{
 		$meta = array('last_index'=>self::$last_index);
 
 		$index_file = $dataDir.'/data/_site/image_index.php';
-		return \gp\tool\Files::SaveData($index_file,'image_index',self::$index,'meta_data',$meta);
+		return \gp\tool\Files::SaveData($index_file,'image_index',(array)self::$index,'meta_data',$meta);
 	}
 
 	/**
