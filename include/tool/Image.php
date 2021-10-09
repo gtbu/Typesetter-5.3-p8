@@ -154,10 +154,10 @@ namespace gp\tool{
 				// scale to fit into new width/height
 				if( $old_aspect_ratio > $new_aspect_ratio ){
 					// old img is wider than new one
-					$new_h = round($new_h / $old_aspect_ratio * $new_aspect_ratio);
+					$new_h = int(round($new_h / $old_aspect_ratio * $new_aspect_ratio));
 				}else{
 					// old img is narrower than new one
-					$new_w = round($new_w / $new_aspect_ratio * $old_aspect_ratio);
+					$new_w = int(round($new_w / $new_aspect_ratio * $old_aspect_ratio));
 				}
 			}else{
 				// crop to cover new width/height
