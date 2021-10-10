@@ -1,4 +1,4 @@
-*** Alpha 1 ::: This version is not yet production ready : Please wait until december (hopefully) !
+*** Alpha 1 ::: This version is not yet production ready : Please wait until december !
 
 <p align="center"><img src="/include/imgs/typesetter/ts-logo-color-100x100px-min.png?raw=true"/></p>
 <h1 align="center">Typesetter CMS </h1>
@@ -14,7 +14,7 @@
 
 
 ## Requirements ##
-* PHP 7.3+ (this fork only)
+* PHP 8.0+ (this fork only)
 
 
 ## Installation ##
