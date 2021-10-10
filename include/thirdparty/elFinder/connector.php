@@ -180,4 +180,9 @@ $opts = array(
 
 // run elFinder
 $connector = new elFinderConnector(new elFinder($opts));
-$connector->run();
+
+try {
+	$connector->run();
+} catch (Exception $e) {
+}
+
