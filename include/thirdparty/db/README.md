@@ -101,3 +101,34 @@ Medoo is under the MIT license.
 * Official website: [https://medoo.in](https://medoo.in)
 
 * Documentation: [https://medoo.in/doc](https://medoo.in/doc)
+
+* -----------------------------------------------------------------
+
+For SQLite
+*File Database
+
+$database = new Medoo([
+	'type' => 'sqlite',
+	'database' => 'my/database/path/database.db'
+]);
+
+*Memory database
+
+$database = new Medoo([
+	'type' => 'sqlite',
+	'database' => ':memory:'
+]);
+
+*Temporary database
+
+Temporary database will be deleted when the connection is closed.
+
+$database = new Medoo([
+	'type' => 'sqlite',
+	'database' => ''
+]);
+
+// Or simply with no database option.
+$database = new Medoo([
+	'type' => 'sqlite'
+]);
