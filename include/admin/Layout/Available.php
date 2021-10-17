@@ -297,7 +297,7 @@ class Available extends \gp\admin\Layout{
 			}else{
 				// give local themes a high rating to make them appear first
 				// rating won't actually display
-				$info['rt'] = 6; 
+				$info['rt'] = 6;
 			}
 
 			$info += ['dn' => 0, 'rt' => 0];
@@ -311,21 +311,29 @@ class Available extends \gp\admin\Layout{
 		}
 
 		// sort by
-		uasort($this->avail_addons, [$this, 'SortUpdated']);
+		if(isset($this->avail_addons)) {
+		    $uaval[] = $this->avail_addons; } /* array */
+			
+	/*	var_dump($uaval);  -> array!;  --- uasort(array &$array, callable $callback): bool */
+	  /* Object Oriented : uasort($collection, array($this, 'mySortMethod')); */
+		uasort($uaval, array($this, 'SortUpdated'));
+
 		switch($this->searchOrder){
 
 			case 'downloads':
-				uasort($this->avail_addons, [$this, 'SortDownloads']);
+				uasort($uaval, [$this, 'SortDownloads']);
 				break;
 
 			case 'modified':
-				uasort($this->avail_addons, [$this, 'SortRating']);
-				uasort($this->avail_addons, [$this, 'SortUpdated']);
+			   				
+				uasort($uaval, [$this, 'SortRating']);
+				
+				uasort($uaval, [$this, 'SortUpdated']);
 				break;
 
 			case 'rating_score':
 			default:
-				uasort($this->avail_addons, [$this, 'SortRating']);
+				uasort($uaval, [$this, 'SortRating']);
 				break;
 		}
 	}
@@ -337,7 +345,7 @@ class Available extends \gp\admin\Layout{
 		$time	= filemtime( $directory );
 
 		foreach($files as $file){
-			if( $file == '..' || $file == '.' ){
+			if( $file === '..' || $file === '.' ){
 				continue;
 			}
 
@@ -580,7 +588,7 @@ class Available extends \gp\admin\Layout{
 		$installer->source				= $theme_info['full_dir'];
 		$installer->new_layout			= $new_layout;
 
-		if( !empty($_POST['default']) && $_POST['default'] != 'false' ){
+		if( !empty($_POST['default']) && $_POST['default'] !== 'false' ){
 			$installer->default_layout	= true;
 		}
 
@@ -688,11 +696,9 @@ class Available extends \gp\admin\Layout{
 			}
 
 			$layout_folder = dirname($layout['theme']);
-			if( $layout_folder == $folder ){
-				if( $config['gpLayout'] == $layout_id ){
-					$message = $langmessage['delete_default_layout'];
-					return false;
-				}
+			if(($layout_folder == $folder) && $config['gpLayout'] == $layout_id) {
+				$message = $langmessage['delete_default_layout'];
+				return false;
 			}
 		}
 		return true;
