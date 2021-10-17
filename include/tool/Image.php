@@ -221,12 +221,13 @@ namespace gp\tool{
 			*/
 
 			$internalErrors =  libxml_use_internal_errors(true);
-			$disableEntities = libxml_disable_entity_loader(true);
+			/* $disableEntities =  libxml_disable_entity_loader(true); php8 deprecated */
 			libxml_clear_errors();
+			/* $doc->loadXML(file_get_contents($filename),$options); */
 			$doc = new \DOMDocument();
 			$doc->loadXML($src_svg, LIBXML_NONET);
 			libxml_use_internal_errors($internalErrors);
-			libxml_disable_entity_loader($disableEntities);
+					
 			if( $error = libxml_get_last_error() ){
 				libxml_clear_errors();
 				// msg("SVG processing - LibXML Error: " . $error->message );
