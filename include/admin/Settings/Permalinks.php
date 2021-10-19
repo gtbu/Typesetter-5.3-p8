@@ -532,7 +532,7 @@ class Permalinks{
 	 * add/remove cms rules from $original_contents to get new $contents
 	 *
 	 */
-	public static function Rewrite_Rules( $hide_index = true, $home_root, $existing_contents = '', $www = null ){
+	public static function Rewrite_Rules(?string $hide_index, $home_root, $existing_contents = '', $www = null ){
 
 		$existing_contents = (string)$existing_contents;
 
@@ -659,7 +659,7 @@ RewriteRule .* - [F]
 	 * Optimally, generating rules for IIS would involve parsing the xml and integrating cms rules
 	 *
 	 */
-	public function Rewrite_RulesIIS( $hide_index = true, $existing_contents ){
+	public function Rewrite_RulesIIS(?string $hide_index, $existing_contents ){
 
 
 		// anything less than 80 characters can be replaced safely
