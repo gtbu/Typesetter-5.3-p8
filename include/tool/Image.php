@@ -205,7 +205,7 @@ namespace gp\tool{
 		 * @param string $type_file a string representing the type of the source file (svg, svgz)
 		 * @return bool
 		 */
-		static function CreateRectSVG($source_path, $dest_path, $width=50, $height=50, $keep_aspect_ratio){
+		static function CreateRectSVG($source_path, $dest_path, $keep_aspect_ratio, $width=50, $height=50){
 
 			$src_svg = @file_get_contents($source_path);
 			if( !$src_svg ){
