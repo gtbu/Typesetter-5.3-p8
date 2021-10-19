@@ -75,7 +75,7 @@ namespace gp\tool{
 			$img_type = self::getType($source_path);
 			if( strpos('svgz', $img_type) === 0 ){
 				// image is SVG
-				return self::CreateRectSVG($source_path,$dest_path,$size,$size,false);
+				return self::CreateRectSVG($source_path,$dest_path,false,$size,$size);
 			}
 
 			$new_w = $new_h = $size;
@@ -131,7 +131,7 @@ namespace gp\tool{
 			$img_type = self::getType($source_path);
 			if( strpos('svgz', $img_type) === 0 ){
 				// image is SVG
-				return self::CreateRectSVG($source_path,$dest_path,$new_w,$new_h,$keep_aspect_ratio);
+				return self::CreateRectSVG($source_path,$dest_path,$keep_aspect_ratio,$new_w,$new_h);
 			}
 
 			$src_img = self::getSrcImg($source_path,$img_type);
@@ -205,7 +205,7 @@ namespace gp\tool{
 		 * @param string $type_file a string representing the type of the source file (svg, svgz)
 		 * @return bool
 		 */
-		static function CreateRectSVG($source_path, $dest_path, $keep_aspect_ratio, $width=50, $height=50){
+		static function CreateRectSVG($source_path, $dest_path, $keep_aspect_ratio, $width=50, $height=50, ){
 
 			$src_svg = @file_get_contents($source_path);
 			if( !$src_svg ){
