@@ -2,15 +2,20 @@
 defined('is_running') or die('Not an entry point...');
 
 class AntiSpamMath{
-	var $operators = array(1=>'plus',2=>'minus',3=>'divided by',4=>'times');
+	var array $operators = array(1=>'plus',2=>'minus',3=>'divided by',4=>'times');
 
+	/**
+	 * @throws Exception
+	 */
 	function Form($html){
 		$operator_key = array_rand($this->operators);
 		$operator = $this->operators[$operator_key];
 
-		$asm_1 = rand(1,10);
-		$asm_3 = rand(1,10);
-		if ($operator_key == 3) $asm_1 = $asm_1 * $asm_3;
+		$asm_1 = random_int(1,10);
+		$asm_3 = random_int(1,10);
+		if ($operator_key == 3) {
+			$asm_1 = $asm_1 * $asm_3;
+		}
 
 
 		$inputs = array();
@@ -19,7 +24,9 @@ class AntiSpamMath{
 		$inputs[] = ' <input type="hidden" name="asm_3" value="'.$asm_3.'" /> ';
 		shuffle($inputs);
 
-		ob_start();
+		if ( !ob_start('ob_gzhandler') ) {
+			ob_start();
+		}
 		echo implode('',$inputs);
 
 		echo '<span class="anti_spam_math">';
@@ -30,24 +37,28 @@ class AntiSpamMath{
 		echo $asm_3;
 		echo '  ';
 		echo gpOutput::GetAddonText('equals');
-		echo ' <input type="text" name="asm_4" value="" size="4" maxlength="6" /> ';
+		echo '<input type="text" name="asm_4" value="" size="4" maxlength="6" /> ';
 		echo '</span>';
 		$html .= ob_get_clean();
 
 		return $html;
 	}
 
+	function message_alert($msg) {
+		echo "<script type='text/javascript'>alert('$msg');</script>";
+	}
+
 	function Check($passed){
 		$message = gpOutput::SelectText('Sorry, your answer to the verification challenge was incorrect. Please try again.');
 
 		if( empty($_POST['asm_1']) || empty($_POST['asm_2']) || empty($_POST['asm_3']) ){
-			message($message.' (1)');
+			$this->message_alert($message . ' (1)');
 			return false;
 		}
 
 		$operator_key = $_POST['asm_2'];
 		if( !isset($this->operators[$operator_key]) ){
-			message($message.' (2)');
+			$this->message_alert($message . ' (2)');
 			return false;
 		}
 
@@ -70,7 +81,7 @@ class AntiSpamMath{
 		//message('result: '.$result.' vs submitted: '.$compare);
 
 		if( $compare != $result ){
-			message($message.' (3)');
+			$this->message_alert($message . ' (3)');
 			return false;
 		}
 
