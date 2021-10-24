@@ -3,7 +3,7 @@ defined('is_running') or die('Not an entry point...');
 
 
 class Example_Map{
-	function Example_Map(){
+	function __construct(){
 		global $page, $addonRelativeCode;
 
 		//add css and js to <head>

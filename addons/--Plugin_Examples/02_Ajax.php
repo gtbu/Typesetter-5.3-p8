@@ -2,7 +2,7 @@
 defined('is_running') or die('Not an entry point...');
 
 class Example_Ajax{
-	function Example_Ajax(){
+	function __construct(){
 		global $page, $addonRelativeCode;
 
 		//prepare the page
