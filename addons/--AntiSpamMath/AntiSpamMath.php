@@ -24,9 +24,7 @@ class AntiSpamMath{
 		$inputs[] = ' <input type="hidden" name="asm_3" value="'.$asm_3.'" /> ';
 		shuffle($inputs);
 
-		if ( !ob_start('ob_gzhandler') ) {
-			ob_start();
-		}
+		ob_start();
 		echo implode('',$inputs);
 
 		echo '<span class="anti_spam_math">';
