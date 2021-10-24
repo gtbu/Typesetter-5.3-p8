@@ -45,7 +45,7 @@ class AntiSpamMath{
 	}
 
 	function message_alert($msg) {
-		echo "<script type='text/javascript'>alert('$msg');</script>";
+		echo "<script>window.alert('$msg');</script>";
 	}
 
 	function Check($passed){
