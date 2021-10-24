@@ -7,7 +7,7 @@ defined('is_running') or die('Not an entry point...');
 
 class Admin{
 
-	function __construct(){
+	public function __construct(){
 		echo '<h2>This is an Admin Only Script</h2>';
 
 		echo '<p>This is an example of a Typesetter Addon in the form of a Admin page.</p>';

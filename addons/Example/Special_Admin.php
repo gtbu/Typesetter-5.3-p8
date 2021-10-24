@@ -7,7 +7,7 @@ defined('is_running') or die('Not an entry point...');
 
 class Special_Admin extends \Addon\Example\Special{
 
-	function __construct(){
+	public function __construct(){
 		echo '<h2>This is the Admin version of a Special Script</h2>';
 
 		echo '<p>This is an example of a Typesetter Addon in the form of a Special page.</p>';
