@@ -15,11 +15,11 @@
 
 
 ## Installation ##
-1. Download the latest stable release of Typesetter
+1. Download this release of Typesetter
 
-2. Upload the extracted contents to your server (with filezilla-portable)
+2. Upload the extracted contents to your server (with filezilla-portable) and put a domain on the directory
 
-3. Using your web browser, navigate to the folder you just uploaded the unzipped contents to
+3. Using your web browser, navigate to the folder you just uploaded the unzipped contents to 
 
 4. Complete the installation form and submit
 
@@ -29,13 +29,12 @@ Submitting bug fixes and enhancements is easy:
 1. Log in to GitHub
 
 2. Fork the Typesetter Repository
-  * https://github.com/gtbu/
+  * https://github.com/gtbu/Typesetter-5.3-p8
   
   * Click "Fork" and you'll have your very own copy of the Typesetter source code at https://github.com/{your-username}/Typesetter
 
 3. Edit files within your fork.
-  This can be done directly on GitHub.com at https://github.com/{your-username}/Typesetter
-
+  
 4. Submit a Pull Request (tell Typesetter about your changes)
   * Click "Pull Request"
   * Enter a Message that will go with your commit to be reviewed by core committers
