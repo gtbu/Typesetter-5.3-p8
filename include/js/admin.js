@@ -1445,7 +1445,7 @@ $gp.HideAdminUI = {
 
 		$('<div class="show-admin-ui" '
 			+ 'title="'	+ gplang.ShowAdminUI + $gp.HideAdminUI.hotkey_hint + '"'
-			+ '><i class="fa fa-user-circle"></i></div>')
+			+ '><i class="fa fa-window-restore"></i></div>')
 		.on('click', function(){
 			$gp.HideAdminUI.toggle(false);
 		}).appendTo('body');
