@@ -1141,6 +1141,7 @@ html.admin_body #simplepanel .toolbar {
 #simplepanel.minb .toolbar .toggle_panel {
 	@include gpimg( 'icons.png', 50%, 0 );
 	z-index:1000;
+}
 
 #simplepanel .toolbar .extra {
 	float: right;
