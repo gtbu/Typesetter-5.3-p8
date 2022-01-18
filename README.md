@@ -1,4 +1,4 @@
-*** Alpha 3 ; runs ok
+*** beta1 
 
 <p align="center"><img src="/include/imgs/typesetter/ts-logo-color-100x100px-min.png?raw=true"/></p>
 <h1 align="center">Typesetter CMS </h1>
