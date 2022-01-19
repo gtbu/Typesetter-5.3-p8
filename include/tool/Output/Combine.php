@@ -54,17 +54,29 @@ class Combine{
 			'type'			=> 'css',
 		],
 
+	    //jquery migrate
+		'migrate' => [
+			'file'			=> '/include/thirdparty/js/jquery-migrate-3.1.0.min.js',
+			'package'		=> 'jquery',
+			'label'			=> 'Migrate',
+			'cdn'		 => [
+				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.1.0/jquery-migrate.min.js',
+				'Google'		=> '//code.jquery.com/jquery-migrate-3.1.0.min.js',
+			],
+		],
+		
 		//jquery
 		'jquery' => [
-			'file'			=> '/include/thirdparty/js/jquery.js',
+			'file'			=> '/include/thirdparty/js/jquery.min.js',   //3.6.0
+			'requires'		=> 'migrate',
 			'package'		=> 'jquery',
 			'label'			=> 'jQuery',
 			'cdn'		 => [
-				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js',
-				'Google'		=> '//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js',
+				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js',
+				'Google'		=> '//code.jquery.com/jquery-3.6.0.min.js',
 			],
 		],
-
+				
 		//jquery ui core
 		'ui-theme' => [
 			'file'			=> '/include/thirdparty/jquery_ui/jquery-ui.min.css',
@@ -77,7 +89,7 @@ class Combine{
 		],
 
 		'ui-core' => [
-			'file'			=> '/include/thirdparty/jquery_ui/core.js',
+			'file'			=> '/include/thirdparty/jquery_ui/core.js', //jquery-ui.min.js'
 			'package'		=> 'jquery_ui',
 			'label'			=> 'jQuery UI',
 			'cdn'		 => [
@@ -289,7 +301,7 @@ class Combine{
 			'requires'	 => ['effects-core'],
 			'package'		=> 'jquery_ui',
 		],
-
+		
 		//html5shiv
 		'html5shiv' => [
 			'file'			=> '/include/thirdparty/js/shiv/html5shiv.js',
