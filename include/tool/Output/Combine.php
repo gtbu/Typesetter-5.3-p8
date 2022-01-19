@@ -72,7 +72,7 @@ class Combine{
 			'package'		=> 'jquery',
 			'label'			=> 'jQuery',
 			'cdn'		 => [
-				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js',
+				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js',
 				'Google'		=> '//code.jquery.com/jquery-3.6.0.min.js',
 			],
 		],
