@@ -56,12 +56,12 @@ class Combine{
 
 	    //jquery migrate
 		'migrate' => [
-			'file'			=> '/include/thirdparty/js/jquery-migrate-3.1.0.min.js',
+			'file'			=> '/include/thirdparty/js/jquery-migrate-3.3.2.min.js',
 			'package'		=> 'jquery',
 			'label'			=> 'Migrate',
 			'cdn'		 => [
-				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.1.0/jquery-migrate.min.js',
-				'Google'		=> '//code.jquery.com/jquery-migrate-3.1.0.min.js',
+				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.3.2/jquery-migrate.min.js',
+				'Google'		=> '//code.jquery.com/jquery-migrate-3.3.2.min.js',
 			],
 		],
 		
