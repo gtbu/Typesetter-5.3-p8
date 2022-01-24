@@ -170,8 +170,16 @@ class Url
         }
 
         $mime_type = $allowed_file_extensions[$file_ext];
-        $base64 = base64_encode(file_get_contents($file));
-        $this->value = "data:$mime_type;base64,$base64";
+        $file_contents = file_get_contents($file);
+
+        if ($file_ext === 'svg') {
+            $string = preg_replace('/\R/', '%0A', trim($file_contents));
+            $this->value = "data:$mime_type;utf8,$string";
+        }
+        else {
+            $base64 = base64_encode($file_contents);
+            $this->value = "data:$mime_type;base64,$base64";
+        }
 
         $this->setType('data')->protocol = 'data';
 

@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/peteboere/css-crush.svg)](https://travis-ci.org/peteboere/css-crush)
+![CI](https://github.com/peteboere/css-crush/actions/workflows/php.yml/badge.svg)
 
 <img src="http://the-echoplex.net/csscrush/images/css-crush-external.svg?v=2" alt="Logo"/>
 
