@@ -1373,8 +1373,8 @@ class Installer extends \gp\admin\Addon\Tools{
 		if( file_exists($this->source) ){
 			\gp\tool\Files::RmAll($this->source);
 		}
-            $thisvar1 = $this->trash_path; $thisvar1 .= "";
-		if( file_exists($thisvar1) ){
+            
+		if( file_exists($this->trash_path) ){
 			\gp\tool\Files::RmAll($this->trash_path);
 		}
 	}
