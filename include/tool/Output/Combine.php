@@ -62,6 +62,7 @@ class Combine{
 			'cdn'		 => [
 				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.3.2/jquery-migrate.min.js',
 				'Google'		=> '//code.jquery.com/jquery-migrate-3.3.2.min.js',
+				'CDN 2.24 (old)'  => '//code.jquery.com/jquery-migrate-1.4.1.min.js',
 			],
 		],
 		
@@ -73,7 +74,8 @@ class Combine{
 			'label'			=> 'jQuery',
 			'cdn'		 => [
 				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js',
-				'Google'		=> '//code.jquery.com/jquery-3.6.0.min.js',
+				'Google'		=> '//ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js',
+				'CDN 2.24 (old)'   => '//code.jquery.com/jquery-2.2.4.min.js',
 			],
 		],
 				
