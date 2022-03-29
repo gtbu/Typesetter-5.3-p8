@@ -515,6 +515,7 @@ namespace gp\admin{
 			$position = '';
 
 			if( \gp\tool::RequestType() != 'admin' ){
+		$reqtmp1 = &$gpAdmin['gpui_ty']; $reqtmp2 = &$gpAdmin['gpui_tx'];
 				$position = ' style="top:' . max(-10, $gpAdmin['gpui_ty']) . 'px;'
 					. 'left:' . max(-10, $gpAdmin['gpui_tx']) . 'px"';
 				if( isset($gpAdmin['gpui_cmpct']) && $gpAdmin['gpui_cmpct'] ){
@@ -765,8 +766,8 @@ namespace gp\admin{
 			echo '</li>';
 
 			$links = ob_get_clean();
+			$gpustmp3 = &$gpAdmin['useralias'];
 			self::_AdminPanelLinks($in_panel, $links, $gpAdmin['useralias'], 'fa fa-user-circle', 'use');
-
 			// stats
 			ob_start();
 			echo '<li><span><span cms-memory-usage>?</span> Memory</span></li>';
@@ -874,7 +875,7 @@ namespace gp\admin{
 			echo '<span>' . $label . '</span>';
 			echo $badge;
 			echo '</a>';
-
+$gpustmp4 = &$gpAdmin['gpui_vis'];
 			if( $gpAdmin['gpui_vis'] == $arg ){
 				echo '<div class="panelgroup2 in_window">';
 			}else{
