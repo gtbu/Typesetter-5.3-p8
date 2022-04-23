@@ -47,3 +47,6 @@ When submitting pull requests, it is extremely helpful to isolate the changes yo
  https://github.com/gtbu/
 2. Once you have located the file, navigate to the code view and click "Edit". For example, if you want to change the /include/common.php file, the "Edit" button would appear on this page: https://github.com/Typesetter/Typesetter/blob/master/include/common.php
 3. Now, edit the file as you like then click "Propose File Change"
+
+## Plugins and php8 ##
+  * Many plugins <a href="https://www.typesettercms.com/Plugins" target=_blank> from the forum</a> will not function with php8, because deprecations of php7 are errors in php8. The momentary solution is to open an issue in the forum, but before lokk at the plugin-site under support, whether there is already an updated version for download and then manual installation under /addons.
