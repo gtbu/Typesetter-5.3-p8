@@ -618,7 +618,7 @@ namespace gp\admin{
 
 				foreach( $config['addons'] as $inst_addon_key => $inst_addon_data ){
 
-					if( $deprec_addon_name != $inst_addon_data['name'] ){
+					if($deprec_addon_name != ($inst_addon_data['name'] ?? null)){
 						// addon is not installed
 						continue;
 					}
