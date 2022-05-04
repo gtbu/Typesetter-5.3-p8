@@ -453,7 +453,7 @@ class Addons extends \gp\admin\Addon\Install{
 		// sort installed addons by name
 		$names = [];
 		foreach($show as $key => $row){
-			$names[$key] = $row['name'];
+			$names[$key] = $row['name'] ?? null;
 		}
 		$names = array_column($show, 'name');
 		// array_multisort($names, SORT_ASC, $show);  ::: // ExecInfo() Fatal Error: Array sizes are inconsistent
