@@ -170,8 +170,8 @@ class Menu extends \gp\special\Base{
 
 	public function SetCollapseSettings(){
 		$gp_menu_collapse =& $_COOKIE['gp_menu_hide'];
-
 		$search = '#' . $this->curr_menu_id . '=[';
+		$gp_menu_collapse .= "";
 		$pos = strpos($gp_menu_collapse, $search);
 		if( $pos === false ){
 			return;
