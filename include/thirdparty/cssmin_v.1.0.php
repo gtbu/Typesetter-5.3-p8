@@ -40,7 +40,7 @@ class cssmin
 		$search = array("/\\;\s/", "/\s*\{\\s*/", "/\\:\s+\\#/", "/,\s+/i", "/\\:\s+\\\'/i", "/\\:\s+([0-9A-Z\-]+)/i");
         $replace = array(";", "{", ":#", ",", ":\'", ":$1");
         $v = preg_replace($search, $replace, $v);
-        $v = str_replace("\n", null, $v);
+        $v = str_replace("\n", "" , $v);
     	return $v;
   		}
 	}

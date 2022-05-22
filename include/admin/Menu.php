@@ -177,7 +177,7 @@ class Menu extends \gp\special\Base{
 			return;
 		}
 
-		$gp_menu_collapse = substr($gp_menu_collapse, $pos + strlen($search));
+		$gp_menu_collapse = substr($gp_menu_collapse, intval($pos) + intval(strlen($search)));
 		$pos = strpos($gp_menu_collapse, ']');
 		if( $pos === false ){
 			return;

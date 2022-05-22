@@ -1146,7 +1146,7 @@ class Parser
         }
 
         $r = '/' . $regex . '/' . $this->patternModifiers;
-        $result = preg_match($r, $this->buffer, $out, null, $from);
+        $result = preg_match($r, $this->buffer, $out, 0 , $from);
 
         return $result;
     }
@@ -1389,7 +1389,7 @@ class Parser
     {
         $r = '/' . $regex . '/' . $this->patternModifiers;
 
-        if (! preg_match($r, $this->buffer, $out, null, $this->count)) {
+        if (! preg_match($r, $this->buffer, $out, 0 , $this->count)) {
             return false;
         }
 
@@ -1470,7 +1470,7 @@ class Parser
     {
         $gotWhite = false;
 
-        while (preg_match(static::$whitePattern, $this->buffer, $m, null, $this->count)) {
+        while (preg_match(static::$whitePattern, $this->buffer, $m, 0, $this->count)) {
             if (isset($m[1]) && empty($this->commentsSeen[$this->count])) {
                 // comment that are kept in the output CSS
                 $comment = [];
@@ -3217,7 +3217,7 @@ class Parser
         }
 
         // match comment hack
-        if (preg_match(static::$whitePattern, $this->buffer, $m, null, $this->count)) {
+        if (preg_match(static::$whitePattern, $this->buffer, $m, 0 , $this->count)) {
             if (! empty($m[0])) {
                 $parts[] = $m[0];
                 $this->count += \strlen($m[0]);
