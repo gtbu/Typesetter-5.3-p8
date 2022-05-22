@@ -1609,8 +1609,8 @@ namespace gp\tool{
 			}elseif( !empty($page->TitleInfo['keywords']) ){
 				$keywords = explode(',', $page->TitleInfo['keywords']);
 			}
-
-			$keywords[]		= strip_tags($page_title);
+			$keywords[]		= strip_tags($page_title); 
+			$page->label .= "";
 			$keywords[]		= strip_tags($page->label);
 
 			$site_keywords	= explode(',', $config['keywords']);
