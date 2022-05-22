@@ -99,7 +99,7 @@ namespace gp{
 			$args = func_get_args();
 			$args[] = $dataDir . $dirPrefix;
 			foreach($args as $arg){
-				if( !ctype_digit($arg) ){
+				if( !ctype_digit((string)$arg)){
 					$arg = crc32( $arg );
 					$arg = sprintf("%u\n", $arg);
 				}
@@ -700,7 +700,7 @@ namespace gp{
 		public static function SpecialHref($href){
 			global $gp_index;
 
-			$href2 = '';
+			$href2 = ''; $href .= '';
 			$pos = mb_strpos($href, '/');
 			if( $pos !== false ){
 				$href2 = mb_substr($href, $pos);

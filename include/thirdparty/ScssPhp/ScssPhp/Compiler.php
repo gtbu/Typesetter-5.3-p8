@@ -328,7 +328,7 @@ class Compiler
         // all Sass features that aren’t also valid CSS will produce errors.
         // Otherwise, the CSS will be rendered as-is. It can even be extended!
         $cssOnly = false;
-
+        $path .= "";  
         if (substr($path, '-4') === '.css') {
             $cssOnly = true;
         }
