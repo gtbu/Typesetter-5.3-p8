@@ -191,7 +191,7 @@ class ContactGadget extends \gp\special\Base{
 		echo '<label for="contact_email">';
 		echo	'<span class="title">';
 		echo		\gp\tool\Output::ReturnText('your_email');
-		$required_attr = '';
+		$required_attr = ''; $require_email .= "";
 		if( strpos($require_email, 'email') !== false ){
 			echo '<span class="required">*</span>';
 			$required_attr = ' required="required"';
