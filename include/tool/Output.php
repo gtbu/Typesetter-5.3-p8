@@ -1274,7 +1274,7 @@ namespace gp\tool{
 					$edit_index,
 					'Admin_Theme_Content/Text',
 					$langmessage['edit'],
-					'cmd=EditText&key=' . urlencode($text) . '&return=' . urlencode($page->title),
+						'cmd=EditText&key=' . urlencode('is_null($text) ? "" : urlencode($text)') . '&return=' . urlencode('is_null($page->title) ? "" : urlencode($page->title)'),
 					['title' => htmlspecialchars($text), 'data-cmd'	=> 'gpabox']
 				);
 				echo '<div class="editable_area inner_size" id="ExtraEditArea' . $edit_index . '">';
