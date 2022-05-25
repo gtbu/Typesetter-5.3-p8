@@ -2,7 +2,7 @@
 
 
 namespace gp{
-
+  use function \PHP81_BC\strftime;
 	defined('is_running') or die('Not an entry point...');
 
 	class tool{
