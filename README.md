@@ -11,7 +11,7 @@
 
 
 ## Requirements ##
-* PHP 8.0 (this fork only)
+* PHP 8.0 or 8.1(this fork only)
 
 
 ## Installation ##
