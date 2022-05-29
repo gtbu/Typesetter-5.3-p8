@@ -11,7 +11,7 @@ class Scss extends \ScssPhp\ScssPhp\Compiler{
 	 * Extend compileValue() so we can fix background:url(path)
 	 *
 	 */
-    public function compileValue($value){
+    public function compileValue($value , $quote = true){
 
 
         if( !is_array($value) || $value[0] != \ScssPhp\ScssPhp\Type::T_FUNCTION || strtolower($value[1]) != 'url' ){
