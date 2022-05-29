@@ -149,6 +149,7 @@ class Number extends Node implements \ArrayAccess
     /**
      * {@inheritdoc}
      */
+#[\ReturnTypeWillChange]		 
     public function offsetExists($offset)
     {
         if ($offset === -3) {
