@@ -1163,8 +1163,8 @@ $gpustmp4 = &$gpAdmin['gpui_vis'];
 				}
 
 				$display = '<span class="layout_color_id" ' .
-					'style="background-color:' . $info['color'] . ';"></span>' .
-					'&nbsp; ' . $info['label'];
+					'style="background-color:' . (isset($info['color']) ? $info['color'] : 0) . ';"></span>' .
+					'&nbsp; ' . (isset($info['label']) ? $info['label'] : 0);
 				echo \gp\tool::Link(
 						'Admin_Theme_Content/Edit/' . rawurlencode($layout),
 						$display
