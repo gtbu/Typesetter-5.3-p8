@@ -13,10 +13,10 @@ class ThemeCajon{
     // enable FontAwesome everywhere
     \gp\tool::LoadComponents('fontawesome');
 
-    // Cajon Parallax
+     // Cajon Parallax  - js now in settings.php
     $page->css_user[] = $addonRelativeCode . '/addons/CajonParallax/CajonParallax.css';
-    $page->head_js[]  = $addonRelativeCode . '/addons/CajonParallax/CajonParallax.js';
-    $page->head_js[]  = $addonRelativeCode . '/addons/CajonParallax/jquery.scrollspeed/jQuery.scrollSpeed.js';
+    //$page->head_js[]  = $addonRelativeCode . '/addons/CajonParallax/CajonParallax.js';
+    //$page->head_js[]  = $addonRelativeCode . '/addons/CajonParallax/jquery.scrollspeed/jQuery.scrollSpeed.js';
   }
 
 
