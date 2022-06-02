@@ -1374,7 +1374,7 @@ class Installer extends \gp\admin\Addon\Tools{
 			\gp\tool\Files::RmAll($this->source);
 		}
             
-		if( file_exists($this->trash_path) ?? ''){
+		if( file_exists($this->trash_path ? $this->trash_path : 0) ){
 			\gp\tool\Files::RmAll($this->trash_path);
 		}
 	}
