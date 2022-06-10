@@ -212,7 +212,7 @@ class Edit extends \gp\Page{
 			$option_links[] = \gp\tool::Link(
 				'Admin/Permissions',
 				$langmessage['permissions'],
-				'index=' . urlencode($this->gp_index),
+				'index=' . urlencode($this->gp_index ? $this->gp_index : 0),
 				[
 					'title'		=> $langmessage['permissions'],
 					'class'		=> 'admin-link admin-link-permissions',

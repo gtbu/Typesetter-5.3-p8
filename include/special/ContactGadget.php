@@ -184,33 +184,33 @@ class ContactGadget extends \gp\special\Base{
 		echo	'<span class="title">';
 		echo		\gp\tool\Output::ReturnText('your_name');
 		echo	'</span>';
-		echo	'<input id="contact_name" class="input text form-control" type="text" name="name"';
+		echo	'<input id="contact_name" class="input text form-control" type="text" maxlength="100" name="name"';
 		echo		' value="' . htmlspecialchars($_POST['name']) . '"' . $readonly_attr . '/>';
 		echo '</label>';
 
 		echo '<label for="contact_email">';
 		echo	'<span class="title">';
 		echo		\gp\tool\Output::ReturnText('your_email');
-		$required_attr = ''; $require_email .= "";
+		$required_attr = '';
 		if( strpos($require_email, 'email') !== false ){
 			echo '<span class="required">*</span>';
 			$required_attr = ' required="required"';
 		}
 		echo	'</span>';
-		echo	'<input id="contact_email" class="input text form-control" type="text" name="email"' . $required_attr;
+		echo	'<input id="contact_email" class="input text form-control" type="email" maxlength="200" name="email"' . $required_attr;
 		echo		' value="' . htmlspecialchars($_POST['email']) . '"' . $readonly_attr . '/>';
 		echo '</label>';
 
 		echo '<label for="contact_subject">';
 		echo	'<span class="title">';
 		echo		\gp\tool\Output::ReturnText('subject');
-		$required_attr = '';
+		$required_attr = ''; $require_email .= "";
 		if( strpos($require_email, 'none') === false ){
 			echo '<span class="required">*</span>';
 			$required_attr = ' required="required"';
 		}
 		echo	'</span>';
-		echo	'<input id="contact_subject" class="input text form-control" type="text" name="subject"' . $required_attr;
+		echo	'<input id="contact_subject" class="input text form-control" type="text" maxlength="200" name="subject"' . $required_attr;
 		echo		' value="' . htmlspecialchars($_POST['subject']) . '"' . $readonly_attr . '/>';
 		echo '</label>';
 
@@ -222,7 +222,7 @@ class ContactGadget extends \gp\special\Base{
 			$required_attr = ' required="required"';
 		}
 		echo '</label>';
-		echo '<textarea id="contact_message" name="message" class="form-control"';
+		echo '<textarea id="contact_message" name="message" maxlength="10000" class="form-control"';
 		echo	' rows="10" cols="10"' . $readonly_attr . $required_attr . '>';
 		echo	htmlspecialchars($_POST['message']);
 		echo '</textarea>';
