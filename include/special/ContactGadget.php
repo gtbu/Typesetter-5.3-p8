@@ -109,7 +109,7 @@ class ContactGadget extends \gp\special\Base{
 		//check for required values
 		$require_email =& $config['require_email'];
 
-		if( strpos($require_email, 'email') !== false ){
+		if( strpos($require_email ?? 0, 'email') !== false ){
 			if( empty($_POST['email']) ){
 				$field = \gp\tool\Output::SelectText('your_email');
 				msg($langmessage['OOPS_REQUIRED'], $field);
@@ -117,7 +117,7 @@ class ContactGadget extends \gp\special\Base{
 			}
 		}
 
-		if( strpos($require_email, 'none') === false ){
+		if( strpos($require_email ?? 0, 'none') === false ){
 			if( empty($_POST['subject']) ){
 				$field = \gp\tool\Output::SelectText('subject');
 				msg($langmessage['OOPS_REQUIRED'], $field);
@@ -192,7 +192,7 @@ class ContactGadget extends \gp\special\Base{
 		echo	'<span class="title">';
 		echo		\gp\tool\Output::ReturnText('your_email');
 		$required_attr = '';
-		if( strpos($require_email, 'email') !== false ){
+		if( strpos($require_email ?? 0, 'email') !== false ){
 			echo '<span class="required">*</span>';
 			$required_attr = ' required="required"';
 		}
