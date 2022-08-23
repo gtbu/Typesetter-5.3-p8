@@ -1,4 +1,4 @@
-*** beta3   -  RC will be version with php8.2
+*** beta3   -  RC will be the version with php8.2
 
 <p align="center"><img src="/include/imgs/typesetter/ts-logo-color-100x100px-min.png?raw=true"/></p>
 <h1 align="center">Typesetter CMS </h1>
