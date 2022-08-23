@@ -56,13 +56,12 @@ class Combine{
 
 	    //jquery migrate
 		'migrate' => [
-			'file'			=> '/include/thirdparty/js/jquery-migrate-3.3.2.min.js',
+			'file'			=> '/include/thirdparty/js/jquery-migrate.min.js',
 			'package'		=> 'jquery',
 			'label'			=> 'Migrate',
 			'cdn'		 => [
-				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.3.2/jquery-migrate.min.js',
-				'Google'		=> '//code.jquery.com/jquery-migrate-3.3.2.min.js',
-				'CDN 2.24 (old)'  => '//code.jquery.com/jquery-migrate-1.4.1.min.js',
+				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.4.0/jquery-migrate.min.js',
+				'Jsdelivr'		=> '//cdn.jsdelivr.net/npm/jquery-migrate@3.4.0/dist/jquery-migrate.min.js',
 			],
 		],
 		
@@ -74,8 +73,7 @@ class Combine{
 			'label'			=> 'jQuery',
 			'cdn'		 => [
 				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js',
-				'Google'		=> '//ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js',
-				'CDN 2.24 (old)'   => '//code.jquery.com/jquery-2.2.4.min.js',
+				'Jsdelivr'		=> '//cdn.jsdelivr.net/gh/jquery/jquery@3.6.0/dist/jquery.min.js',
 			],
 		],
 				
@@ -85,18 +83,18 @@ class Combine{
 			'type'			=> 'css',
 			'package'		=> 'jquery_ui',
 			'cdn'		 => [
-				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css',
-				'Google'		=> '//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.min.css',
+				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css',
+				'Jsdelivr'		=> '//cdn.jsdelivr.net/npm/jquery-ui@1.13.2/dist/themes/smoothness/jquery-ui.min.css',
 			],
 		],
 
 		'ui-core' => [
-			'file'			=> '/include/thirdparty/jquery_ui/core.js', //jquery-ui.min.js'
+			'file'			=> '/include/thirdparty/jquery_ui/jquery-ui.min.js',  //core.js',
 			'package'		=> 'jquery_ui',
 			'label'			=> 'jQuery UI',
 			'cdn'		 => [
-				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js',
-				'Google'		=> '//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js',
+				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js',
+				'Jsdelivr'		=> '//cdn.jsdelivr.net/npm/jquery-ui@1.13.2/dist/jquery-ui.min.js',
 			],
 		],
 
