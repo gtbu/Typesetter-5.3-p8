@@ -30,7 +30,7 @@
 			'error'                : 'Fehler',
 			'errUnknown'           : 'Unbekannter Fehler.',
 			'errUnknownCmd'        : 'Unbekannter Befehl.',
-			'errJqui'              : 'Ungültige jQuery UI-Konfiguration. Die Komponenten Selectable, Draggable und Droppable müssen inkludiert sein.',
+			'errJqui'              : 'Ungültige jQuery UI-Konfiguration. Die Komponenten Selectable, Draggable und Droppable müssen enthalten sein.',
 			'errNode'              : 'Für elFinder muss das DOM-Element erstellt werden.',
 			'errURL'               : 'Ungültige elFinder Konfiguration! Die URL-Option ist nicht gesetzt.',
 			'errAccess'            : 'Zugriff verweigert.',
@@ -136,7 +136,7 @@
 			'cmdinfo'      : 'Informationen',
 			'cmdmkdir'     : 'Neuer Ordner',
 			'cmdmkdirin'   : 'In neuen Ordner', // from v2.1.7 added 19.2.2016
-			'cmdmkfile'    : 'Neuer Datei',
+			'cmdmkfile'    : 'Neue Datei',
 			'cmdopen'      : 'Öffnen',
 			'cmdpaste'     : 'Einfügen',
 			'cmdquicklook' : 'Vorschau',
