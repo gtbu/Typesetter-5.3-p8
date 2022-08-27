@@ -1329,6 +1329,13 @@ div.elfinder-cwd-wrapper-list .ui-icon-grip-dotted-vertical {
 #elfinder-elfinder-cwd-thead td.ui-state-active {
   background: rgba(33, 138, 232, 0.5)
 }
+
+/* 3. level - list view */	
+.elfinder .elfinder-cwd table thead td ,
+.elfinder .elfinder-cwd table thead td.ui-state-active {
+	text-align:left !important; background:inherit !important;
+}
+	
 #elfinder-elfinder-cwd-thead td.ui-state-active .ui-icon {
   font-size: 10px !important;
   background: none transparent;
