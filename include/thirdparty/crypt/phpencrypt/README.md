@@ -1,3 +1,8 @@
+
+*** If libsodium is not installed on the server, then the use of 
+https://github.com/paragonie/sodium_compat  is recommended.
+
+
 # PHP Encryption
 
 ![Build Status!](https://app.travis-ci.com/dwgebler/php-encryption.svg?token=uj4HfXm5wqJXVuPAd984&branch=master)
