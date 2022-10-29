@@ -112,11 +112,11 @@ class Menu{
 	}
 
 
-	public function GetSubMenu($arg='',$info=false,$search_level=false){
+	public function GetSubMenu($arg='',$info=false,$search_level=0){
 		global $page;
 		$this->curr_menu = $arg;
 		$source_menu_array = $this->GetMenuArray($arg);
-
+        $search_level = 0; // 0 = full-submenu, 1 only 1. sublevel, 2 only 2. level 
 		$reset_level = 0;
 		if( !empty($search_level) ){
 			$reset_level = max(0,$search_level-1);
