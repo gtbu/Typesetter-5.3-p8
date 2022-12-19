@@ -62,7 +62,7 @@ namespace gp\tool{
 		 */
 		public static function Form($theme='light'){
 			global $config;
-			echo self::GetForm($theme,'',$config['recaptcha_language']);
+			echo self::GetForm($theme,'',$config['recaptcha_language'] ?? null);
 		}
 
 		/**
