@@ -568,7 +568,7 @@ class Combine{
 		],
 
 		'bootstrap4-util' => [
-			'file'			=> '/include/thirdparty/Bootstrap4/js/util.min.js',
+			'file'			=> '/include/thirdparty/Bootstrap4/js/utils.min.js',
 			'package'		=> 'bootstrap4',
 		],
 
