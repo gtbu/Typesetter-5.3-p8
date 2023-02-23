@@ -313,7 +313,7 @@ namespace gp\tool{
 					return $layout_info['js_vars'];
 				}
 			}
-			
+
 			$js_vars = self::GetCustomizerDefaults('js');
 			return "\n" . 'var layout_config = ' . json_encode($js_vars) . ';' . "\n";
 		}
@@ -338,7 +338,7 @@ namespace gp\tool{
 					return $layout_info['config'];
 				}
 			}
-			
+
 			return self::GetCustomizerDefaults('php');
 		}
 
@@ -1186,7 +1186,7 @@ namespace gp\tool{
 				is_array($gpLayouts[$page->gpLayout]['images'][$container_id])
 			){
 				//shuffle($gpLayouts[$page->gpLayout]['images'][$container_id]);
-				//Does not make sense ? There will always be only 1 entry in 
+				//Does not make sense ? There will always be only 1 entry in
 				//for this container as it is per img element
 				//call to current also not needed, there will only be 1 entry
 				$image = $gpLayouts[$page->gpLayout]['images'][$container_id][0];
@@ -1274,7 +1274,7 @@ namespace gp\tool{
 					$edit_index,
 					'Admin_Theme_Content/Text',
 					$langmessage['edit'],
-						'cmd=EditText&key=' . urlencode('is_null($text) ? "" : urlencode($text)') . '&return=' . urlencode('is_null($page->title) ? "" : urlencode($page->title)'),
+						'cmd=EditText&key=' . urlencode(is_null($text) ? "" : urlencode($text)) . '&return=' . urlencode(is_null($page->title) ? "" : urlencode($page->title)),
 					['title' => htmlspecialchars($text), 'data-cmd'	=> 'gpabox']
 				);
 				echo '<div class="editable_area inner_size" id="ExtraEditArea' . $edit_index . '">';
@@ -1310,7 +1310,7 @@ namespace gp\tool{
 			global $page;
 
 			$classes = [];
-		
+
 			if( self::is_front_page() ){
 				$classes[] = 'is-homepage';
 			}
@@ -1609,7 +1609,7 @@ namespace gp\tool{
 			}elseif( !empty($page->TitleInfo['keywords']) ){
 				$keywords = explode(',', $page->TitleInfo['keywords']);
 			}
-			$keywords[]		= strip_tags($page_title); 
+			$keywords[]		= strip_tags($page_title);
 			$page->label .= "";
 			$keywords[]		= strip_tags($page->label);
 
