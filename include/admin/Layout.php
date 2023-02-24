@@ -37,7 +37,7 @@ $gpOutConf = [] of output functions/classes.. to use with the theme content
 
 */
 
-
+#[\AllowDynamicProperties]
 class Layout extends \gp\admin\Addon\Install{
 
 	public $curr_layout;
