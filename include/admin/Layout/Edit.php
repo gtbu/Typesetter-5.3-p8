@@ -3,7 +3,7 @@
 namespace gp\admin\Layout;
 
 defined('is_running') or die('Not an entry point...');
-
+#[\AllowDynamicProperties]
 class Edit extends \gp\admin\Layout{
 
 	protected $layout_request = true;
