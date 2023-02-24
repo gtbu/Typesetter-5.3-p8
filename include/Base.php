@@ -3,7 +3,7 @@
 namespace gp;
 
 defined('is_running') or die('Not an entry point...');
-
+#[\AllowDynamicProperties]
 abstract class Base{
 
 	//executable commands
