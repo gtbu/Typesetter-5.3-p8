@@ -11,7 +11,8 @@ In the web are several old sources for vendor.prefixes for sass :
 * https://gist.github.com/raksa/fa61d5e5f7abbea515d7701be6b79dd5
 * https://andycrone.com/thoughts/current-list-sass-mixins-vendor-prefixes
 *  https://codepen.io/juanbrujo/pen/VwwXGa  
-
-So i will wait for bootstrap 5.3 - 
+* https://github.com/ArtCodeStudio/sass-prefix-mixins
+* 
+So i will wait for bootstrap 5.3. 
 
 
