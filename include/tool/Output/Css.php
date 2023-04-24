@@ -261,8 +261,8 @@ class Css{
 		$import_dirs[$dataDir] = \gp\tool::GetDir('/');
 		$parser->SetImportDirs($import_dirs);
 
-
-		$parser->cache_method = 'php';
+		/* $parser->cache_method = 'php'; Creation of dynamic property Less_Parser::$cache_method is deprecated */
+		$parser::$options['cache_method'] == 'php'; 
 		$parser->SetCacheDir($dataDir . '/data/_cache');
 
 		// combine files
