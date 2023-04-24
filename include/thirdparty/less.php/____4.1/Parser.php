@@ -542,7 +542,27 @@ $g = intval( $g );
 	/**
 	 * Set a list of directories or callbacks the parser should use for determining import paths
 	 *
-	 * @param array $dirs
+	 * Import closures are called with a single `$path` argument containing the unquoted `@import`
+	 * string an input LESS file. The string is unchanged, except for a statically appended ".less"
+	 * suffix if the basename does not yet contain a dot. If a dot is present in the filename, you
+	 * are responsible for choosing whether to expand "foo.bar" to "foo.bar.less". If your callback
+	 * can handle this import statement, return an array with an absolute file path and an optional
+	 * URI path, or return void/null to indicate that your callback does not handle this import
+	 * statement.
+	 *
+	 * Example:
+	 *
+	 *     function ( $path ) {
+	 *         if ( $path === 'virtual/something.less' ) {
+	 *             return [ '/srv/elsewhere/thing.less', null ];
+	 *         }
+	 *     }
+	 *
+	 *
+	 * @param array<string|callable> $dirs The key should be a server directory from which LESS
+	 * files may be imported. The value is an optional public URL or URL base path that corresponds to
+	 * the same directory (use empty string otherwise). The value may also be a closure, in
+	 * which case the key is ignored.
 	 */
 	public function SetImportDirs( $dirs ) {
 		self::$options['import_dirs'] = [];
@@ -2188,6 +2208,7 @@ $g = intval( $g );
 		$hasIdentifier = false;
 		$hasExpression = false;
 		$hasUnknown = false;
+		$isRooted = true;
 
 		$value = $this->parseImport() ?? $this->parseMedia();
 		if ( $value ) {
@@ -2230,6 +2251,7 @@ $g = intval( $g );
 			case "@right-middle":
 			case "@right-bottom":
 			hasBlock = true;
+			isRooted = true;
 			break;
 			*/
 			case "@charset":
@@ -2245,9 +2267,12 @@ $g = intval( $g );
 				break;
 			case "@host":
 			case "@page":
+				$hasUnknown = true;
+				break;
 			case "@document":
 			case "@supports":
 				$hasUnknown = true;
+				$isRooted = false;
 				break;
 		}
 
@@ -2275,7 +2300,7 @@ $g = intval( $g );
 
 		if ( $rules || ( !$hasBlock && $value && $this->MatchChar( ';' ) ) ) {
 			$this->forget();
-			return new Less_Tree_Directive( $name, $value, $rules, $index, $this->env->currentFileInfo );
+			return new Less_Tree_Directive( $name, $value, $rules, $index, $isRooted, $this->env->currentFileInfo );
 		}
 
 		$this->restore();

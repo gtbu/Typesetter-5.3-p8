@@ -4,7 +4,7 @@ namespace gp\tool\Output;
 
 class Css{
 
-
+    public $parser;
 	/**
 	 * Convert a .scss or .less files to .css and include it in the page
 	 *
