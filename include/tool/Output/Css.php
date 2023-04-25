@@ -57,8 +57,8 @@ class Css{
 			$temp_sourcemap_name	= $parsed_data[1];
 		}else{
 			$parsed_data			= self::ParseScss($file_array);
-			$compiled				= $parsed_data[0];
-			$temp_sourcemap_name	= $parsed_data[1];
+			$compiled				= $parsed_data[0] ?? 'default value';  /* ??= 'default value'; */
+			$temp_sourcemap_name	= $parsed_data[1] ?? 'default value';
 		}
 
 		if( !$compiled ){
