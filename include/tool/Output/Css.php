@@ -2,6 +2,15 @@
 
 namespace gp\tool\Output;
 
+/* require_once $dataDir . '/include/thirdparty/ScssPhp/ScssPhp' . '/scss.inc.php'; */
+use ScssPhp\ScssPhp\Compiler;
+use function ScssPhp\ScssPhp\getIncludedFiles;
+use ScssPhp\ScssPhp\Parser;
+use ScssPhp\ScssPhp\OutputStyle;
+use ScssPhp\ScssPhp\Formatter;
+use ScssPhp\ScssPhp\SourceMap\SourceMapGenerator;
+
+
 class Css{
 
     public $parser;
@@ -157,7 +166,7 @@ class Css{
 			$compiler->addImportPath($dataDir);
 
 			// set 'compressed' format for compiled css
-			$compiler->setFormatter('ScssPhp\ScssPhp\Formatter\Compressed');
+			 $compiler->setOutputStyle(OutputStyle::COMPRESSED); 
 
 			$temp_sourcemap_name = false;
 
@@ -191,9 +200,7 @@ class Css{
 
 			}
 
-			$compiled	= $compiler->compile(implode("\n", $combined));
-			// debug('$compiler = ' . pre(get_object_vars($compiler))); /* TODO: remove */
-			// $variables	= $compiler->getVariables(); debug('Scss variables = ' . pre($variables)); /* TODO: remove */
+		$compiled = $compiler->compileString(implode("\n", $combined))->getCss();	
 
 		}catch( \Exception $e){
 			if( \gp\tool::LoggedIn() ){
@@ -202,8 +209,10 @@ class Css{
 			return false;
 		}
 
-		$scss_files = $compiler->getParsedFiles();
-		$scss_files = array_keys($scss_files);
+	 $includedFiles =  $compiler->compileString(implode("\n", $combined))->getIncludedFiles();
+     $sourceMap = $compiler->compileString(implode("\n", $combined))->getSourceMap(); 
+
+    	$scss_files = $includedFiles; 
 
 		return [$compiled, $temp_sourcemap_name];
 	}
@@ -261,7 +270,7 @@ class Css{
 		$import_dirs[$dataDir] = \gp\tool::GetDir('/');
 		$parser->SetImportDirs($import_dirs);
 
-		/* $parser->cache_method = 'php'; Creation of dynamic property Less_Parser::$cache_method is deprecated */
+		/* $parser->cache_method = 'php'; */
 		$parser::$options['cache_method'] == 'php'; 
 		$parser->SetCacheDir($dataDir . '/data/_cache');
 
