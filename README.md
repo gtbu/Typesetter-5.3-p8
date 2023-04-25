@@ -54,4 +54,4 @@ When submitting pull requests, it is extremely helpful to isolate the changes yo
 ## Problems with updates ##
 If You have questions regarding installation please look here at the top in the WIKI.
 
-Since update of scssphp to version 1.11, which is important for bootstrap 5,  bootswatch 3 - themes do not function. Users who must use it will have to go back to scssphp 1.7 - evtl. i will find  a solution.
+Since update of scssphp to version 1.11, which is important for bootstrap 5,  bootstrap 3 - based themes do not function. Users who must use it will have to go back to scssphp 1.7 - evtl. i will find  a solution.
