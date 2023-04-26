@@ -54,5 +54,5 @@ When submitting pull requests, it is extremely helpful to isolate the changes yo
 ## Problems with updates ##
 If You have questions regarding installation please look here at the top in the WIKI.
 
-The pdate of scssphp to version 1.11 is important for bootstrap 5. 
+The update of scssphp to version 1.11 is important for bootstrap 5. 
 Old bootstrap 3 - based themes had a small bug in variables.css which has been corrected.
