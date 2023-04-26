@@ -200,7 +200,8 @@ class Css{
 
 			}
 
-		$compiled = $compiler->compileString(implode("\n", $combined))->getCss();	
+		$tmpcomp = $compiler->compileString(implode("\n", $combined));
+			$compiled = $tmpcomp->getCss();		
 
 		}catch( \Exception $e){
 			if( \gp\tool::LoggedIn() ){
@@ -209,9 +210,9 @@ class Css{
 			return false;
 		}
 
-	 $includedFiles =  $compiler->compileString(implode("\n", $combined))->getIncludedFiles();
-     $sourceMap = $compiler->compileString(implode("\n", $combined))->getSourceMap(); 
-
+	 $includedFiles = $tmpcomp->getIncludedFiles();
+     $sourceMap = $tmpcomp->getSourceMap(); 
+	 
     	$scss_files = $includedFiles; 
 
 		return [$compiled, $temp_sourcemap_name];
