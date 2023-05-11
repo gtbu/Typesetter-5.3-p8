@@ -5,7 +5,7 @@
  * See settings.php for configuration options
  */
 
-
+global $page;
 /**
  * Load theme javascripts
  *
