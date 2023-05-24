@@ -484,8 +484,8 @@ namespace gp\tool{
 			}
 
 			//default values
-			$outKeys =array();
 			if( !$outSet && isset($gpOutConf[$default]) ){
+				$outKeys =array();
 				$outKeys[] = trim($default . ':' . $arg, ':');
 			}
 
