@@ -1339,7 +1339,7 @@ class Edit extends \gp\admin\Layout{
 		echo	'</tr>';
 
 		$extrasFolder	= $dataDir . '/data/_extra';
-		$files			= scandir($extrasFolder) or [];
+		$files			= scandir($extrasFolder) ?? [];
 
 		asort($files);
 		foreach($files as $file){

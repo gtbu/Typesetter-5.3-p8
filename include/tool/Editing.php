@@ -1043,7 +1043,7 @@ namespace gp\tool{
 
 
 			//extra area include autocomplete
-			$extra_area_files	= scandir($dataDir . '/data/_extra') or [];
+			$extra_area_files	= scandir($dataDir . '/data/_extra') ?? [];
 			foreach($extra_area_files as $extra_area){
 
 				$extra_area	= \gp\admin\Content\Extra::AreaExists($extra_area);
