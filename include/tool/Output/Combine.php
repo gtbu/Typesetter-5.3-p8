@@ -572,6 +572,12 @@ class Combine{
 			'package'		=> 'bootstrap4',
 		],
 
+      // Bootstrap5.2
+		'bootstrap5.2-js' => [
+			'file'			=> '/include/thirdparty/Bootstrap5.2/js/bootstrap.bundle.min.js',
+			'package'		=> 'bootstrap5.2,
+			'exclude'		=> '',
+		],
 
 		// FontAwesome (4.7)
 		'fontawesome'		=> [
