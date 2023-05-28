@@ -667,7 +667,7 @@ function pre($mixed){
 				$mixed = 'false';
 			}
 		default:
-			$output = '(' . $type . ')' . htmlspecialchars($mixed, ENT_COMPAT, 'UTF-8', false) . '';
+			$output = '(' . $type . ')' . htmlspecialchars($mixed ?? "", ENT_COMPAT, 'UTF-8', false) . '';
 		break;
 	}
 
