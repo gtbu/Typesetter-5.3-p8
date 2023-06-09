@@ -579,22 +579,38 @@ class Combine{
 			'exclude'		=> ' ',
 		],
 
+      // Bootstrap5.3
+		'bootstrap5.2-js' => [
+			'file'			=> '/include/thirdparty/Bootstrap5.3/js/bootstrap.bundle.min.js',
+			'package'		=> 'bootstrap5.3',
+			'exclude'		=> ' ',
+		],
+		
 		// FontAwesome (4.7)
 		'fontawesome'		=> [
 			'file'			=> '/include/thirdparty/fontawesome/css/font-awesome.min.css',
 			'label'			=> 'Font Awesome',
 			'cdn'			=> [
-				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
+				'CloudFlare'	=> 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
+			],
+		],
+		
+		// FontAwesome (6.4 free)
+		'fontawesome6'		=> [
+			'file'			=> '/include/thirdparty/fontawesome/v6.4/css/all.min.css',
+			'label'			=> 'Font Awesome 6.4',
+			'cdn'			=> [
+				'CloudFlare'	=> 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
 			],
 		],
 
-		// Colorbox (1.6.3)
+		// Colorbox (1.6.3 MIT)
 		'colorbox' => [
 			'file'			=> '/include/thirdparty/colorbox/colorbox/jquery.colorbox.js',
 			'requires'		=> 'gp-main,colorbox-css',
 			'label'			=> 'Colorbox JS',
 			'cdn'			=> [
-				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.6.3/jquery.colorbox-min.js',
+				'CloudFlare'	=> 'https://cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.6.3/jquery.colorbox-min.js',
 			],
 		],
 
