@@ -580,7 +580,7 @@ class Combine{
 		],
 
       // Bootstrap5.3
-		'bootstrap5.2-js' => [
+		'bootstrap5.3-js' => [
 			'file'			=> '/include/thirdparty/Bootstrap5.3/js/bootstrap.bundle.min.js',
 			'package'		=> 'bootstrap5.3',
 			'exclude'		=> ' ',
