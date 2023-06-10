@@ -105,7 +105,7 @@ class Remote extends \gp\admin\Addon\Install{
 			echo '</td><td>';
 			echo $row['version'];
 			echo '</td><td class="nowrap">';
-			echo sprintf($langmessage['_downloads'],number_format($row['downloads']));
+			echo sprintf($langmessage['_downloads'],number_format(floatval($row['downloads'])) );
 			echo '<br/>';
 			$this->CurrentRating($row['rating_weighted']);
 			echo '<br/>';
