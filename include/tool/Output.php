@@ -263,7 +263,8 @@ namespace gp\tool{
 				$customizer_file	= $layout_dir . '/customizer.php';
 			}
 
-			if( !file_exists($customizer_file) ){
+			$cust_path = stream_resolve_include_path($customizer_file);
+              if (!$cust_path || !is_readable($cust_path)) {
 				// msg('customizer file ' . htmlspecialchars($customizer_file) . ' does not exist'); // TODO remove
 				return [];
 			};
