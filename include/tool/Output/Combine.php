@@ -603,6 +603,15 @@ class Combine{
 				'CloudFlare'	=> 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
 			],
 		],
+		
+		// Bootstrap Icons
+		'bootstrap-icons'		=> [
+			'file'			=> '/include/thirdparty/Bootstrap5/fonts/bootstrap-icons.min.css',
+			'label'			=> 'Bootstrap Icons',
+			'cdn'			=> [
+				'CloudFlare'   => 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css',
+			],
+		],
 
 		// Colorbox (1.6.3 MIT)
 		'colorbox' => [
