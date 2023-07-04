@@ -81,6 +81,13 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver
         $this->options['keepTimestamp'] = array('copy', 'move'); // keep timestamp at inner filesystem allowed 'copy', 'move' and 'upload'
         $this->options['substituteImg'] = true;       // support substitute image with dim command
         $this->options['statCorrector'] = null;       // callable to correct stat data `function(&$stat, $path, $statOwner, $volumeDriveInstance){}`
+        if (DIRECTORY_SEPARATOR === '/') {
+            // Linux
+            $this->options['acceptedName'] = '/^[^\.\/\x00][^\/\x00]*$/';
+        } else {
+            // Windows
+            $this->options['acceptedName'] = '/^[^\.\/\x00\\\:*?"<>|][^\/\x00\\\:*?"<>|]*$/';
+        }
     }
 
     /*********************************************************************/
@@ -258,6 +265,14 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver
         }
 
         $this->statOwner = (!empty($this->options['statOwner']));
+
+        // enable WinRemoveTailDots plugin on Windows server
+        if (DIRECTORY_SEPARATOR !== '/') {
+            if (!isset($this->options['plugin'])) {
+                $this->options['plugin'] = array();
+            }
+            $this->options['plugin']['WinRemoveTailDots'] = array('enable' => true);
+        }
     }
 
     /**
@@ -358,9 +373,13 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver
         // realpath() returns FALSE if the file does not exist
         if ($path === false || strpos($path, $this->root) !== 0) {
             if (DIRECTORY_SEPARATOR !== '/') {
+                $dir = str_replace('/', DIRECTORY_SEPARATOR, $dir);
                 $name = str_replace('/', DIRECTORY_SEPARATOR, $name);
             }
             // Directory traversal measures
+            if (strpos($dir, '..' . DIRECTORY_SEPARATOR) !== false || substr($dir, -2) == '..') {
+                $dir = $this->root;
+            }
             if (strpos($name, '..' . DIRECTORY_SEPARATOR) !== false) {
                 $name = basename($name);
             }
@@ -470,6 +489,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver
         if ($path === DIRECTORY_SEPARATOR) {
             return $this->root;
         } else {
+            $path = $this->_normpath($path);
             if (strpos($path, $this->systemRoot) === 0) {
                 return $path;
             } else if (DIRECTORY_SEPARATOR !== '/' && preg_match('/^[a-zA-Z]:' . preg_quote(DIRECTORY_SEPARATOR, '/') . '/', $path)) {
@@ -952,7 +972,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver
      **/
     protected function _symlink($source, $targetDir, $name)
     {
-        return symlink($source, $this->_joinPath($targetDir, $name));
+        return $this->localFileSystemSymlink($source, $this->_joinPath($targetDir, $name));
     }
 
     /**
@@ -1450,12 +1470,14 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver
     protected function localFileSystemSymlink($target, $link)
     {
         $res = false;
-        $errlev = error_reporting();
-        error_reporting($errlev ^ E_WARNING);
-        if ($res = symlink(realpath($target), $link)) {
-            $res = is_readable($link);
+        if (function_exists('symlink') and is_callable('symlink')) {
+            $errlev = error_reporting();
+            error_reporting($errlev ^ E_WARNING);
+            if ($res = symlink(realpath($target), $link)) {
+                $res = is_readable($link);
+            }
+            error_reporting($errlev);
         }
-        error_reporting($errlev);
         return $res;
     }
 } // END class 
