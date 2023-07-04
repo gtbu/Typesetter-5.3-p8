@@ -3,16 +3,6 @@
 // Used in conjunction with global variables to enable certain theme features.
 
 
-// Vendor Prefix Mixins
-@import "vp-mixins/variables";
-@import "vp-mixins/flexbox";
-@import "vp-mixins/general";
-@import "vp-mixins/forms";
-@import "vp-mixins/transitions";
-@import "vp-mixins/backgrounds";
-@import "vp-mixins/sass-prefixer";
-
-
 // Vendor
 @import "vendor/rfs";
 
@@ -51,3 +41,12 @@
 @import "mixins/clearfix";
 @import "mixins/container";
 @import "mixins/grid";
+
+// Vendor Prefix Mixins
+@import "vp-mixins/variables";
+@import "vp-mixins/flexbox";
+@import "vp-mixins/general";
+@import "vp-mixins/forms";
+@import "vp-mixins/transitions";
+@import "vp-mixins/backgrounds";
+//@import "vp-mixins/sass-prefixer";
