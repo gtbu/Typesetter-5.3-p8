@@ -1,0 +1,188 @@
+/*! this scss contains general styles for all theme-colors ! */
+
+* { margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+.nav-link{
+  white-space: nowrap;
+}
+
+main > .container {
+  padding: 1px 15px 0;
+}
+
+/*! lightgray  - here adjust general navigation background color ! */
+.nav-custom{ background-color: #fcfcfc;             
+             border-top:1px lightgray solid;
+             border-bottom:1px lightgray solid; }
+
+
+.bg-custom{ background-color: white;  }
+
+
+/*! .footer-admin-links span.login_link::before{ content : "  \2617  " !important;} */
+.footer-admin-links {
+	span.login_link {
+		&::before {
+			content: "  \2617  " !important;
+		}
+	}
+}
+
+span.sitemap_link a, span.login_link a{text-decoration:none;}
+
+
+
+@media all and (max-width: 991px) {
+       ul.navbar-nav{ padding:15px; 
+            border:1px lightgray solid;
+            border-radius:4px;}
+			
+	  div.gpMenu.gpArea_FullMenu.GPAREA > .navbar-nav{
+			  border: 1px lightgray solid;
+			  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;  
+			           }
+     }
+	 
+
+.main-footer{bottom:0;
+position: absolute;
+width: 100%;
+margin-bottom:-30px;
+}
+
+
+/*! --- https://codepen.io/anil-vinnakoti5/pen/rNZomxX --- */
+
+
+@media all and (min-width: 992px) {
+    .dropdown-menu li {
+        position: relative;
+    }
+
+    .dropdown-menu .submenu {
+        display: none;
+        position: absolute;
+        left: 100%;
+        top: -7px;
+    }
+
+    .dropdown-menu .submenu-left {
+        right: 100%;
+        left: auto;
+    }
+
+    .dropdown-menu > li:hover {
+        background-color: #f1f1f1;
+    }
+
+    .dropdown-menu > li:hover > .submenu {
+        display: block;
+    }
+}
+
+
+@media (max-width: 991px) {
+    .dropdown-menu .dropdown-menu {
+        margin-left: 0.7rem;
+        margin-right: 0.7rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/*! ------------ user  css ------------------------------------------------------ */
+
+@media (min-width : 992px) {
+  .offcanvas {
+    visibility      : visible;
+    position        : relative;
+    background      : none;
+    border          : none;
+    justify-content : end;
+    color           : blue;    
+  }
+}
+
+@media (max-width : 992px) {
+  .offcanvas {
+    width : 18rem !important;
+  }
+  .offcanvas-start-lg {
+    top          : 0;
+    left         : 0;
+    border-right : 1px solid rgba(0, 0, 0, .2);
+    transform    : translateX(-100%);
+  }
+}
+
+#main-nav {transition: transform 1s ease-out;}
+
+/*! ----------- searchform ------------------------- */
+
+#search, form.fmail {min-width:15em;
+         max-height:2.2em !important;}
+
+form.fmail {border-radius:3px;}	
+
+.fmail .input-group{border-radius:1.1em;
+background-color: #e3ecfb;}
+
+div#search{ margin-right:3em; }
+
+div#search, div.input-group, span.input-group-btn, form.fmail{
+background-color: inherit;
+border-radius:1.1em;
+}
+
+.bi-search{-webkit-text-stroke: 1px;}
+/*! --- search - button --- #dee2e6; */
+.btn-custom{background:transparent;}
+
+div.input-group span.input-group-btn{
+	background-color: inherit; 
+    border-radius:17px !important; 
+	width:2.3em !important; 
+	max-height:2.3em;
+	padding-bottom:0.3em;
+    visibility:visible;
+	z-index:1;
+}
+
+div.input-group:not(:hover)	{
+	min-width:6em; 
+    visibility:hidden;
+    span.input-group-btn{visibility:visible;}
+}
+
+.input-group:not(.has-validation) > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating), .input-group:not(.has-validation) > .dropdown-toggle:nth-last-child(n+3), .input-group:not(.has-validation) > .form-floating:not(:last-child) > .form-control, .input-group:not(.has-validation) > .form-floating:not(:last-child) > .form-select {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+input.form-control:focus{ border-color: gray;
+box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 3px rgba(255, 100, 255, 0.5);
+}
+
+form.fmail::hover, div.input-group::hover, form.fmail::focus, div.input-group::focus{
+	min-width:12em !important; 
+	transition: 1s;
+}	
+		
+form.fmail > .input-group:hover {
+ background-color: transparent !important;
+ input.form-control {border-color:lightgray;  margin-right:3px;}
+}
+
+

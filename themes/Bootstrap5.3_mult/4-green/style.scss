@@ -1,0 +1,63 @@
+@import 'include/thirdparty/Bootstrap5.3/scss/_bootstrap.scss';
+
+/*! @import '_variables.scss'; */
+
+$text-shadow: 0 1px 0 rgba(0, 0, 0, .05) !default;
+
+$navbar-height: ($nav-link-height + $navbar-padding-y * 2);
+
+@mixin btn-shadow($color){
+  @include gradient-y-three-colors(lighten($color, 8%), $color, 60%, darken($color, 4%));
+}
+
+@import '../_common/common_style.scss';
+
+@import '../assets/css/style.scss';
+
+
+
+
+/*!  0.001 rem;   == off ! --> custom height if no header wanted */
+header.section-header{ height:4rem;   
+ margin-top:-57px;
+ background-color: lightgreen;
+ }
+
+nav.nav-custom {
+   background-color: #008000;
+   ul:not(.submenu) a{color:dimgray;}
+ }
+   
+.navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+  color: dimgray;
+}
+   
+@media only screen and ( min-width: 951px ) {
+nav.nav-custom {
+   ul:not(.submenu) a{color:white;}
+   ul.dropdown-menu a, ul.submenu a {color:dimgray;}
+ }
+.navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+  color: white; }
+}
+
+@media only screen and ( max-width: 950px ) {
+ul.navbar-nav{min-width:250px;}
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  color: var(--bs-dropdown-link-active-color);
+  background-color: var(--bs-dropdown-link-active-bg);
+}
+
+.dropdown-menu {
+    --bs-dropdown-link-color: var(--bs-body-color);
+  --bs-dropdown-link-hover-color: var(--bs-body-color);
+  --bs-dropdown-link-hover-bg: var(--bs-tertiary-bg);
+  --bs-dropdown-link-active-color: #fff;
+  --bs-dropdown-link-active-bg: lightgray;  /*! #0d6efd; */
+  }
+
+div.input-group span.input-group-btn:hover {
+  background-color: lightgreen;
+  }
