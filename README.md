@@ -1,5 +1,6 @@
 *** RC1   -  RC will be the version with php8.2
 
+* php 8.0 - 8.2
 * Jquery UI 13.2 and jquery 3.7
 * Scssphp 1.11.0 compiler with Bootstrap 5.3 support
 * less 2.53 compiler
