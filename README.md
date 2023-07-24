@@ -1,5 +1,10 @@
 *** RC1   -  RC will be the version with php8.2
 
+* Jquery UI 13.2 and jquery 3.7
+* Scssphp 1.11.0 compiler with Bootstrap 5.3 support
+* less 2.53 compiler
+* Elfinder 2.1.62
+
 <p align="center"><img src="/include/imgs/typesetter/ts-logo-color-100x100px-min.png?raw=true"/></p>
 <h1 align="center">Typesetter CMS </h1>
 <p align="center">Open source CMS written in PHP focused on ease of use with true WYSIWYG editing and flat-file storage.<br/><br/></p>
@@ -11,7 +16,7 @@
 
 
 ## Requirements ##
-* PHP 8.0 or 8.1(this fork only)
+* PHP 8.0 - 8.2
 
 
 ## Installation ##
