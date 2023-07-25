@@ -5,6 +5,7 @@
 * Scssphp 1.11.0 compiler with Bootstrap 5.3 support
 * less 2.53 compiler
 * Elfinder 2.1.62
+* Local fonts under themes/Bootstrap4/assets
 
 <p align="center"><img src="/include/imgs/typesetter/ts-logo-color-100x100px-min.png?raw=true"/></p>
 <h1 align="center">Typesetter CMS </h1>
