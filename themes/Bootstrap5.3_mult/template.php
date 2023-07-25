@@ -42,7 +42,7 @@ $lang = isset($page->lang) ? $page->lang : $config['language'];
       </div>
     <![endif]-->
     <header class="section-header row text-center">
-           <div class="container col hd1">
+           <div class="container col p-2 hd1">
 		      <?php echo common::Link('', $config['title'], '', 'class="navbar-brand"');  ?>
            </div>	
            <div class="container col hd2"> 		  
@@ -64,13 +64,13 @@ $lang = isset($page->lang) ? $page->lang : $config['language'];
                <div class = 'offcanvas-header d-flex d-lg-none'>
                   <h5 class = 'offcanvas-title text-white' id = 'offcanvasLabel'>Navbar</h5>
                  <a href='#' class = 'text-reset p-0' data-bs-dismiss = 'offcanvas' aria-label = 'close'> 
-				            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+	        	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16"><style>svg{fill:white}</style>
                 <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
                 </svg>  
                </a>  <!-- &#xF659;  &#128473; &#10005; &#10006; -->  
                </div>
 
-                <div class="offcanvas-body sidebar pb-3 pb-lg-0" id="main_nav">
+                <div class="offcanvas-body sidebar pb-2 pb-lg-0" id="main_nav">
             <?php
               $GP_ARRANGE = false;
 			  $GP_MENU_ELEMENTS = '';
@@ -134,7 +134,7 @@ $lang = isset($page->lang) ? $page->lang : $config['language'];
       </section>
   </main><!-- /.main-content -->
 
-    <footer class="main-footer position-absolute bottom-0 mt-auto">
+    <footer class="main-footer position-absolute bottom-0 mt-auto p-2">
       <div class="container">
 
         <div class="row">

@@ -31,7 +31,7 @@ nav.nav-custom {
   color: dimgray;
 }
    
-@media only screen and ( min-width: 951px ) {
+@media only screen and ( min-width: 991px ) {
 nav.nav-custom {
    ul:not(.submenu) a{color:white;}
    ul.dropdown-menu a, ul.submenu a {color:dimgray;}
@@ -40,8 +40,9 @@ nav.nav-custom {
   color: white; }
 }
 
-@media only screen and ( max-width: 950px ) {
-ul.navbar-nav{min-width:250px;}
+@media only screen and ( max-width: 990px ) {
+ul.navbar-nav{min-width:250px; background-color:white;}
+div#offcanvasGp.offcanvas{background-color:#567baf;}
 }
 
 
@@ -64,4 +65,15 @@ div.input-group span.input-group-btn:hover {
   }
 
 
+/*! --- common  footer-styles  in _common/footer.scss ----- */	
+$footer-bg: #272727;  /*! css - instead Standard */
 
+
+span.login_link:before{color:white;}
+span.sitemap_link a, span.login_link a{color:white;}
+
+footer.main-footer {
+  font-size: 0.875rem;
+  background: #272727;
+  color: white;
+}

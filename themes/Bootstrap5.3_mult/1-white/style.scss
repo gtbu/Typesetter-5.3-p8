@@ -41,7 +41,9 @@ nav.nav-custom{
   --bs-dropdown-link-active-bg: lightgray;  /*! #0d6efd; */
   }
   
-  
+@media only screen and ( max-width: 990px ) {
+ul.navbar-nav{min-width:250px;}
+}
 
 /*! ----- search-button -----*/
 div.input-group span.input-group-btn{
@@ -53,3 +55,8 @@ div.input-group span.input-group-btn{
 $footer-bg: $gray-300;  /*! Standard */
 
 
+footer.main-footer {
+  font-size: 0.875rem;
+  background: #dee2e6;
+  color: #212529;
+}

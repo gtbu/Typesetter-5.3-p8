@@ -39,8 +39,17 @@ nav.nav-custom{   background-image: linear-gradient(#f9fafb, #f8f9fa 60%, #e9eae
   --bs-dropdown-link-active-bg: lightgray;  /*! #0d6efd; */
   }
 
+@media only screen and ( max-width: 990px ) {
+ul.navbar-nav{min-width:250px;}
+}
+
+/*! --- common  footer-styles  in _common/footer.scss ----- */	
+$footer-bg: $gray-300;  /*! Standard */
 
 
-
-
+footer.main-footer {
+  font-size: 0.875rem;
+  background: #dee2e6;
+  color: #212529;
+}
 

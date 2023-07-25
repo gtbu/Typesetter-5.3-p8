@@ -21,6 +21,5 @@ $themeDir = dirname($page->theme_path);
 //$page->head_js[] = $themeDir.'/assets/js/bootnavbar.js'; 
 
 $page->head_js[] = $themeDir.'/assets/js/script.js';
-$page->head_js[] = $themeDir.'/assets/js/init.js';
 
 

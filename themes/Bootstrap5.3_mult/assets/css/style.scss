@@ -47,6 +47,8 @@ span.sitemap_link a, span.login_link a{text-decoration:none;}
        ul.navbar-nav{ padding:15px; 
             border:1px lightgray solid;
             border-radius:4px;}
+	
+	.gpMenu #main-nav ul li{min-width:220px;}
 			
 	  div.gpMenu.gpArea_FullMenu.GPAREA > .navbar-nav{
 			  border: 1px lightgray solid;
