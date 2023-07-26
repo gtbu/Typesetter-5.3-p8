@@ -2,8 +2,9 @@
 
 * php 8.0 - 8.2
 * Jquery UI 13.2 and jquery 3.7
+* Ckeditor 4.21
 * Scssphp 1.11.0 compiler with Bootstrap 5.3 support
-* less 2.53 compiler
+* Less 2.53 compiler
 * Elfinder 2.1.62
 * Local fonts under themes/Bootstrap4/assets
 
@@ -56,7 +57,8 @@ When submitting pull requests, it is extremely helpful to isolate the changes yo
 3. Now, edit the file as you like then click "Propose File Change"
 
 ## Plugins and php8 ##
-  * Many plugins <a href="https://www.typesettercms.com/Plugins" target=_blank> from the forum</a> will not function with php8, because deprecations of php7 are errors in php8. The momentary solution is to open an issue in the forum, but before look at the plugin-site under 'support', whether there is already an updated version for download and then manual installation under /addons.
+  * Many plugins <a href="https://www.typesettercms.com/Plugins" target=_blank> from the forum</a> will not function with Php 8, because deprecations of Php 7 are errors in php8. 
+  The momentary solution is to open an issue in the forum, but before look at the plugin-site under 'support', whether there is already an updated version for download and then manual installation under /addons.
 
 ## Problems with updates ##
 If You have questions regarding installation please look here at the top in the WIKI.
