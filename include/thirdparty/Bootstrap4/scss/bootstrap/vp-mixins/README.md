@@ -51,3 +51,8 @@ Check the source code to see which mixins exist or help me and update this Readm
  
 ## See also
 * [Bootstrap 4 Backward](https://github.com/JumpLinkNetwork/bootstrap-backward) - Bootstrap 4 Version using sass-autoprefixer to compile bootstrap 4 directly in your project.
+
+## see also 
+* https://github.com/ArtCodeStudio/sass-prefix-mixins
+* https://github.com/guerrero/sass-prefixer
+* https://css-tricks.com/snippets/sass/mixin-prefix-properties/
