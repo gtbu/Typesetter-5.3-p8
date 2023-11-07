@@ -1,0 +1,4 @@
+
+strftime.php is from https://gist.github.com/bohwaz/42fc223031e2b2dd2585aab159a20f30
+
+strftime-8.1.php is from https://github.com/alphp/strftime (MIT)
