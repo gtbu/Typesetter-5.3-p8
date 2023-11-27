@@ -904,7 +904,7 @@ class Installer extends \gp\admin\Addon\Tools{
 
 		$result			= $full_result['body'];
 		$md5			=& $full_result['headers']['x-md5'];
-		$package_md5	= md5($result);
+		$package_md5	= md5($result ?? '');
 
 		//check md5
 		if( $package_md5 != $md5 ){
