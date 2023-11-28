@@ -150,7 +150,9 @@ class Archive{
 	 *
 	 */
 	public function __call( $name , $arguments ){
-		return call_user_func_array( array($this->php_object,$name), $arguments);
+		$call1 =  new \ZipArchive(); 
+		$call1 = $this->php_object; 
+		return call_user_func_array( array($call1,$name), $arguments);
 	}
 
 
