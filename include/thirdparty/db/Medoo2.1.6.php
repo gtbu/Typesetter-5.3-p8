@@ -6,10 +6,10 @@ declare(strict_types=1);
  *
  * The Lightweight PHP Database Framework to Accelerate Development.
  *
- * @version 2.1.12
+ * @version 2.1.6
  * @author Angel Lai
  * @package Medoo
- * @copyright Copyright 2024 Medoo Project, Angel Lai.
+ * @copyright Copyright 2022 Medoo Project, Angel Lai.
  * @license https://opensource.org/licenses/MIT
  * @link https://medoo.in
  */
@@ -51,14 +51,14 @@ class Raw
  * @method bool has(string $table, array $where)
  * @method mixed rand(string $table, array|string $column, array $where)
  * @method int count(string $table, array $where)
- * @method string max(string $table, string $column)
- * @method string min(string $table, string $column)
- * @method string avg(string $table, string $column)
- * @method string sum(string $table, string $column)
- * @method string max(string $table, string $column, array $where)
- * @method string min(string $table, string $column, array $where)
- * @method string avg(string $table, string $column, array $where)
- * @method string sum(string $table, string $column, array $where)
+ * @method int max(string $table, string $column)
+ * @method int min(string $table, string $column)
+ * @method int avg(string $table, string $column)
+ * @method int sum(string $table, string $column)
+ * @method int max(string $table, string $column, array $where)
+ * @method int min(string $table, string $column, array $where)
+ * @method int avg(string $table, string $column, array $where)
+ * @method int sum(string $table, string $column, array $where)
  */
 class Medoo
 {
@@ -234,7 +234,9 @@ class Medoo
         }
 
         $option = $options['option'] ?? [];
-        $commands = [];
+        $commands = (isset($options['command']) && is_array($options['command'])) ?
+            $options['command'] :
+            [];
 
         switch ($this->type) {
 
@@ -467,10 +469,6 @@ class Medoo
                 );
             }
 
-            if (isset($options['command']) && is_array($options['command'])) {
-                $commands = array_merge($commands, $options['command']);
-            }
-
             foreach ($commands as $value) {
                 $this->pdo->exec($value);
             }
@@ -604,7 +602,7 @@ class Medoo
 
         foreach ($map as $key => $value) {
             if ($value[1] === PDO::PARAM_STR) {
-                $replace = $this->quote("{$value[0]}");
+                $replace = $this->quote($value[0]);
             } elseif ($value[1] === PDO::PARAM_NULL) {
                 $replace = 'NULL';
             } elseif ($value[1] === PDO::PARAM_LOB) {
@@ -661,7 +659,7 @@ class Medoo
         }
 
         $query = preg_replace_callback(
-            '/(([`\'])[\<]*?)?((FROM|TABLE|INTO|UPDATE|JOIN|TABLE IF EXISTS)\s*)?\<(([\p{L}_][\p{L}\p{N}@$#\-_]*)(\.[\p{L}_][\p{L}\p{N}@$#\-_]*)?)\>([^,]*?\2)?/',
+            '/(([`\']).*?)?((FROM|TABLE|INTO|UPDATE|JOIN|TABLE IF EXISTS)\s*)?\<(([\p{L}_][\p{L}\p{N}@$#\-_]*)(\.[\p{L}_][\p{L}\p{N}@$#\-_]*)?)\>([^,]*?\2)?/u',
             function ($matches) {
                 if (!empty($matches[2]) && isset($matches[8])) {
                     return $matches[0];
@@ -867,7 +865,7 @@ class Medoo
             $operator = $match['operator'] ?? null;
 
             if ($isIndex && isset($match[4]) && in_array($operator, ['>', '>=', '<', '<=', '=', '!='])) {
-                $stack[] = "{$column} {$operator} " . $this->columnQuote($match[4]);
+                $stack[] = "${column} ${operator} " . $this->columnQuote($match[4]);
                 continue;
             }
 
@@ -894,20 +892,15 @@ class Medoo
                             break;
 
                         case 'array':
-                            $values = [];
+                            $placeholders = [];
 
                             foreach ($value as $index => $item) {
-                                if ($raw = $this->buildRaw($item, $map)) {
-                                    $values[] = $raw;
-                                } else {
-                                    $stackKey = $mapKey . $index . '_i';
-
-                                    $values[] = $stackKey;
-                                    $map[$stackKey] = $this->typeMap($item, gettype($item));
-                                }
+                                $stackKey = $mapKey . $index . '_i';
+                                $placeholders[] = $stackKey;
+                                $map[$stackKey] = $this->typeMap($item, gettype($item));
                             }
 
-                            $stack[] = $column . ' NOT IN (' . implode(', ', $values) . ')';
+                            $stack[] = $column . ' NOT IN (' . implode(', ', $placeholders) . ')';
                             break;
 
                         case 'object':
@@ -942,15 +935,14 @@ class Medoo
                     $likeClauses = [];
 
                     foreach ($value as $index => $item) {
-                        $likeKey = "{$mapKey}_{$index}_i";
                         $item = strval($item);
 
                         if (!preg_match('/((?<!\\\)\[.+(?<!\\\)\]|(?<!\\\)[\*\?\!\%#^_]|%.+|.+%)/', $item)) {
                             $item = '%' . $item . '%';
                         }
 
-                        $likeClauses[] = $column . ($operator === '!~' ? ' NOT' : '') . " LIKE {$likeKey}";
-                        $map[$likeKey] = [$item, PDO::PARAM_STR];
+                        $likeClauses[] = $column . ($operator === '!~' ? ' NOT' : '') . " LIKE {$mapKey}L{$index}";
+                        $map["{$mapKey}L{$index}"] = [$item, PDO::PARAM_STR];
                     }
 
                     $stack[] = '(' . implode($connector, $likeClauses) . ')';
@@ -987,20 +979,16 @@ class Medoo
                     break;
 
                 case 'array':
-                    $values = [];
+                    $placeholders = [];
 
                     foreach ($value as $index => $item) {
-                        if ($raw = $this->buildRaw($item, $map)) {
-                            $values[] = $raw;
-                        } else {
-                            $stackKey = $mapKey . $index . '_i';
+                        $stackKey = $mapKey . $index . '_i';
 
-                            $values[] = $stackKey;
-                            $map[$stackKey] = $this->typeMap($item, gettype($item));
-                        }
+                        $placeholders[] = $stackKey;
+                        $map[$stackKey] = $this->typeMap($item, gettype($item));
                     }
 
-                    $stack[] = $column . ' IN (' . implode(', ', $values) . ')';
+                    $stack[] = $column . ' IN (' . implode(', ', $placeholders) . ')';
                     break;
 
                 case 'object':
@@ -1328,7 +1316,7 @@ class Medoo
                 $tableName .= ' AS ' . $this->tableQuote($match['alias']);
             }
 
-            $tableJoin[] = $type[$match['join']] . " JOIN {$tableName} {$relation}";
+            $tableJoin[] = $type[$match['join']] . " JOIN ${tableName} ${relation}";
         }
 
         return implode(' ', $tableJoin);
@@ -1358,14 +1346,14 @@ class Medoo
 
                 $stack[$value] = isset($keyMatch['type']) ?
                     [$columnKey, $keyMatch['type']] :
-                    [$columnKey];
+                    [$columnKey, 'String'];
             } elseif ($this->isRaw($value)) {
                 preg_match('/([\p{L}_][\p{L}\p{N}@$#\-_]*\.)?(?<column>[\p{L}_][\p{L}\p{N}@$#\-_]*)(\s*\[(?<type>(String|Bool|Int|Number))\])?/u', $key, $keyMatch);
                 $columnKey = $keyMatch['column'];
 
                 $stack[$key] = isset($keyMatch['type']) ?
                     [$columnKey, $keyMatch['type']] :
-                    [$columnKey];
+                    [$columnKey, 'String'];
             } elseif (!is_int($key) && is_array($value)) {
                 if ($root && count(array_keys($columns)) === 1) {
                     $stack[$key] = [$key, 'String'];
@@ -1471,7 +1459,7 @@ class Medoo
                             break;
 
                         case 'String':
-                            $stack[$columnKey] = (string) $item;
+                            $stack[$columnKey] = $item;
                             break;
                     }
                 } else {
@@ -2235,11 +2223,7 @@ class Medoo
         ];
 
         foreach ($output as $key => $value) {
-            try {
-                $output[$key] = $this->pdo->getAttribute(constant('PDO::ATTR_' . $value));
-            } catch (PDOException $e) {
-                $output[$key] = $e->getMessage();
-            }
+            $output[$key] = @$this->pdo->getAttribute(constant('PDO::ATTR_' . $value));
         }
 
         $output['dsn'] = $this->dsn;
