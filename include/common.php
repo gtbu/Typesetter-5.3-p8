@@ -50,7 +50,7 @@ gp_defined('CMS_NAME_FULL',				'Typesetter CMS');
 gp_defined('addon_browse_path',			CMS_DOMAIN . '/index.php');
 gp_defined('debug_path',				CMS_DOMAIN . '/index.php/Debug');
 
-gp_defined('gpversion',					'5.3-p8 RC1');
+gp_defined('gpversion',					'5.3-p8.3');
 gp_defined('gp_random',					\gp\tool::RandomString());
 
 
