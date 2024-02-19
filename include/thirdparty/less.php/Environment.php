@@ -9,11 +9,11 @@ class Less_Environment {
 	 *
 	 * - rootpath: rootpath to append to URLs
 	 *
-	 * @var array|null $currentFileInfo;
+	 * @var array|null
 	 */
 	public $currentFileInfo;
 
-	/* Whether we are currently importing multiple copies */
+	/** @var bool Whether we are currently importing multiple copies */
 	public $importMultiple = false;
 
 	/**
@@ -21,14 +21,9 @@ class Less_Environment {
 	 */
 	public $frames = [];
 
-	/**
-	 * @var array
-	 */
+	/** @var Less_Tree_Media[] */
 	public $mediaBlocks = [];
-
-	/**
-	 * @var array
-	 */
+	/** @var Less_Tree_Media[] */
 	public $mediaPath = [];
 
 	public static $parensStack = 0;
@@ -40,6 +35,8 @@ class Less_Environment {
 	public static $_outputMap;
 
 	public static $mixin_stack = 0;
+
+	public static $mathOn = true;
 
 	/**
 	 * @var array
@@ -88,17 +85,29 @@ class Less_Environment {
 	}
 
 	public function copyEvalEnv( $frames = [] ) {
-		$new_env = new Less_Environment();
+		$new_env = new self();
 		$new_env->frames = $frames;
 		return $new_env;
 	}
 
+	/**
+	 * @return bool
+	 * @see Eval.prototype.isMathOn in less.js 3.0.0 https://github.com/less/less.js/blob/v3.0.0/dist/less.js#L1007
+	 */
 	public static function isMathOn() {
+		if ( !self::$mathOn ) {
+			return false;
+		}
 		return !Less_Parser::$options['strictMath'] || self::$parensStack;
 	}
 
+	/**
+	 * @param string $path
+	 * @return bool
+	 * @see less-2.5.3.js#Eval.isPathRelative
+	 */
 	public static function isPathRelative( $path ) {
-		return !preg_match( '/^(?:[a-z-]+:|\/)/', $path );
+		return !preg_match( '/^(?:[a-z-]+:|\/|#)/', $path );
 	}
 
 	/**

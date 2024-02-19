@@ -2,9 +2,9 @@
 /**
  * @private
  */
-class Less_Tree_Value extends Less_Tree {
+class Less_Tree_Value extends Less_Tree implements Less_Tree_HasValueProperty {
 
-	public $type = 'Value';
+	/** @var Less_Tree[] */
 	public $value;
 
 	/**
@@ -25,7 +25,7 @@ class Less_Tree_Value extends Less_Tree {
 			$ret[] = $v->compile( $env );
 		}
 		if ( $i > 0 ) {
-			return new Less_Tree_Value( $ret );
+			return new self( $ret );
 		}
 		return $ret[0];
 	}
@@ -33,7 +33,7 @@ class Less_Tree_Value extends Less_Tree {
 	/**
 	 * @see Less_Tree::genCSS
 	 */
-	function genCSS( $output ) {
+	public function genCSS( $output ) {
 		$len = count( $this->value );
 		for ( $i = 0; $i < $len; $i++ ) {
 			$this->value[$i]->genCSS( $output );

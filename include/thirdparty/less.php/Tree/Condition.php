@@ -9,7 +9,6 @@ class Less_Tree_Condition extends Less_Tree {
 	public $rvalue;
 	public $index;
 	public $negate;
-	public $type = 'Condition';
 
 	public function __construct( $op, $l, $r, $i = 0, $negate = false ) {
 		$this->op = trim( $op );
@@ -24,6 +23,11 @@ class Less_Tree_Condition extends Less_Tree {
 		$this->rvalue = $visitor->visitObj( $this->rvalue );
 	}
 
+	/**
+	 * @param Less_Environment $env
+	 * @return bool
+	 * @see less-2.5.3.js#Condition.prototype.eval
+	 */
 	public function compile( $env ) {
 		$a = $this->lvalue->compile( $env );
 		$b = $this->rvalue->compile( $env );
@@ -38,26 +42,18 @@ class Less_Tree_Condition extends Less_Tree {
 				break;
 
 			default:
-				if ( Less_Parser::is_method( $a, 'compare' ) ) {
-					$result = $a->compare( $b );
-				} elseif ( Less_Parser::is_method( $b, 'compare' ) ) {
-					$result = $b->compare( $a );
-				} else {
-					throw new Less_Exception_Compiler( 'Unable to perform comparison', null, $this->index );
-				}
-
-				switch ( $result ) {
+				switch ( Less_Tree::nodeCompare( $a, $b ) ) {
 					case -1:
-					$result = $this->op === '<' || $this->op === '=<' || $this->op === '<=';
+						$result = $this->op === '<' || $this->op === '=<' || $this->op === '<=';
 						break;
-
 					case 0:
-					$result = $this->op === '=' || $this->op === '>=' || $this->op === '=<' || $this->op === '<=';
+						$result = $this->op === '=' || $this->op === '>=' || $this->op === '=<' || $this->op === '<=';
 						break;
-
 					case 1:
-					$result = $this->op === '>' || $this->op === '>=';
+						$result = $this->op === '>' || $this->op === '>=';
 						break;
+					default:
+						$result = false;
 				}
 				break;
 		}
