@@ -60,20 +60,20 @@ class Combine{
 			'package'		=> 'jquery',
 			'label'			=> 'Migrate',
 			'cdn'		 => [
-				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.4.0/jquery-migrate.min.js',
-				'Jsdelivr'		=> '//cdn.jsdelivr.net/npm/jquery-migrate@3.4.0/dist/jquery-migrate.min.js',
+				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.4.1/jquery-migrate.min.js',
+				'Jsdelivr'		=> '//cdn.jsdelivr.net/npm/jquery-migrate@3.4.1/dist/jquery-migrate.min.js',
 			],
 		],
 		
 		//jquery
 		'jquery' => [
-			'file'			=> '/include/thirdparty/js/jquery.min.js',   //3.6.0
+			'file'			=> '/include/thirdparty/js/jquery.min.js',   //3.6.3
 			'requires'		=> 'migrate',
 			'package'		=> 'jquery',
 			'label'			=> 'jQuery',
 			'cdn'		 => [
-				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js',
-				'Jsdelivr'		=> '//cdn.jsdelivr.net/gh/jquery/jquery@3.6.0/dist/jquery.min.js',
+				'CloudFlare'	=> '//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js',
+				'Jsdelivr'		=> '//cdn.jsdelivr.net/gh/jquery/jquery@3.6.3/dist/jquery.min.js',
 			],
 		],
 				
