@@ -82,7 +82,7 @@ class gp_email{
 		}
 
 		$server = \gp\tool::ServerName(true);
-		if( !$server === false ){
+		if (!boolval($server)){
 			$server = 'localhost';
 		}
 

@@ -16,7 +16,7 @@ class About{
 
 
 		echo '<p>You\'re currently using version '.\gpversion.' of our free, open source and easy to use content management system.';
-		echo ' Our code is <a href="https://github.com/Typesetter/Typesetter">hosted on GitHub</a> ';
+		echo ' Our code is <a href="https://github.com/gtbu/Typesetter-5.3-p8">hosted on GitHub</a> ';
 		echo 'and licensed under version 2 of the <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU General Public License</a>. ';
 		echo '</p>';
 
@@ -42,7 +42,7 @@ class About{
 		echo '<p>This one is a bit more subjective, but just as important. ';
 		echo ' There are multiple ways to give us feedback. The following services allow you to rate and comment on '.\CMS_NAME.'. ';
 		echo '</p>';
-		echo '<p><a href="https://github.com/Typesetter/Typesetter" target="_blank">Fork on GitHub</a></p>';
+		echo '<p><a href="https://github.com/gtbu/Typesetter-5.3-p8" target="_blank">Fork on GitHub</a></p>';
 		echo '<p><a href="https://www.opensourcecms.com/typesetter-cms/" target="_blank">OpensourceCMS.com</a></p>';
 
 
@@ -52,9 +52,10 @@ class About{
 		$projects['ColorBox']		= 'www.jacklmoore.com/colorbox';
 		$projects['Bootstrap']		= 'getbootstrap.com';
 		$projects['Bootswatch']		= 'bootswatch.com';
-		$projects['jQuery']			= 'jquery.com';
+		$projects['jQuery']		= 'jquery.com';
 		$projects['jQuery UI']		= 'jqueryui.com';
-		$projects['ScssPhp']		= 'github.com/leafo/scssphp';
+		$projects['ScssPhp']		= 'https://github.com/scssphp/scssphp';
+                $projects['Less']		= 'https://github.com/wikimedia/less.php';
 		$projects['PHPMailer']		= 'github.com/PHPMailer/PHPMailer';
 
 

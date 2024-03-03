@@ -808,7 +808,7 @@ namespace gp{
 		public static function ServerName($strip_www=false, $with_port=false){
 
 			$add_port = '';
-			if( isset($_SERVER['SERVER_NAME']) ){
+			if( !empty($_SERVER['HTTP_HOST']) ){
 				$server = self::UrlChars($_SERVER['SERVER_NAME']);
 				if( $with_port && isset($_SERVER['SERVER_PORT']) ){
 					$port = $_SERVER['SERVER_PORT'];
