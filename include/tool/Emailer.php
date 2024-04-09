@@ -14,7 +14,7 @@ namespace gp\tool{
 	 * @since 1.7
 	 *
 	 */
-	
+#[\AllowDynamicProperties]		
 	class Emailer extends \PHPMailer\PHPMailer\PHPMailer{
 
 		function __construct(){
