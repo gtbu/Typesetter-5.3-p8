@@ -20,12 +20,14 @@
 /**
  * PHPMailer SPL autoloader.
  * @param string $classname The name of the class to load
+ * but new : namespace PHPMailer\PHPMailer; 
  */
 function PHPMailerAutoload($classname){
-  $filename = __DIR__ . DIRECTORY_SEPARATOR . 'class.' . strtolower($classname) . '.php';
-  if (is_readable($filename)) {
-    require $filename;
-  }
+    $filename = __DIR__ . DIRECTORY_SEPARATOR . $classname . '.php';
+		/* was : $filename = __DIR__ . DIRECTORY_SEPARATOR . 'class.' . strtolower($classname) . '.php'; */
+		/* __DIR__ . DIRECTORY_SEPARATOR) -> include/thirdparty/PHPMailer/ */		
+	if (is_readable($filename)) { require $filename; } 
+	  /* -> :  /var/..../include/thirdparty/PHPMailer/PHPMailer.php */
 }
 
 spl_autoload_register('PHPMailerAutoload', true, true);

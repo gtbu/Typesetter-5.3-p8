@@ -1,19 +1,21 @@
 <?php
-
 namespace gp\tool{
-
 	defined('is_running') or die('Not an entry point...');
-
-	includeFile('thirdparty/PHPMailer/PHPMailerAutoload.php');
-
-
+    includeFile('thirdparty/PHPMailer/PHPMailerAutoload.php');
+    includeFile('thirdparty/PHPMailer/PHPMailer.php');
+	includeFile('thirdparty/PHPMailer/SMTP.php');
+	includeFile('thirdparty/PHPMailer/Exception.php'); 
+	use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+	use PHPMailer\PHPMailer\SMTP;
 	/**
 	 * An extension of phpmailer
-	 *
+	 * $obj = new namespace\Another; // instantiates object of class foo\Another
 	 * @since 1.7
 	 *
 	 */
-	class Emailer extends \PHPMailer{
+	
+	class Emailer extends \PHPMailer\PHPMailer\PHPMailer{
 
 		function __construct(){
 			global $dataDir,$config;
@@ -24,10 +26,10 @@ namespace gp\tool{
 			$this->PluginDir = $dataDir.'/include/thirdparty/PHPMailer/';
 			$this->CharSet = 'utf-8';
 			$this->ContentType = 'text/html';
-
+            $this->SMTPDebug = 0; 
 			$mail_method = $this->Mail_Method();
 			switch($mail_method){
-
+              
 				//smtp & smtpauth
 				case 'smtpauth':
 					$this->SMTPAuth = true;
@@ -252,8 +254,7 @@ namespace gp\tool{
 
 namespace{
 	class gp_phpmailer extends \gp\tool\Emailer{}
-
-	global $gp_mailer;
+  	global $gp_mailer;
 	if( !is_object( $gp_mailer ) || !is_a( $gp_mailer, 'gp_phpmailer' ) ){
 		$gp_mailer = new gp_phpmailer();
 	}
