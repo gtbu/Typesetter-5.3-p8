@@ -6,6 +6,7 @@
 * Scssphp 1.11.0 compiler with Bootstrap 5.3 support
 * Less 2.53 compiler
 * Elfinder 2.1.62
+* PhpMailer 6.9.1
 * Local fonts under themes/Bootstrap4/assets
 
 <p align="center"><img src="/include/imgs/typesetter/ts-logo-color-100x100px-min.png?raw=true"/></p>
