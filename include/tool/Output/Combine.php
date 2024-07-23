@@ -521,7 +521,7 @@ class Combine{
 		
 		// FontAwesome (6.6 free)
 		'fontawesome6.6'		=> [
-			'file'			=> '/include/thirdparty/fontawesome/v6.6/css/all.min.css',
+			'file'			=> '/include/thirdparty/fontawesome/V6.6/css/all.min.css',
 			'label'			=> 'Font Awesome 6.6',
 			'cdn'			=> [
 				'CloudFlare'	=> 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css',
