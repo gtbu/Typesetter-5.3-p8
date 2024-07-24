@@ -509,18 +509,9 @@ class Combine{
 				'CloudFlare'	=> 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
 			],
 		],
-		
-		// FontAwesome (6.4 free)
-		'fontawesome6'		=> [
-			'file'			=> '/include/thirdparty/fontawesome/v6.4/css/all.min.css',
-			'label'			=> 'Font Awesome 6.4',
-			'cdn'			=> [
-				'CloudFlare'	=> 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-			],
-		],
-		
+				
 		// FontAwesome (6.6 free)
-		'fontawesome6.6'		=> [
+		'fontawesome6'		=> [
 			'file'			=> '/include/thirdparty/fontawesome/V6.6/css/all.min.css',
 			'label'			=> 'Font Awesome 6.6',
 			'cdn'			=> [
