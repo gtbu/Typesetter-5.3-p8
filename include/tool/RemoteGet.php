@@ -174,19 +174,21 @@ namespace gp\tool{
 			return false;
 		}
 
-
 		/**
 		 * Fetch a url using php's stream_get_contents() function
 		 *
 		 */
 		public function stream_request($url,$r){
+			
+            $parsedUrl = parse_url($url);
+            if ($parsedUrl['host'] == 'localhost' || $parsedUrl['host'] == 'www.localhost') {
+            $url = str_replace(['http://www.localhost', 'http://localhost'], 'http://127.0.0.1', $url);
+            $url = str_replace(['https://www.localhost', 'https://localhost'], 'https://127.0.0.1', $url);
+            }
 
 			$arrContext =	$this->stream_context($url,$r);
-
 			$context =		stream_context_create($arrContext);
-
 			$handle =		fopen($url, 'r', false, $context);
-
 			if( $handle === false ){
 				static::$debug['stream']	= 'no handle';
 				return false;
@@ -199,12 +201,9 @@ namespace gp\tool{
 			fclose($handle);
 
 			$processedHeaders = static::processHeaders($theHeaders);
-
 			$this->body = static::chunkTransferDecode($strResponse,$processedHeaders);
-
 			return $this->ReturnRequest( $url, $r, $processedHeaders );
 		}
-
 
 		/**
 		 * Create context array
