@@ -76,7 +76,7 @@ class HTML{
 	}
 
 	public static function Chars($str){
-		return htmlspecialchars($str, ENT_COMPAT, 'UTF-8', false);
+		return htmlspecialchars($str ?? '', ENT_COMPAT, 'UTF-8', false);
 	}
 
 
