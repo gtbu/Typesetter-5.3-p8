@@ -118,8 +118,10 @@ namespace gp{
 			$modified				= 0;
 			$content_length			= 0;
 			foreach($files as $file){
-				$content_length		+= @filesize($file);
-				$modified			= max($modified, @filemtime($file));
+				if (file_exists($file)) {
+                       $content_length += filesize($file);}				
+				if (file_exists($file) && is_readable($file)) {
+                        $modified = max($modified, filemtime($file));}
 			}
 
 			return self::GenEtag($modified, $content_length);
