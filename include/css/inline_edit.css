@@ -6,11 +6,12 @@ html {
 }
 
 #ckeditor_wrap {
-	display: block;
 	position: fixed;
 	bottom: 0;
 	right: -220px;
 	width: 220px;
+	height: fit-content; 
+    display: inline-block;
 	top: 0;
 	z-index: 10000; /* to be above full screen editing of ckeditor */
 	background: #eee;
