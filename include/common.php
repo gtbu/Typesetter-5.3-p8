@@ -43,10 +43,10 @@ gp_defined('notify_deprecated',			true);	// Since 5.2
 
 
 //gp_defined('CMS_DOMAIN',				'http://gpeasy.loc');
-gp_defined('CMS_DOMAIN',				'https://www.typesettercms.com');
-gp_defined('CMS_READABLE_DOMAIN',		'TypesetterCMS.com');
+gp_defined('CMS_DOMAIN',				'https://github.com/gtbu');
+gp_defined('CMS_READABLE_DOMAIN',		'github.com/gtbu');
 gp_defined('CMS_NAME',					'Typesetter');
-gp_defined('CMS_NAME_FULL',				'Typesetter CMS');
+gp_defined('CMS_NAME_FULL',				'Typesetter5 CMS');
 gp_defined('addon_browse_path',			CMS_DOMAIN . '/index.php');
 gp_defined('debug_path',				CMS_DOMAIN . '/index.php/Debug');
 
