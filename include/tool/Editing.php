@@ -616,7 +616,7 @@ namespace gp\tool{
 		 * Configuration precedence: (1) User (2) Addon (3) $options (4) CMS
 		 *
 		 */
-		public static function CKConfig( $options = array(), $config_name = 'config', &$plugins = array() ){
+		public static function CKConfig( $options = array(), $config_name = 'config', &$plugins = array(), $Ckskin='moono-lisa' ){
 			global $config;
 
 			$plugins = array();
@@ -624,7 +624,7 @@ namespace gp\tool{
 			// 4) CMS defaults
 			$defaults = array(
 							//'customConfig'				=> \gp\tool::GetDir('/include/js/ckeditor_config.js'),
-							'skin'						=> 'moono-lisa',
+							'skin'						=> $Ckskin,
 							'browser'					=> true, //not actually a ckeditor configuration value, but we're keeping it now for reverse compat
 							'smiley_path'				=> \gp\tool::GetDir('/include/thirdparty/ckeditor/plugins/smiley/images/'),
 							'height'					=> 300,
