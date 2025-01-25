@@ -19,6 +19,7 @@ $langmessage = array (
 	'Saved'                           => 'Збережено',
 	'Saving'                          => 'Зберігається',
 	'save_changes'                    => 'Зберегти зміни',
+	'Select a skin'	                  => 'Виберіть скін',
 	'back'                            => 'Назад',
 	'cancel'                          => 'Скасувати',
 	'Classes'                         => 'Класи',

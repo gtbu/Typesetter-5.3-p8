@@ -19,6 +19,7 @@ $langmessage = array (
 	'Saved'                           => '保存しました',
 	'Saving'                          => '保存しています',
 	'save_changes'                    => '変更を保存',
+	'Select a skin'	                  => 'スキンを選択',
 	'back'                            => 'もどる',
 	'cancel'                          => 'キャンセル',
 	'Classes'                         => 'クラス',

@@ -19,6 +19,7 @@ $langmessage = array (
 	'Saved'                           => 'Saved',
 	'Saving'                          => 'Saving',
 	'save_changes'                    => 'Αποθήκευση Αλλαγών',
+	'Select a skin'	                  => 'Επιλέξτε ένα θέμα',
 	'back'                            => 'Πίσω',
 	'cancel'                          => 'Άκυρο',
 	'Classes'                         => 'Classes',

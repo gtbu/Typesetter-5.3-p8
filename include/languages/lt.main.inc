@@ -19,6 +19,7 @@ $langmessage = array (
 	'Saved'                           => 'Saved',
 	'Saving'                          => 'Saving',
 	'save_changes'                    => 'Saugoti pakeitimus',
+	'Select a skin'	                  => 'Pasirinkite apipavidalinimą',
 	'back'                            => 'Atgal',
 	'cancel'                          => 'Atšaukti',
 	'Classes'                         => 'Classes',

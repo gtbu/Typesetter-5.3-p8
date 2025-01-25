@@ -19,6 +19,7 @@ $langmessage = array (
 	'Saved'                           => 'Enregistré',
 	'Saving'                          => 'En cours d´enregistrement',
 	'save_changes'                    => 'Enregistrer les modifications',
+	'Select a skin'	                  => 'Sélectionner un habillage',
 	'back'                            => 'Retour',
 	'cancel'                          => 'Annuler',
 	'Classes'                         => 'Classes',

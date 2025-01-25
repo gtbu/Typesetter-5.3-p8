@@ -19,6 +19,7 @@ $langmessage = array (
 	'Saved'                           => 'Saved',
 	'Saving'                          => 'Saving',
 	'save_changes'                    => 'Változások mentése',
+	'Select a skin'	                  => 'Válasszon egy skint',
 	'back'                            => 'Vissza',
 	'cancel'                          => 'Mégsem',
 	'Classes'                         => 'Classes',

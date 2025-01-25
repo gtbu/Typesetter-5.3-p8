@@ -19,6 +19,7 @@ $langmessage = array (
 	'Saved'                           => 'Saved',
 	'Saving'                          => 'Saving',
 	'save_changes'                    => 'Goym broytingar',
+	'Select a skin'	                  => 'Select Skin',
 	'back'                            => 'Bakka',
 	'cancel'                          => 'Angra',
 	'Classes'                         => 'Classes',
