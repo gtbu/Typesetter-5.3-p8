@@ -616,16 +616,20 @@ namespace gp\tool{
 		 * Configuration precedence: (1) User (2) Addon (3) $options (4) CMS
 		 *
 		 */
-		public static function CKConfig( $options = array(), $config_name = 'config', &$plugins = array(), $Ckskin='moono-lisa' ){
-			global $config;
+		public static function CKConfig($options = array(), $config_name = 'config', &$plugins = array()) {
+            global $config;
+            $plugins = array();
 
-			$plugins = array();
+            // Read the skin value from config.js
+            $cfgPath = 'include/thirdparty/ckeditor/config.js';
+            $cfgContent = file_get_contents($cfgPath);
+            preg_match('/config\.skin\s*=\s*[\'"](\w+)[\'"]/', $cfgContent, $matches);
+            $cskin = isset($matches[1]) ? $matches[1] : 'moono-lisa'; // Default to 'moono-lisa' if not found
 
-			// 4) CMS defaults
-			$defaults = array(
-							//'customConfig'				=> \gp\tool::GetDir('/include/js/ckeditor_config.js'),
-							'skin'						=> $Ckskin,
-							'browser'					=> true, //not actually a ckeditor configuration value, but we're keeping it now for reverse compat
+            $defaults = array(
+                    //'customConfig'    => \gp\tool::GetDir('/include/js/ckeditor_config.js'),
+                            'skin'            => $cskin,
+                            'browser'         => true,//not actually a ckeditor configuration value, but we're keeping it now for reverse compat
 							'smiley_path'				=> \gp\tool::GetDir('/include/thirdparty/ckeditor/plugins/smiley/images/'),
 							'height'					=> 300,
 							'contentsCss'				=> \gp\tool::GetDir('/include/css/ckeditor_contents.css'),
