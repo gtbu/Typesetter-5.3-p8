@@ -584,8 +584,8 @@ namespace gp\tool{
 			echo	'CKEDITOR.on("instanceReady", function(evt){';
 			/* echo		'console.log("triggered editor:loaded event with ", { section: evt.editor.element["$"], section_type: "other", label: evt.editor.name });'; */
 			echo		'$(document).trigger("editor:loaded", { editor: evt.editor, section: evt.editor.element["$"], section_type: "other", label: evt.editor.name });';
-			echo	'});';
 			echo '});';
+			echo '});';  
 
 			echo "\n\n";
 			$page->jQueryCode .= ob_get_clean();
@@ -617,7 +617,7 @@ namespace gp\tool{
 		 *
 		 */
 		public static function CKConfig($options = array(), $config_name = 'config', &$plugins = array()) {
-            global $config;
+            global $config, $cskin;
             $plugins = array();
 
             // Read the skin value from config.js
@@ -656,13 +656,10 @@ namespace gp\tool{
 
 						);
 
-			if( $config['langeditor'] == 'inherit' ){
-				$defaults['language'] = $config['language'];
-			}else{
-				$defaults['language'] = $config['langeditor'];
-			}
+			$defaults['language'] = ($config['langeditor'] == 'inherit') ? $config['language'] : $config['langeditor'];
 
 			// 3) $options
+			$defaults['skin'] = $cskin;
 			$options += $defaults;
 
 
