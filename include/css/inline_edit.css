@@ -14,7 +14,8 @@ html {
     display: inline-block;
 	top: 0;
 	z-index: 10000; /* to be above full screen editing of ckeditor */
-	background: #eee;
+	background: #F3F3F1;
+	background-color: #F3F3F1;
 	font-family: 
 		-apple-system, BlinkMacSystemFont,
 		"Segoe UI", Roboto, "Helvetica Neue", Arial,
