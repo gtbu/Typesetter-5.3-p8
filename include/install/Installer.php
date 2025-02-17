@@ -237,7 +237,7 @@ class Installer{
 			$can_install		= -1;
 		}
 
-		$this->SetStatus($langmessage['PHP_Version'], $can_install, $version, '7.3+');
+		$this->SetStatus($langmessage['PHP_Version'], $can_install, $version, '8.0+');
 	}
 
 
