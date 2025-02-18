@@ -27,6 +27,7 @@ class CKEditor extends \gp\special\Base{
 		$this->subpages = array(
 			''				=> $langmessage['Manage Plugins'],
 			'Config'		=> $langmessage['configuration'],
+			'CK_Skin'          => 'Skin',   // /* 425 */
 			'Example'		=> 'Example',
 			);
 
@@ -67,6 +68,8 @@ class CKEditor extends \gp\special\Base{
 			case 'Example':
 				$this->Example();
 			break;
+			case 'CK_Skin':
+				$this->CKSkins();
 			case 'Config':
 				$this->CustomConfigForm();
 				$this->DisplayCurrent();
@@ -415,6 +418,89 @@ class CKEditor extends \gp\special\Base{
 		}
 
 	}
+
+/*  --------cke skinselector -------------- */
+
+public function saveskins() {
+     global $langmessage;
+    
+     if (isset($_POST['skin_select']) && !empty($_POST['skin_select'])) {
+		
+        $selected_skin = $_POST['skin_select'];
+        $config_file = 'include/thirdparty/ckeditor/config.js';
+        
+        // Read the current content of the config file
+        $current_content = file_get_contents($config_file);
+        
+        // Remove any existing config.skin lines
+        $new_content = preg_replace('/^\s*config\.skin\s*=.*$/m', '', $current_content);
+        
+        // Add the new config.skin line after the function opening
+        $new_content = preg_replace(
+        '/(CKEDITOR\.editorConfig\s*=\s*function\s*\(?\s*config\s*\)?\s*\{)/i',
+        "$1\n\tconfig.skin = '$selected_skin';",
+        $new_content
+        );
+        
+        // Remove any empty lines that might have been created
+        $new_content = preg_replace('/^\s*[\r\n]/m', '', $new_content);
+        
+        // Write the updated content back to the config file
+        if (file_put_contents($config_file, $new_content) !== false) {
+            echo '<div class="success">' . $langmessage['SAVED'] . ': ' . $selected_skin . '</div>';
+        } else {
+            echo '<div class="error">' . $langmessage['OOPS'] . ': ' . $langmessage['COULD_NOT_SAVE'] . '</div>';
+        }
+    }
+ }
+	 
+    /**
+	 * Ckeditor custom skin
+	 * 71
+	 **/
+public function CKSkins() {   
+    global $langmessage;
+    $skins_dir = 'include/thirdparty/ckeditor/skins';
+    $skin_directories = array_diff(scandir($skins_dir), array('..', '.'));
+    $selected_skin = '';
+           
+    if (isset($_POST['skin_select']) && in_array($_POST['skin_select'], $skin_directories)) {
+        $selected_skin = $_POST['skin_select'];
+    } else {
+        // Read the current skin from the config file
+        $config_file = 'include/thirdparty/ckeditor/config.js';
+        $config_content = file_get_contents($config_file);
+        preg_match('/config\.skin\s*=\s*[\'"](\w+)[\'"]/', $config_content, $matches);
+        $selected_skin = isset($matches[1]) ? $matches[1] : 'moono-lisa';
+    }
+    
+    echo '<form method="post">';
+    echo ' <label for="skin_select">Custom Skin:</label> ';
+    echo ' <select name="skin_select" id="skin_select"> ';
+    echo '<option value=""' . (empty($selected_skin) ? ' selected' : '') . '>--' . $langmessage['Select a skin'] . '--</option>';
+    foreach ($skin_directories as $skin_dir) {
+        echo '<option value="' . $skin_dir . '"' . 
+             ($selected_skin === $skin_dir ? ' selected' : '') . 
+             '>' . $skin_dir . '</option>';
+    }
+    echo ' </select> ';
+    echo '<input type="submit" name="save_button" value="' . $langmessage['save'] . '">';
+    echo ' </form> ';
+    echo '<br> ';
+	/* if (isset($_POST['save_button'])) { saveskins(); } */
+	
+	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['save_button'])) {
+                $this->saveskins();
+            }
+        }
+}
+
+	 
+ public function run() {
+        // A minimal run function to trigger things, needed for extended \gp\special\Base classes
+        $this->CKSkins();
+    }
 
 
 	/**
