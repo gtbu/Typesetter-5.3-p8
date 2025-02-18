@@ -81,6 +81,7 @@ $languages = [
 	'fr' => 'Français',					# French
 	'gl' => 'Galego',					# Galician
 	'hr' => 'hrvatski',					# Croatian
+	'hi' => 'Hindi',					# Hindi
 	'hu' => 'Magyar',					# Hungarian
 	'is' => 'Íslenska',					# Icelandic
 	'it' => 'Italiano',					# Italian
