@@ -129,10 +129,10 @@ class CKEditor extends \gp\special\Base{
 
 		echo '<tr><td>';
 		echo '<input type="hidden" name="cmd" value="upload_plugin" />';
-		echo '<input type="file" name="plugin" />';
+		echo '<input type="file" class="gpselect" name="plugin" />';
 		echo '</td><td>&nbsp;';
 		echo '</td><td>';
-		echo ' <input type="submit" value="Install Plugin" />';
+		echo ' <input type="submit" class="gpsubmit" value="Install Plugin" />';
 		echo '</td></tr>';
 
 		echo '</table>';
@@ -476,7 +476,7 @@ public function CKSkins() {
     
     echo '<form method="post">';
     echo ' <label for="skin_select">Custom Skin:</label> ';
-    echo ' <select name="skin_select" id="skin_select"> ';
+    echo ' <select name="skin_select" id="skin_select" class="gpselect"> ';
     echo '<option value=""' . (empty($selected_skin) ? ' selected' : '') . '>--' . $langmessage['Select a skin'] . '--</option>';
     foreach ($skin_directories as $skin_dir) {
         echo '<option value="' . $skin_dir . '"' . 
@@ -484,7 +484,7 @@ public function CKSkins() {
              '>' . $skin_dir . '</option>';
     }
     echo ' </select> ';
-    echo '<input type="submit" name="save_button" value="' . $langmessage['save'] . '">';
+    echo '<input type="submit" class="gpsubmit" name="save_button" value="' . $langmessage['save'] . '">';
     echo ' </form> ';
     echo '<br> ';
 	/* if (isset($_POST['save_button'])) { saveskins(); } */
