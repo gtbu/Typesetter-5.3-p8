@@ -166,7 +166,7 @@ html {
  *
  */
 #ckeditor_area {
-	padding: 10px 10px 0 10px;
+	padding: 3px 3px 0 3px;
 	overflow: auto;
 	box-sizing: border-box;
 }
@@ -204,7 +204,7 @@ html {
 
 #ckeditor_area .cke_toolbar {
 	width: 100%;
-	padding: 4px 0 !important;
+	padding: 2px 0 !important;
 	margin: 0;
 }
 
@@ -249,7 +249,7 @@ html {
 
 #ckeditor_area .cke_button {
 	border: 1px solid transparent;
-	height: 16px;
+	height: 18px;
 	padding: 2px;
 }
 
