@@ -177,7 +177,6 @@ function showError($errno, $errmsg, $filename, $linenum, $vars=null, $backtrace=
 		E_USER_ERROR		=> 'User Error',
 		E_USER_WARNING 		=> 'User Warning',
 		E_USER_NOTICE		=> 'User Notice',
-		E_STRICT			=> 'Strict Notice',
 		E_RECOVERABLE_ERROR => 'Recoverable Error',
 		E_DEPRECATED		=> 'Deprecated',
 		E_USER_DEPRECATED	=> 'User Deprecated',
@@ -187,11 +186,6 @@ function showError($errno, $errmsg, $filename, $linenum, $vars=null, $backtrace=
 	$error_reporting = error_reporting();
 	if( $error_reporting === 0 ){
 		return false;
-	}
-
-	// since we supported older versions of php, there may be a lot of strict errors
-	if( $errno === E_STRICT ){
-		return true;
 	}
 
 	//get the backtrace and function where the error was thrown
