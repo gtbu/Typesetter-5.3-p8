@@ -1,9 +1,9 @@
 *** RC1   -  RC will be the version with php8.2
 
-* php 8.0 - 8.3
-* Jquery UI 13.2 and jquery 3.7
-* Ckeditor 4.22
-* Scssphp 1.11.0 compiler with Bootstrap 5.3 support
+* php 8.0 - 8.4
+* Jquery UI 13.2 and jquery 3.6
+* Ckeditor 4.22 with skin-switch
+* Scssphp 1.13.0 compiler with Bootstrap 5.3 support
 * Less 2.53 compiler
 * Elfinder 2.1.62
 * PhpMailer 6.9.1
