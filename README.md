@@ -1,4 +1,4 @@
-*** RC1   -  RC will be the version with php8.2
+Features
 
 * php 8.0 - 8.4
 * Jquery UI 13.2 and jquery 3.6
@@ -6,21 +6,21 @@
 * Scssphp 1.13.0 compiler with Bootstrap 5.3 support
 * Less 2.53 compiler
 * Elfinder 2.1.62
-* PhpMailer 6.9.1
+* PhpMailer 6.9.1 and Google Recaptcha
 * Local fonts under themes/Bootstrap4/assets
+* Encrypted login
 
 <p align="center"><img src="/include/imgs/typesetter/ts-logo-color-100x100px-min.png?raw=true"/></p>
 <h1 align="center">Typesetter CMS </h1>
 <p align="center">Open source CMS written in PHP focused on ease of use with true WYSIWYG editing and flat-file storage.<br/><br/></p>
 
 
-* [Typesetter Home](https://www.typesettercms.com)
-* [Typesetter Documentation](https://www.typesettercms.com/Docs)
-* [Typesetter Wiki](https://github.com/gtbu/Typesetter5.2/wiki) with more detailed instructions !
+* [Typesetter Home](https://www.typesettercms.com) - now closed
+* [Typesetter 5.3 Wiki](https://github.com/gtbu/Typesetter-5.3-p8/wiki) with more detailed instructions !
 
 
 ## Requirements ##
-* PHP 8.0 - 8.2
+* PHP 8.0 - 8.4
 
 
 ## Installation ##
