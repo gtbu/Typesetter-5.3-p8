@@ -13,7 +13,6 @@
 namespace ScssPhp\ScssPhp\Block;
 
 use ScssPhp\ScssPhp\Block;
-use ScssPhp\ScssPhp\Node\Number;
 use ScssPhp\ScssPhp\Type;
 
 /**
@@ -22,7 +21,7 @@ use ScssPhp\ScssPhp\Type;
 class MediaBlock extends Block
 {
     /**
-     * @var string|array|Number|null
+     * @var string|array|null
      */
     public $value;
 

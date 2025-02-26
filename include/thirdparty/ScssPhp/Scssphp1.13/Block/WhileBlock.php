@@ -18,7 +18,7 @@ use ScssPhp\ScssPhp\Type;
 /**
  * @internal
  */
-class ElseifBlock extends Block
+class WhileBlock extends Block
 {
     /**
      * @var array
@@ -27,6 +27,6 @@ class ElseifBlock extends Block
 
     public function __construct()
     {
-        $this->type = Type::T_ELSEIF;
+        $this->type = Type::T_WHILE;
     }
 }

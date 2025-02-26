@@ -13,20 +13,26 @@
 namespace ScssPhp\ScssPhp\Block;
 
 use ScssPhp\ScssPhp\Block;
+use ScssPhp\ScssPhp\Node\Number;
 use ScssPhp\ScssPhp\Type;
 
 /**
  * @internal
  */
-class ElseifBlock extends Block
+class MediaBlock extends Block
 {
     /**
-     * @var array
+     * @var string|array|Number|null
      */
-    public $cond;
+    public $value;
+
+    /**
+     * @var array|null
+     */
+    public $queryList;
 
     public function __construct()
     {
-        $this->type = Type::T_ELSEIF;
+        $this->type = Type::T_MEDIA;
     }
 }

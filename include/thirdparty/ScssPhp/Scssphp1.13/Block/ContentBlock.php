@@ -13,20 +13,26 @@
 namespace ScssPhp\ScssPhp\Block;
 
 use ScssPhp\ScssPhp\Block;
+use ScssPhp\ScssPhp\Compiler\Environment;
 use ScssPhp\ScssPhp\Type;
 
 /**
  * @internal
  */
-class ElseifBlock extends Block
+class ContentBlock extends Block
 {
     /**
-     * @var array
+     * @var array|null
      */
-    public $cond;
+    public $child;
+
+    /**
+     * @var Environment|null
+     */
+    public $scope;
 
     public function __construct()
     {
-        $this->type = Type::T_ELSEIF;
+        $this->type = Type::T_INCLUDE;
     }
 }

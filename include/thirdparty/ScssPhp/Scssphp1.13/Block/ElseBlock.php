@@ -18,15 +18,10 @@ use ScssPhp\ScssPhp\Type;
 /**
  * @internal
  */
-class ElseifBlock extends Block
+class ElseBlock extends Block
 {
-    /**
-     * @var array
-     */
-    public $cond;
-
     public function __construct()
     {
-        $this->type = Type::T_ELSEIF;
+        $this->type = Type::T_ELSE;
     }
 }

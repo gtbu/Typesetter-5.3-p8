@@ -13,20 +13,26 @@
 namespace ScssPhp\ScssPhp\Block;
 
 use ScssPhp\ScssPhp\Block;
+use ScssPhp\ScssPhp\Node\Number;
 use ScssPhp\ScssPhp\Type;
 
 /**
  * @internal
  */
-class ElseifBlock extends Block
+class DirectiveBlock extends Block
 {
     /**
-     * @var array
+     * @var string|array
      */
-    public $cond;
+    public $name;
+
+    /**
+     * @var array|Number|null
+     */
+    public $value;
 
     public function __construct()
     {
-        $this->type = Type::T_ELSEIF;
+        $this->type = Type::T_DIRECTIVE;
     }
 }

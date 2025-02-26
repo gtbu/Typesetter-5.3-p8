@@ -13,7 +13,6 @@
 namespace ScssPhp\ScssPhp\Block;
 
 use ScssPhp\ScssPhp\Block;
-use ScssPhp\ScssPhp\Node\Number;
 use ScssPhp\ScssPhp\Type;
 
 /**
@@ -27,12 +26,12 @@ class ForBlock extends Block
     public $var;
 
     /**
-     * @var array|Number
+     * @var array
      */
     public $start;
 
     /**
-     * @var array|Number
+     * @var array
      */
     public $end;
 

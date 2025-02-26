@@ -18,15 +18,20 @@ use ScssPhp\ScssPhp\Type;
 /**
  * @internal
  */
-class ElseifBlock extends Block
+class NestedPropertyBlock extends Block
 {
+    /**
+     * @var bool
+     */
+    public $hasValue;
+
     /**
      * @var array
      */
-    public $cond;
+    public $prefix;
 
     public function __construct()
     {
-        $this->type = Type::T_ELSEIF;
+        $this->type = Type::T_NESTED_PROPERTY;
     }
 }

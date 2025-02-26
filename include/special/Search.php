@@ -358,13 +358,15 @@ class Search extends \gp\special\Base{
 		}
 	}
 
-
-
-	public function Sort($resulta,$resultb){
-		return $resulta['strength'] < $resultb['strength'];
-	}
-
-
+	public function Sort($resulta, $resultb) {
+      if ($resulta['strength'] < $resultb['strength']) {
+        return 1; 
+      } elseif ($resulta['strength'] > $resultb['strength']) {
+        return -1; 
+      } else {
+        return 0; 
+      }
+    }
 
 	public function SearchPattern(){
 		// $query = mb_strtolower($_REQUEST['q']);

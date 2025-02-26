@@ -18,15 +18,20 @@ use ScssPhp\ScssPhp\Type;
 /**
  * @internal
  */
-class ElseifBlock extends Block
+class AtRootBlock extends Block
 {
     /**
-     * @var array
+     * @var array|null
      */
-    public $cond;
+    public $selector;
+
+    /**
+     * @var array|null
+     */
+    public $with;
 
     public function __construct()
     {
-        $this->type = Type::T_ELSEIF;
+        $this->type = Type::T_AT_ROOT;
     }
 }
