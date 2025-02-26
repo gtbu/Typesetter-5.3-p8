@@ -25,6 +25,7 @@ $langmessage = array (
 	'Classes'                         => 'Flokkar',
 	'Manage Classes'                  => 'Sýsla með flokka',
 	'Available Classes'               => 'Tiltækir flokkar',
+	'category'                        => 'Flokkur',
 	'Close'                           => 'Loka',
 	'Copy'                            => 'Afrita',
 	'Clipboard'                       => 'Klippispjald',

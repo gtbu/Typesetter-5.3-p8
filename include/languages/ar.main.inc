@@ -25,6 +25,7 @@ $langmessage = array (
 	'Classes'                         => 'Classes',
 	'Manage Classes'                  => 'Manage Classes',
 	'Available Classes'               => 'Available Classes',
+	'category'                        => 'الفئة',
 	'Close'                           => 'أغلق',
 	'Copy'                            => 'انسخ',
 	'Clipboard'                       => 'Clipboard',

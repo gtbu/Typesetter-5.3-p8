@@ -25,6 +25,7 @@ $langmessage = array (
 	'Classes'                         => 'クラス',
 	'Manage Classes'                  => 'クラス管理',
 	'Available Classes'               => '利用可能なクラス',
+	'category'                        => 'カテゴリー'(Kategorī),
 	'Close'                           => '閉じる',
 	'Copy'                            => 'コピー',
 	'Clipboard'                       => 'クリップボード',

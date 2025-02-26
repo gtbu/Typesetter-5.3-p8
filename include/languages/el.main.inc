@@ -25,6 +25,7 @@ $langmessage = array (
 	'Classes'                         => 'Classes',
 	'Manage Classes'                  => 'Manage Classes',
 	'Available Classes'               => 'Available Classes',
+	'category'                        => 'Κατηγορία',
 	'Close'                           => 'Κλειστό',
 	'Copy'                            => 'Αντιγραφή',
 	'Clipboard'                       => 'Clipboard',

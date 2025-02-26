@@ -25,6 +25,7 @@ $langmessage = array (
 	'Classes'                         => '클래스',
 	'Manage Classes'                  => '클래스 관리',
 	'Available Classes'               => '사용 가능한 클래스',
+	'category'                        => '카테고리'(Kategori),
 	'Close'                           => '닫기',
 	'Copy'                            => '복사',
 	'Clipboard'                       => '클립보드',

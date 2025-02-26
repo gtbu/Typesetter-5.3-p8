@@ -24,6 +24,7 @@ $langmessage = array (
 	'Classes'                         => 'क्लासेस',
 	'Manage Classes'                  => 'क्लासेस मैनेज करें',
 	'Available Classes'               => 'उपलब्ध क्लासेस',
+	'category'                        => 'श्रेणी'(Shreni),
 	'Close'                           => 'बंद करें',
 	'Copy'                            => 'कॉपी करें',
 	'Clipboard'                       => 'क्लिपबोर्ड',

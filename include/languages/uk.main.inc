@@ -25,6 +25,7 @@ $langmessage = array (
 	'Classes'                         => 'Класи',
 	'Manage Classes'                  => 'Управління класами',
 	'Available Classes'               => 'Доступні класи',
+	'category'                        => 'Категорія',
 	'Close'                           => 'Закрити',
 	'Copy'                            => 'Копіювати',
 	'Clipboard'                       => 'Буфер обміну',

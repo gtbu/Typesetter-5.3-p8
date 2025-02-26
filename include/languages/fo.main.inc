@@ -25,6 +25,7 @@ $langmessage = array (
 	'Classes'                         => 'Classes',
 	'Manage Classes'                  => 'Manage Classes',
 	'Available Classes'               => 'Available Classes',
+	'category'                        => 'Bólkur',
 	'Close'                           => 'Lat aftur',
 	'Copy'                            => 'Kopiera',
 	'Clipboard'                       => 'Clipboard',

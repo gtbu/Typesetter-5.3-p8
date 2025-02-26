@@ -25,6 +25,7 @@ $langmessage = array (
 	'Classes'                         => 'Classes',
 	'Manage Classes'                  => 'Manage Classes',
 	'Available Classes'               => '可用类',
+	'category'                        => '类别'(Lèi Bié)
 	'Close'                           => '關閉',
 	'Copy'                            => '複製',
 	'Clipboard'                       => 'Clipboard',
