@@ -33,6 +33,7 @@ class Configuration extends \gp\special\Base{
 			/* General Settings */
 			'general_settings'			=> false,
 			'title'						=> '',
+			'category'                  => '',
 			'keywords'					=> '',
 			'desc'						=> 'textarea',
 

@@ -239,7 +239,8 @@ class Tools{
 		$_config['toemail']					= $_POST['email'];
 		$_config['gpLayout']				= 'default';
 		$_config['title']					= self::Install_Title();
-		$_config['keywords']				= '';
+		$_config['category']				= '';
+		$_config['keywords']				= '';		
 		$_config['desc']					= 'A new ' . CMS_NAME . ' installation. You can change your site\'s description in the configuration.';
 		$_config['timeoffset']				= '0';
 		$_config['langeditor']				= 'inherit';

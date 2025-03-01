@@ -2,7 +2,10 @@
 
 
 namespace gp{
-  use function \PHP81_BC\strftime;
+
+use intltime;
+use function \intltime\strftime;
+
 	defined('is_running') or die('Not an entry point...');
 
 	class tool{

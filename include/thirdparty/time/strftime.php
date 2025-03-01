@@ -1,190 +1,201 @@
 <?php
-namespace PHP81_BC;
 
-  use DateTime;
-  use DateTimeZone;
-  use DateTimeInterface;
-  use Exception;
-  use IntlDateFormatter;
-  use IntlGregorianCalendar;
-  use InvalidArgumentException;
+declare(strict_types=1);
+
+namespace intltime;
+
+defined('is_running') or die('Not an entry point...');
+
+use DateTime;
+use DateTimeInterface;
+use DateTimeZone;
+use IntlDateFormatter;
+use IntlCalendar;
+use InvalidArgumentException;
+
 /**
- * Locale-formatted strftime using \IntlDateFormatter (PHP 8.1 compatible)
- * This provides a cross-platform alternative to strftime() for when it will be removed from PHP.
- * Note that output can be slightly different between libc sprintf and this function as it is using ICU.
+ * Emulates the strftime() function for PHP 8.4 using the intl extension.
+ * This version combines:
+ * - Handling various timestamp input types (int, string, DateTimeInterface, null)
+ * - Explicit locale and timezone arguments with defaults
+ * - Comprehensive mapping of strftime format specifiers to ICU equivalents
+ * - Robust error handling
+ * - Proper namespacing and class structure
+ * - Checking for the intl extension
+ * - Implementation of missing specifiers like %U, %V, %W, %P, %k, %l
  *
- * Usage:
- * use function \PHP81_BC\strftime;
- * echo strftime('%A %e %B %Y %X', new \DateTime('2021-09-28 00:00:00'), 'fr_FR');
- *
- * Original use:
- * \setlocale('fr_FR.UTF-8', LC_TIME);
- * echo \strftime('%A %e %B %Y %X', strtotime('2021-09-28 00:00:00'));
- *
- * @param  string $format Date format
- * @param  integer|string|DateTime $timestamp Timestamp
- * @return string
- * @author BohwaZ <https://bohwaz.net/>
+ * @param string $format The format string. See https://www.php.net/manual/en/function.strftime.php for details.
+ * @param int|string|DateTimeInterface|null $timestamp (Optional) The timestamp to format. If null, uses the current time.
+ * @param string|null $locale (Optional) The locale to use. If null, uses the default locale.
+ * @param string|null $timezone (Optional) The timezone to use. If null, uses the default timezone.
+ * @return string|false The formatted string, or false on failure.
+ * @throws InvalidArgumentException
  */
-function strftime(string $format, $timestamp = null, ?string $locale = null): string
+function strftime(string $format, int|string|DateTimeInterface|null $timestamp = null, ?string $locale = null, ?string $timezone = null): string|false
 {
-	if (null === $timestamp) {
-		$timestamp = new \DateTime;
-	}
-	elseif (is_numeric($timestamp)) {
-		$timestamp = date_create('@' . $timestamp);
+    if (!extension_loaded('intl')) {
+        trigger_error('The intl extension is not loaded.', E_USER_WARNING);
+        return false;
+    }
 
-		if ($timestamp) {
-			$timestamp->setTimezone(new \DateTimezone(date_default_timezone_get()));
-		}
-	}
-	elseif (is_string($timestamp)) {
-		$timestamp = date_create($timestamp);
-	}
+    // Handle Timestamp Input and Create DateTime Object
+    try {
+        if ($timestamp === null) {
+            $dateTime = new DateTime();
+        } elseif (is_numeric($timestamp)) {
+            $dateTime = new DateTime('@' . $timestamp);
+            $dateTime->setTimezone(new DateTimeZone(date_default_timezone_get()));
+        } elseif (is_string($timestamp)) {
+            $dateTime = new DateTime($timestamp);
+        } elseif ($timestamp instanceof DateTimeInterface) {
+            $dateTime = $timestamp;
+        } else {
+            throw new InvalidArgumentException('$timestamp argument is not a valid date-time string nor a DateTime object nor a valid UNIX timestamp.');
+        }
+    } catch (\Exception $e) {
+        throw new InvalidArgumentException('Invalid timestamp format', 0, $e);
+    }
 
-	if (!($timestamp instanceof \DateTimeInterface)) {
-		throw new \InvalidArgumentException('$timestamp argument is neither a valid UNIX timestamp, a valid date-time string or a DateTime object.');
-	}
+    // Set Locale and Timezone (use defaults if not provided)
+    $locale = $locale ?? \Locale::getDefault();
+    $timezone = $timezone ?? date_default_timezone_get();
+    $timeZoneObject = new DateTimeZone($timezone);
+    $dateTime->setTimezone($timeZoneObject);
 
-	$locale = substr((string) $locale, 0, 5);
+    // Format Map: strftime to ICU
+    $formatMap = [
+        '%a' => 'EEE',       // Abbreviated weekday name
+        '%A' => 'EEEE',      // Full weekday name
+        '%b' => 'MMM',       // Abbreviated month name
+        '%B' => 'MMMM',      // Full month name
+        '%c' => 'EEE MMM dd HH:mm:ss yyyy', // Preferred date and time representation (locale-dependent)
+        '%C' => null,        // Century number (year/100, truncated to integer)
+        '%d' => 'dd',        // Day of the month as a decimal number (01-31)
+        '%D' => 'MM/dd/yy',  // Short MM/DD/YY date
+        '%e' => 'd',         // Day of the month as a decimal number (1-31); a single digit is preceded by a space
+        '%F' => 'yyyy-MM-dd', // ISO 8601 date format (YYYY-MM-DD)
+        '%g' => 'yy',        // The ISO 8601 week-based year without the century (00-99) (approximation)
+        '%G' => 'yyyy',      // The ISO 8601 week-based year with century
+        '%h' => 'MMM',       // Same as %b
+        '%H' => 'HH',        // Hour as a decimal number (00-23)
+        '%I' => 'hh',        // Hour as a decimal number (01-12)
+        '%j' => null,        // Day of the year as a decimal number (001-366)
+        '%m' => 'MM',        // Month as a decimal number (01-12)
+        '%M' => 'mm',        // Minute as a decimal number (00-59)
+        '%n' => "\n",        // A newline character
+        '%p' => 'a',         // AM or PM
+        '%P' => null,         // am or pm (lowercase)
+        '%r' => 'hh:mm:ss a', // AM/PM time format
+        '%R' => 'HH:mm',     // 24-hour HH:MM time format
+        '%s' => null,        // Number of seconds since the Epoch
+        '%S' => 'ss',        // Second as a decimal number (00-60)
+        '%t' => "\t",        // A tab character
+        '%T' => 'HH:mm:ss',  // 24-hour time format
+        '%u' => null,        // ISO 8601 weekday as number with Monday as 1
+        '%U' => null,        // Week number of the current year (Sunday as first day)
+        '%V' => null,        // ISO 8601 week number
+        '%w' => null,        // Weekday as a decimal number (0-6), with Sunday as 0
+        '%W' => null,        // Week number of the current year, starting with the first Monday as the first week
+        '%x' => 'MM/dd/yyyy', // Preferred date representation (locale-dependent)
+        '%X' => 'HH:mm:ss',  // Preferred time representation (locale-dependent)
+        '%y' => 'yy',        // Year without century (00-99)
+        '%Y' => 'yyyy',      // Year with century
+        '%z' => 'ZZZZ',      // Numeric timezone offset. E.g., -0800
+        '%Z' => 'z',         // Timezone abbreviation
+        '%%' => '%',         // A literal '%' character
+        '%k' => null,         // Hour in 24-hour format, space-padded
+        '%l' => null,         // Hour in 12-hour format, space-padded
+    ];
 
-	$intl_formats = [
-		'%a' => 'EEE',	// An abbreviated textual representation of the day	Sun through Sat
-		'%A' => 'EEEE',	// A full textual representation of the day	Sunday through Saturday
-		'%b' => 'MMM',	// Abbreviated month name, based on the locale	Jan through Dec
-		'%B' => 'MMMM',	// Full month name, based on the locale	January through December
-		'%h' => 'MMM',	// Abbreviated month name, based on the locale (an alias of %b)	Jan through Dec
-	];
+    // Build ICU Format String
+    $icuFormat = '';
+    $len = strlen($format);
 
-	$intl_formatter = function (\DateTimeInterface $timestamp, string $format) use ($intl_formats, $locale) {
-		$tz = $timestamp->getTimezone();
-		$date_type = \IntlDateFormatter::FULL;
-		$time_type = \IntlDateFormatter::FULL;
-		$pattern = '';
+    for ($i = 0; $i < $len; $i++) {
+        if ($format[$i] == '%') {
+            $i++;
+            if (!isset($format[$i])) {
+                return false; // Invalid format. Trailing %.
+            }
 
-		// %c = Preferred date and time stamp based on locale
-		// Example: Tue Feb 5 00:45:10 2009 for February 5, 2009 at 12:45:10 AM
-		if ($format == '%c') {
-			$date_type = \IntlDateFormatter::LONG;
-			$time_type = \IntlDateFormatter::SHORT;
-		}
-		// %x = Preferred date representation based on locale, without the time
-		// Example: 02/05/09 for February 5, 2009
-		elseif ($format == '%x') {
-			$date_type = \IntlDateFormatter::SHORT;
-			$time_type = \IntlDateFormatter::NONE;
-		}
-		// Localized time format
-		elseif ($format == '%X') {
-			$date_type = \IntlDateFormatter::NONE;
-			$time_type = \IntlDateFormatter::MEDIUM;
-		}
-		else {
-			$pattern = $intl_formats[$format];
-		}
+            $key = '%' . $format[$i];
+            if (isset($formatMap[$key])) {
+                if ($formatMap[$key] === null) {
+                    // Handle cases where a direct mapping isn't possible
+                    switch ($key) {
+                        case '%C':
+                            $icuFormat .= floor($dateTime->format('Y') / 100);
+                            break;
+                        case '%j':
+                            $icuFormat .= sprintf('%03d', (int)$dateTime->format('z') + 1);
+                            break;
+                        case '%s':
+                            $icuFormat .= $dateTime->getTimestamp();
+                            break;
+                        case '%k':
+                            $icuFormat .= sprintf('% 2u', $dateTime->format('G')); // Hour in 24-hour format, space-padded
+                            break;
+                        case '%l':
+                            $icuFormat .= sprintf('% 2u', $dateTime->format('g')); // Hour in 12-hour format, space-padded
+                            break;
+                        case '%u': // ISO 8601 weekday as number with Monday as 1
+                            $dayOfWeek = (int)$dateTime->format('N');
+                            $icuFormat .= $dayOfWeek;
+                            break;
+                        case '%w': // Weekday as a decimal number (0-6), with Sunday as 0
+                            $icuFormat .= $dateTime->format('w');
+                            break;
+                        case '%U': // Week number of the current year as a decimal number, starting with the first Sunday as the first week
+                        case '%W': // Week number of the current year as a decimal number, starting with the first Monday as the first week
+                        case '%V': // The ISO 8601 week number (01-53)
+                            $calendar = IntlCalendar::createInstance($timeZoneObject, $locale);
+                            $calendar->setTime($dateTime->getTimestamp() * 1000); // IntlCalendar uses milliseconds
 
-		return (new \IntlDateFormatter($locale, $date_type, $time_type, $tz, null, $pattern))->format($timestamp);
-	};
+                            if ($key == '%U') {
+                                $icuFormat .= $calendar->get(IntlCalendar::FIELD_WEEK_OF_YEAR);
+                            } elseif ($key == '%W') {
+                                $calendar->setMinimalDaysInFirstWeek(4); // ISO 8601
+                                $calendar->setFirstDayOfWeek(IntlCalendar::MONDAY); // ISO 8601
+                                $icuFormat .= $calendar->get(IntlCalendar::FIELD_WEEK_OF_YEAR);
 
-	// Same order as https://www.php.net/manual/en/function.strftime.php
-	$translation_table = [
-		// Day
-		'%a' => $intl_formatter,
-		'%A' => $intl_formatter,
-		'%d' => 'd',
-		'%e' => function ($timestamp) {
-			return sprintf('% 2u', $timestamp->format('j'));
-		},
-		'%j' => function ($timestamp) {
-			// Day number in year, 001 to 366
-			return sprintf('%03d', $timestamp->format('z')+1);
-		},
-		'%u' => 'N',
-		'%w' => 'w',
+                            } else { // %V
+                                $calendar->setMinimalDaysInFirstWeek(4); // ISO 8601
+                                $calendar->setFirstDayOfWeek(IntlCalendar::MONDAY); // ISO 8601
+                                $icuFormat .= sprintf("%02d", $calendar->get(IntlCalendar::FIELD_WEEK_OF_YEAR)); //format to 2 digits
+                            }
+                            break;
+                        case '%P':
+                            $amPm = $dateTime->format('a');
+                            $icuFormat .= strtolower($amPm);
+                            break;
+                        default:
+                            return false; // Indicate unsupported format
+                    }
+                } else {
+                    $icuFormat .= $formatMap[$key];
+                }
+            } else {
+                return false; // Unknown format code.
+            }
+        } else {
+            $icuFormat .= $format[$i];
+        }
+    }
 
-		// Week
-		'%U' => function ($timestamp) {
-			// Number of weeks between date and first Sunday of year
-			$day = new \DateTime(sprintf('%d-01 Sunday', $timestamp->format('Y')));
-			return sprintf('%02u', 1 + ($timestamp->format('z') - $day->format('z')) / 7);
-		},
-		'%V' => 'W',
-		'%W' => function ($timestamp) {
-			// Number of weeks between date and first Monday of year
-			$day = new \DateTime(sprintf('%d-01 Monday', $timestamp->format('Y')));
-			return sprintf('%02u', 1 + ($timestamp->format('z') - $day->format('z')) / 7);
-		},
+    try {
+        $formatter = new IntlDateFormatter(
+            $locale,
+            IntlDateFormatter::FULL,
+            IntlDateFormatter::FULL,
+            $timeZoneObject,
+            IntlDateFormatter::GREGORIAN,
+            $icuFormat
+        );
 
-		// Month
-		'%b' => $intl_formatter,
-		'%B' => $intl_formatter,
-		'%h' => $intl_formatter,
-		'%m' => 'm',
-
-		// Year
-		'%C' => function ($timestamp) {
-			// Century (-1): 19 for 20th century
-			return floor($timestamp->format('Y') / 100);
-		},
-		'%g' => function ($timestamp) {
-			return substr($timestamp->format('o'), -2);
-		},
-		'%G' => 'o',
-		'%y' => 'y',
-		'%Y' => 'Y',
-
-		// Time
-		'%H' => 'H',
-		'%k' => function ($timestamp) {
-			return sprintf('% 2u', $timestamp->format('G'));
-		},
-		'%I' => 'h',
-		'%l' => function ($timestamp) {
-			return sprintf('% 2u', $timestamp->format('g'));
-		},
-		'%M' => 'i',
-		'%p' => 'A', // AM PM (this is reversed on purpose!)
-		'%P' => 'a', // am pm
-		'%r' => 'h:i:s A', // %I:%M:%S %p
-		'%R' => 'H:i', // %H:%M
-		'%S' => 's',
-		'%T' => 'H:i:s', // %H:%M:%S
-		'%X' => $intl_formatter, // Preferred time representation based on locale, without the date
-
-		// Timezone
-		'%z' => 'O',
-		'%Z' => 'T',
-
-		// Time and Date Stamps
-		'%c' => $intl_formatter,
-		'%D' => 'm/d/Y',
-		'%F' => 'Y-m-d',
-		'%s' => 'U',
-		'%x' => $intl_formatter,
-	];
-
-	$out = preg_replace_callback('/(?<!%)(%[a-zA-Z])/', function ($match) use ($translation_table, $timestamp) {
-		if ($match[1] == '%n') {
-			return "\n";
-		}
-		elseif ($match[1] == '%t') {
-			return "\t";
-		}
-
-		if (!isset($translation_table[$match[1]])) {
-			throw new \InvalidArgumentException(sprintf('Format "%s" is unknown in time format', $match[1]));
-		}
-
-		$replace = $translation_table[$match[1]];
-
-		if (is_string($replace)) {
-			return $timestamp->format($replace);
-		}
-		else {
-			return $replace($timestamp, $match[1]);
-		}
-	}, $format);
-
-	$out = str_replace('%%', '%', $out);
-	return $out;
+        return $formatter->format($dateTime);
+    } catch (\Exception $e) {
+        // Handle invalid locale or timezone
+        error_log("IntlDateFormatter exception: " . $e->getMessage()); // Log the error
+        return false;
+    }
 }

@@ -1,7 +1,6 @@
 <?php
 defined('is_running') or die('Not an entry point...');
 
-
 /**
  * See gpconfig.php for these configuration options
  *
@@ -12,8 +11,9 @@ if( gpdebug ){
 }
 set_error_handler('showError');
 
-require_once('tool.php');
 require_once('thirdparty/time/strftime.php');
+
+require_once('tool.php');
 
 gp_defined('gp_restrict_uploads',		false);
 gp_defined('gpdebugjs',					gpdebug);

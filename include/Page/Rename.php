@@ -31,6 +31,7 @@ namespace gp\Page{
 								'keywords'		=> '',
 								'description'	=> '',
 								'rel'			=> '',
+								'category'      => '',
 								);
 
 			if( empty($_REQUEST['new_title']) ){
@@ -69,7 +70,6 @@ namespace gp\Page{
 			//slug (title)
 			$attr		= '';
 			$class		= 'new_title';
-
 			if( $title == \gp\admin\Tools::LabelToSlug($label) ){
 				//$attr = 'disabled="disabled" ';
 				$attr = 'readonly="readonly"" ';
@@ -80,8 +80,7 @@ namespace gp\Page{
 			self::ToggleSync($attr);
 			echo '</td></tr>';
 
-
-
+           		
 			//browser title defaults to label
 			$attr			= '';
 			$class			= 'browser_title';
@@ -98,6 +97,13 @@ namespace gp\Page{
 			self::ToggleSync($attr);
 			echo '</td></tr>';
 
+
+           //category : wird in data site config.php definiert und in pages.php eingetragen	/ admin/configuration.php 36 -- include install tools 242					
+			$category = $title_info['category'];
+			self::FormLabel('category',$title_info['category']);
+			echo '<input type="text" class="gpinput" size="50" name="category" value="'.$title_info['category'].'" />';
+			echo '</td></tr>';
+			
 
 			//meta keywords
 			self::FormLabel('keywords',$title_info['keywords']);
@@ -246,6 +252,7 @@ namespace gp\Page{
 			self::SetInfo($title_info, 'browser_title');
 			self::SetInfo($title_info, 'keywords');
 			self::SetInfo($title_info, 'description');
+			self::SetInfo($title_info, 'category');
 			self::SetRobots($title_info);
 
 
