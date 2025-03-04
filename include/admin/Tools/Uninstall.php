@@ -5,7 +5,8 @@ namespace gp\admin\Tools;
 defined('is_running') or die('Not an entry point...');
 
 class Uninstall{
-
+    private $DirPermission;
+    private $FilePermission;
 
 	//should have a way to switch them back!
 	public function __construct(){
