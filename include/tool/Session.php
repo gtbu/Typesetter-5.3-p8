@@ -706,6 +706,7 @@ class Session{
 			'Sections'					=>	'Sections',
 			'Section Attributes'		=>	'SectionAttributes',
 			'Available Classes'			=>	'AvailableClasses',
+			'category'                  =>  'Category',
 			'Attribute'					=>	'Attribute',
 			'Add Attribute'				=>	'AddAttribute',
 			'Value'						=>	'Value',

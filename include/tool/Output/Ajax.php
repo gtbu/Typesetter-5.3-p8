@@ -292,35 +292,40 @@ namespace gp\tool\Output{
 		 * Remove scripts that have already been sent to the server
 		 *
 		 */
-		public static function RemoveSent($scripts){
+		public static function RemoveSent(array $scripts): array
+        {
+        $definedObjects = [];
 
-			$cleansed			= array();
-			$defined_objects	= explode(',',$_REQUEST['defined_objects']);
+        if (isset($_GET['defined_objects']) && is_string($_GET['defined_objects'])) {
+        $definedObjects = explode(',', $_GET['defined_objects']);
+        $definedObjects = array_map('trim', $definedObjects); // Trim whitespace
 
-			foreach($scripts as $script){
+        } else {
+        // Log or handle missing 'defined_objects' here
+        error_log("Warning: 'defined_objects' not found in \$_GET. Continuing with empty array."); //Example log
+        throw new InvalidArgumentException("'defined_objects' parameter is required.");
+        }
+		
+        $cleansed = [];
+        foreach ($scripts as $script) {
+        $object = false;
 
-				$object = false;
+        if (is_array($script) && !empty($script['object'])) {
+            $object = $script['object'];
+        } elseif (is_string($script) && isset(self::$script_objects[$script])) {
+            $object = self::$script_objects[$script];
+        }
 
-				if( is_array($script) && !empty($script['object']) ){
-					$object = $script['object'];
+        if ($object !== false && in_array($object, $definedObjects, true)) {
+            error_log("Object $object already defined");
+            continue;
+        }
 
-				}elseif( is_string($script) && isset(self::$script_objects[$script]) ){
-					$object = self::$script_objects[$script];
+        $cleansed[] = $script;
+        }
 
-				}
-
-				if( $object !== false && in_array($object, $defined_objects) ){
-					echo "\n\n/** Object Already Defined: ".$object." **/\n\n";
-					continue;
-				}
-
-
-				$cleansed[] = $script;
-			}
-
-			return $cleansed;
-		}
-
+        return $cleansed;
+        }
 
 		/**
 		 * Get scripts for editing inline text using ckeditor
