@@ -77,7 +77,8 @@ class Text extends \gp\admin\Layout{
 			echo '<tr'.$style.'><td>';
 			echo $text;
 			echo '</td><td>';
-			echo '<input type="text" name="values['.htmlspecialchars($text).']" value="'.$value.'" class="gpinput"/>'; //value has already been escaped with htmlspecialchars()
+			echo '<input type="text" name="values['.htmlspecialchars($text).']" value="'.htmlspecialchars($value).'" class="gpinput"/>';
+			//value has already been escaped with htmlspecialchars()
 			echo '</td></tr>';
 
 		}
@@ -93,24 +94,14 @@ class Text extends \gp\admin\Layout{
 			return;
 		}
 
-		$default = $value = $key = $_GET['key'];
-		if( isset($langmessage[$key]) ){
-			$default = $value = $langmessage[$key];
-		}else{
-			$default = $value = htmlspecialchars($key);
-		}
-		if( isset($config['customlang'][$key]) ){
-			$value = $config['customlang'][$key];
-		}else{
-			$value = htmlspecialchars($key);
-		}
+		$key = $_GET['key'];
+        $default = isset($langmessage[$key]) ? $langmessage[$key] : htmlspecialchars($key);
+        $value = isset($config['customlang'][$key]) ? $config['customlang'][$key] : htmlspecialchars($key);
 
-
-
-		echo '<div class="inline_box">';
+       	echo '<div class="inline_box">';
 		echo '<form action="'.\gp\tool::GetUrl('Admin_Theme_Content/Text').'" method="post">';
 		echo '<input type="hidden" name="cmd" value="savetext" />';
-		echo '<input type="hidden" name="key" value="'.$key.'" />';
+		echo '<input type="hidden" name="key" value="'.htmlspecialchars($key).'" />';
 
 		echo '<table class="bordered full_width">';
 		echo '<tr><th>';
@@ -122,8 +113,8 @@ class Text extends \gp\admin\Layout{
 		echo $default;
 		echo '</td><td>';
 		//$value is already escaped using htmlspecialchars()
-		echo '<input type="text" name="value" value="'.$value.'" class="gpinput full_width"/>';
-		echo '</td></tr>';
+		echo '<input type="text" name="value" value="'.htmlspecialchars($value).'" class="gpinput full_width"/>';
+	  	echo '</td></tr>';
 		echo '</table>';
 		echo '<p>';
 		echo ' <input type="submit" name="aaa" value="'.$langmessage['save'].'" data-cmd="gpajax" class="gpsubmit"/>';
