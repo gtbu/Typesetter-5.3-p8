@@ -1,5 +1,4 @@
 <?php
-
 namespace gp\admin{
 
 	defined('is_running') or die('Not an entry point...');
@@ -202,8 +201,22 @@ namespace gp\admin{
 						$this->SetFilter($_REQUEST['id'], 'set_priority', $_REQUEST['new_priority']);
 					}
 					break;
-			}
 
+				case 'PublishDraft':  // NEW: Handle PublishDraft command
+					if( !empty($_REQUEST['file']) ){
+						$file = $_REQUEST['file'];
+						$this->PublishExtraDraft($file);  // Call a method to actually publish the draft
+
+						// Now, update the notification list
+						self::UpdateNotifications();
+
+						// Optional:  Return a JSON response to signal success to the browser if 'gpajax' is used.
+						// echo json_encode(['success' => true, 'message' => 'Draft published']);
+						// exit;
+					}
+					break;
+
+			}
 
 			$gpAdmin['notification_filters'] = array_filter($this->filters); // Save filters to the admin session
 
@@ -847,11 +860,11 @@ namespace gp\admin{
 								)
 							);
 							$draft['publish_link']	= \gp\tool::Link(
-								'Admin/Extra',
+								'Admin/Notifications/Manage',  // Changed URL
 								$langmessage['Publish Draft'],
 								'cmd=PublishDraft&file=' . $folder,
 								array(
-									'data-cmd'	=> 'gpajax',
+									'data-cmd'	=> 'gpabox',  // Or 'gpajax' or 'postlink' depending on server
 									'class'		=> 'getdrafts-extra-publish',
 									'title'		=> $langmessage['Publish Draft'],
 								)
@@ -947,6 +960,28 @@ namespace gp\admin{
 			}
 
 			return $private_pages;
+		}
+
+		/**
+		 * Helper function to publish an Extra content draft
+		 * @param string $file The name of the extra content file.
+		 */
+		private function PublishExtraDraft($file) {
+			global $dataDir;
+
+			$draft_path = $dataDir . '/data/_extra/' . $file . '/draft.php';
+			$content_path = $dataDir . '/data/_extra/' . $file . '/content.php';
+
+			if (\gp\tool\Files::Exists($draft_path)) {
+				// Read the draft content
+				$draft_content = file_get_contents($draft_path);
+
+				// Write it to the content file
+				file_put_contents($content_path, $draft_content);
+
+				// Delete the draft file
+				unlink($draft_path);
+			}
 		}
 
 
