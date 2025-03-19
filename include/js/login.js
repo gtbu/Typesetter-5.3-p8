@@ -1,4 +1,4 @@
-
+import jsSHA from '../thirdparty/js/jsSHA.js';
 
 $(function(){
 	// if( typeof(IE_LT_10) != 'undefined' && IE_LT_10 ){
