@@ -37,7 +37,7 @@ class Text extends \gp\admin\Layout{
 		echo '<div class="inline_box" style="text-align:right">';
 		echo '<form action="'.\gp\tool::GetUrl('Admin_Theme_Content/Text').'" method="post">';
 		echo '<input type="hidden" name="cmd" value="SaveAddonText" />';
-		echo '<input type="hidden" name="addon" value="'.htmlspecialchars($addon).'" />'; //will be populated by javascript
+		echo '<input type="hidden" name="addon" value="'.htmlspecialchars($addon, ENT_QUOTES).'" />'; //will be populated by javascript
 
 
 		$this->AddonTextFields($texts);
@@ -58,7 +58,7 @@ class Text extends \gp\admin\Layout{
 		echo '</th><th>';
 		echo '</th></tr>';
 
-		$key =& $_GET['key'];
+		$key = isset($_GET['key']) ? $this->sanitizeKey($_GET['key']) : '';  // Sanitize first
 		foreach($array as $text){
 
 			$value = $text;
@@ -75,9 +75,9 @@ class Text extends \gp\admin\Layout{
 			}
 
 			echo '<tr'.$style.'><td>';
-			echo $text;
+			echo htmlspecialchars($text, ENT_QUOTES);
 			echo '</td><td>';
-			echo '<input type="text" name="values['.htmlspecialchars($text).']" value="'.htmlspecialchars($value).'" class="gpinput"/>';
+			echo '<input type="text" name="values['.htmlspecialchars($text, ENT_QUOTES).']" value="'.htmlspecialchars($value, ENT_QUOTES).'" class="gpinput"/>';
 			//value has already been escaped with htmlspecialchars()
 			echo '</td></tr>';
 
@@ -94,14 +94,14 @@ class Text extends \gp\admin\Layout{
 			return;
 		}
 
-		$key = $_GET['key'];
-        $default = isset($langmessage[$key]) ? $langmessage[$key] : htmlspecialchars($key);
-        $value = isset($config['customlang'][$key]) ? $config['customlang'][$key] : htmlspecialchars($key);
+        $key = $this->sanitizeKey($_GET['key']); // Sanitize input
+        $default = isset($langmessage[$key]) ? $langmessage[$key] : htmlspecialchars($key, ENT_QUOTES);
+        $value = isset($config['customlang'][$key]) ? $config['customlang'][$key] : htmlspecialchars($key, ENT_QUOTES);
 
        	echo '<div class="inline_box">';
 		echo '<form action="'.\gp\tool::GetUrl('Admin_Theme_Content/Text').'" method="post">';
 		echo '<input type="hidden" name="cmd" value="savetext" />';
-		echo '<input type="hidden" name="key" value="'.htmlspecialchars($key).'" />';
+		echo '<input type="hidden" name="key" value="'.htmlspecialchars($key, ENT_QUOTES).'" />';
 
 		echo '<table class="bordered full_width">';
 		echo '<tr><th>';
@@ -110,10 +110,10 @@ class Text extends \gp\admin\Layout{
 		echo $langmessage['edit'];
 		echo '</th></tr>';
 		echo '<tr><td>';
-		echo $default;
+		echo htmlspecialchars($default, ENT_QUOTES);
 		echo '</td><td>';
 		//$value is already escaped using htmlspecialchars()
-		echo '<input type="text" name="value" value="'.htmlspecialchars($value).'" class="gpinput full_width"/>';
+		echo '<input type="text" name="value" value="'.htmlspecialchars($value, ENT_QUOTES).'" class="gpinput full_width"/>';
 	  	echo '</td></tr>';
 		echo '</table>';
 		echo '<p>';
@@ -139,13 +139,14 @@ class Text extends \gp\admin\Layout{
 			return;
 		}
 
-		$default = $key = $_POST['key'];
+        $key = $this->sanitizeKey($_POST['key']);
+		$default = $key;
 		if( isset($langmessage[$key]) ){
 			$default = $langmessage[$key];
 		}
 
-		$config['customlang'][$key] = $value = htmlspecialchars($_POST['value']);
-		if( ($value === $default) || (htmlspecialchars($default) == $value) ){
+		$config['customlang'][$key] = $value = htmlspecialchars($_POST['value'], ENT_QUOTES);
+		if( ($value === $default) || (htmlspecialchars($default, ENT_QUOTES) == $value) ){
 			unset($config['customlang'][$key]);
 		}
 
@@ -170,15 +171,15 @@ class Text extends \gp\admin\Layout{
 				continue;
 			}
 
-
+            $text = $this->sanitizeKey($text);  // Sanitize text key as well
 			$default = $text;
 			if( isset($langmessage[$text]) ){
 				$default = $langmessage[$text];
 			}
 
-			$value = htmlspecialchars($_POST['values'][$text]);
+			$value = htmlspecialchars($_POST['values'][$text], ENT_QUOTES);
 
-			if( ($value === $default) || (htmlspecialchars($default) == $value) ){
+			if( ($value === $default) || (htmlspecialchars($default, ENT_QUOTES) == $value) ){
 				unset($config['customlang'][$text]);
 			}else{
 				$config['customlang'][$text] = $value;
@@ -236,4 +237,14 @@ class Text extends \gp\admin\Layout{
 		return $texts;
 	}
 
+    /**
+     * Sanitize the key parameter.  Allow only alphanumeric characters, underscores, and hyphens.
+     *
+     * @param string $key The key to sanitize.
+     * @return string The sanitized key.
+     */
+    private function sanitizeKey(string $key): string
+    {
+        return preg_replace('/[^a-zA-Z0-9_\-]/', '', $key);
+    }
 }
