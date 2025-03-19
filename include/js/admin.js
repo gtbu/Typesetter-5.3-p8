@@ -936,9 +936,10 @@ $(function(){
 	 * Update character counts
 	 *
 	 */
-	$gp.$doc.on('keyup keypress paste change', '.show_character_count textarea', function(){
-		$(this).parent().find('.character_count span').html( this.value.length );
-	});
+	$gp.$doc.on('input', '.show_character_count textarea', function(){
+        var $span = $(this).parent().find('.character_count span');
+        $span.text(this.value.length);
+    });
 
 
 	/**
@@ -1506,162 +1507,214 @@ $gp.HideAdminUI = {
 
 
 
-/**
- * A simple drag function for use with Typesetter admin areas
- * Works with absolute and fixed positioned elements
- * Different from other drag script in that the mouse will not trigger any mouseover/mousenter events because the drag box will be under the mouse
- *
- * @param string selector
- * @param string drag_area
- * @param string positioning (absolute,relative,fixed)
- * @param function callback_done function to call once the drag 'n drop is done
- */
-function SimpleDrag(selector, drag_area, positioning, callback_done){
+(function() { // IIFE for scoping
 
-	var tolerance	= -10;
-	var $drag_area	= $(drag_area);
+  /**
+   * A simple drag function for use with Typesetter admin areas
+   * Works with absolute and fixed positioned elements
+   * Different from other drag script in that the mouse will not trigger any mouseover/mousenter events because the drag box will be under the mouse
+   *
+   * @param {string} selector  Selector for the element that triggers the drag (e.g., '.drag-handle')
+   * @param {string} drag_area Selector for the element to be dragged (e.g., '#draggable-div')
+   * @param {string} positioning 'absolute', 'relative', or 'fixed'
+   * @param {function} callback_done  Function to call once the drag 'n drop is done.  Receives (element, position, event)
+   */
+  window.SimpleDrag = function(selector, drag_area, positioning, callback_done) {  // Making it a global function explicitly
 
+    if (typeof jQuery === 'undefined') {
+      console.error("SimpleDrag: jQuery is required but not loaded.");
+      return; // Exit if jQuery is missing
+    }
 
-	//dragging
-	$gp.$doc.off('mousedown.sdrag',selector).on('mousedown.sdrag',selector,function(e){
-
-		if( e.which != 1 ){
-			return;
-		}
-
-		var box, click_offsetx, click_offsety;
-		e.preventDefault();
-		if( $drag_area.length < 1 ){
-			return;
-		}
-		init();
-		function init(){
-			var pos = $drag_area.offset();
-			click_offsetx = e.clientX - pos.left + $gp.$win.scrollLeft();
-			click_offsety = e.clientY - pos.top + $gp.$win.scrollTop();
-		}
+    if (typeof $gp === 'undefined' || !$gp.$doc || !$gp.$win || typeof $gp.div !== 'function') {
+      console.error("SimpleDrag: $gp object is required and must have $doc, $win and div properties/methods.");
+      return;  // Exit if $gp is missing necessary properties
+    }
 
 
-		$gp.$doc.on('mousemove.sdrag',function(e){
+    var tolerance = -10;
+    var $drag_area = $(drag_area);
+    var dragNamespace = '.simpleDrag_' + Math.random().toString(36).substring(7);  // Unique namespace
 
-			//initiate the box
-			if( !box ){
-				var pos = $drag_area.offset();
-				var w = $drag_area.width();
-				var h = $drag_area.height();
-				box = $gp.div('admin_drag_box')
-					.css({'top':pos.top,'left':pos.left,'width':w,'height':h});
-			}
+    if ($drag_area.length === 0) {
+      console.warn("SimpleDrag: No element found with selector '" + drag_area + "'. Drag functionality will not be enabled.");
+      return; // Exit if no element to drag
+    }
 
-			box.css({'left':Math.max(tolerance,e.clientX - click_offsetx),'top': Math.max(tolerance,e.clientY - click_offsety)});
-			e.preventDefault();
+    // dragging
+    $gp.$doc.off('mousedown' + dragNamespace, selector).on('mousedown' + dragNamespace, selector, function(e) {
 
-			return false;
-		});
+      if (e.which !== 1) {
+        return; // Only left mouse button
+      }
 
+      var box, click_offsetx, click_offsety;
+      e.preventDefault();
 
+      init();
 
-		$gp.$doc.off('mouseup.sdrag').on('mouseup.sdrag',function(e){
-			var newposleft,newpostop,pos_obj;
-			$gp.$doc.off('mousemove.sdrag mouseup.sdrag');
-
-			if( !box ){
-				return false;
-			}
-			e.preventDefault();
-
-			//clean
-			box.remove();
-			box = false;
-
-			//new
-			newposleft = e.clientX - click_offsetx;
-			newpostop = e.clientY - click_offsety;
-			//newposleft = Math.max(0,e.clientX - click_offsetx);
-			//newpostop = Math.max(0,e.clientY - click_offsety);
-
-			//add scroll back in for absolute position
-			if( positioning === 'absolute' ){
-				newposleft += $gp.$win.scrollLeft();
-				newpostop += $gp.$win.scrollTop();
-			}
-
-			newposleft = Math.max(tolerance,newposleft);
-			newpostop = Math.max(tolerance,newpostop);
+      function init() {
+        try {
+          var pos = $drag_area.offset();
+          click_offsetx = e.clientX - pos.left + $gp.$win.scrollLeft();
+          click_offsety = e.clientY - pos.top + $gp.$win.scrollTop();
+        } catch (err) {
+          console.error("SimpleDrag: Error in init function: ", err);
+          return;
+        }
+      }
 
 
-			pos_obj = {'left':newposleft,'top': newpostop};
+      $gp.$doc.on('mousemove' + dragNamespace, function(e) {
+        try {
+          // initiate the box
+          if (!box) {
+            var pos = $drag_area.offset();
+            var w = $drag_area.width();
+            var h = $drag_area.height();
+            box = $gp.div('admin_drag_box')
+              .css({
+                'top': pos.top,
+                'left': pos.left,
+                'width': w,
+                'height': h
+              });
+          }
 
-			$drag_area.css(pos_obj).data({'gp_left':newposleft,'gp_top':newpostop});
+          box.css({
+            'left': Math.max(tolerance, e.clientX - click_offsetx),
+            'top': Math.max(tolerance, e.clientY - click_offsety)
+          });
+          e.preventDefault();
 
-			if( typeof(callback_done) === 'function' ){
-				callback_done.call($drag_area,pos_obj,e);
-			}
-
-			$drag_area.trigger('dragstop');
-			return false;
-		});
-
-		return false;
-	});
+          return false;
+        } catch (err) {
+          console.error("SimpleDrag: Error in mousemove handler: ", err);
+          return false;  // Stop propagation
+        }
+      });
 
 
 
-	if( $drag_area.css('position') === 'fixed' || $drag_area.parent().css('position') === 'fixed' ){
-		KeepViewable( $drag_area.addClass('keep_viewable') ,true);
-	}
+      $gp.$doc.off('mouseup' + dragNamespace).on('mouseup' + dragNamespace, function(e) {
+        try {
+          var newposleft, newpostop, pos_obj;
+          $gp.$doc.off('mousemove' + dragNamespace + ' mouseup' + dragNamespace); // Remove both handlers
 
-	function KeepViewable($elem,init){
+          if (!box) {
+            return false;
+          }
+          e.preventDefault();
 
-		if( !$elem.hasClass('keep_viewable') ){
-			return;
-		}
+          //clean
+          box.remove();
+          box = false;
 
-		var gp_left
-			, css = {}
-			, pos = $elem.position();
+          //new
+          newposleft = e.clientX - click_offsetx;
+          newpostop = e.clientY - click_offsety;
 
+          //add scroll back in for absolute position
+          if (positioning === 'absolute') {
+            newposleft += $gp.$win.scrollLeft();
+            newpostop += $gp.$win.scrollTop();
+          }
 
-		//move back to the right if $elem has been moved left
-		if( init ){
-			$elem.data({'gp_left':pos.left,'gp_top':pos.top});
-		}else if( gp_left = $elem.data('gp_left') ){
-			pos.left = css.left = gp_left;
-			pos.top = css.top = $elem.data('gp_top');
-		}
-
-		var width = $elem.width();
-
-
-		//keep the top of the area from being placed too high in the window
-		var winbottom = $gp.$win.height();
-		if( pos.top < tolerance ){
-			css.top = tolerance;
-
-		//keep the top of the area from being placed too low
-		}else if( pos.top > winbottom ){
-			css.top = winbottom + 2*tolerance; //tolerance is negative
-		}
+          newposleft = Math.max(tolerance, newposleft);
+          newpostop = Math.max(tolerance, newpostop);
 
 
-		//right
-		var checkright = $gp.$win.width()  - width - tolerance;
-		if( pos.left > checkright ){
-			css.left = checkright;
-		}
+          pos_obj = {
+            'left': newposleft,
+            'top': newpostop
+          };
 
-		if( css.left || css.top ){
-			$elem.css(css);
-		}
-	}
+          $drag_area.css(pos_obj).data({
+            'gp_left': newposleft,
+            'gp_top': newpostop
+          });
 
-	$gp.$win.on('resize', function(){
-		$('.keep_viewable').each(function(){
-			KeepViewable($(this),false);
-		});
-	});
+          if (typeof(callback_done) === 'function') {
+            callback_done.call($drag_area, $drag_area, pos_obj, e); //Pass element as first param
+          }
 
-}
+          $drag_area.trigger('dragstop');
+          return false;
+        } catch (err) {
+          console.error("SimpleDrag: Error in mouseup handler: ", err);
+          return false;  // Stop propagation
+        }
+      });
+
+      return false;
+    });
+
+
+
+    if ($drag_area.css('position') === 'fixed' || $drag_area.parent().css('position') === 'fixed') {
+      KeepViewable($drag_area.addClass('keep_viewable'), true);
+    }
+
+    function KeepViewable($elem, init) {
+      try {
+        if (!$elem.hasClass('keep_viewable')) {
+          return;
+        }
+
+        var gp_left,
+          css = {},
+          pos = $elem.position();
+
+
+        //move back to the right if $elem has been moved left
+        if (init) {
+          $elem.data({
+            'gp_left': pos.left,
+            'gp_top': pos.top
+          });
+        } else if (gp_left = $elem.data('gp_left')) {
+          pos.left = css.left = gp_left;
+          pos.top = css.top = $elem.data('gp_top');
+        }
+
+        var width = $elem.width();
+
+
+        //keep the top of the area from being placed too high in the window
+        var winbottom = $gp.$win.height();
+        if (pos.top < tolerance) {
+          css.top = tolerance;
+
+          //keep the top of the area from being placed too low
+        } else if (pos.top > winbottom) {
+          css.top = winbottom + 2 * tolerance; //tolerance is negative
+        }
+
+
+        //right
+        var checkright = $gp.$win.width() - width - tolerance;
+        if (pos.left > checkright) {
+          css.left = checkright;
+        }
+
+        if (css.left || css.top) {
+          $elem.css(css);
+        }
+      } catch (err) {
+        console.error("SimpleDrag: Error in KeepViewable: ", err);
+      }
+    }
+
+    $gp.$win.on('resize' + dragNamespace, function() {
+      $('.keep_viewable').each(function() {
+        KeepViewable($(this), false);
+      });
+    });
+
+  }; // End SimpleDrag function
+
+})(); // End IIFE
+
 
 
 /**
