@@ -312,8 +312,9 @@ class Status extends \gp\special\Base{
 			return;
 		}
 
+				
 		// move old to deletable
-		echo '<li>Move: '.$to_fix.' -&gt; ' . $deletable . '</li>';
+		echo '<li>Move: '.htmlspecialchars($to_fix, ENT_QUOTES, 'UTF-8').' -> ' . $deletable . '</li>';
 		if( !rename($to_fix_full,$deletable_full) ){
 			echo '<li>Failed</li>';
 			echo '</ol>';
@@ -321,7 +322,7 @@ class Status extends \gp\special\Base{
 			\gp\tool\Files::RmAll($new_file_full);
 			return;
 		}
-
+		
 
 		// move
 		echo '<li>Move: '.$new_file.' -&gt; ' . $to_fix . '</li>';
