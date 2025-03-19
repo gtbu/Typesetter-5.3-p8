@@ -477,9 +477,15 @@ namespace gp\tool{
 			if( !$new_h ){
 				$new_h = $dst_h;
 			}
+			
+			/* $original_w = imagesx($src_img);
+            $original_h = imagesy($src_img);
+			$new_h = $original_h * ($new_w / $original_w); */
 
-
-			$dst_img = imagecreatetruecolor($new_w, $new_h);
+            $new_w = intval($new_w);
+            $new_h = intval($new_h);
+            $dst_img = imagecreatetruecolor($new_w, $new_h);
+		
 			if( !$dst_img ){
 				trigger_error('dst_img not created');
 				return false;

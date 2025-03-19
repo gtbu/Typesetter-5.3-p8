@@ -1008,7 +1008,8 @@ namespace gp\tool{
 				$img_alt = str_replace('_', ' ', basename(pathinfo($image, PATHINFO_FILENAME)));
 
 				echo '<li>';
-				echo '<a class="gallery_gallery" data-arg="gallery_gallery" href="'.$image.'" data-cmd="gallery" rel="'.$rel_id.'">'; // title="'.htmlspecialchars($caption).'"
+				// echo '<a class="gallery_gallery" data-arg="gallery_gallery" href="'.$image.'" data-cmd="gallery" rel="'.$rel_id.'">'; // title="'.htmlspecialchars($caption).'"
+				echo '<a class="gallery_gallery" data-arg="gallery_gallery" href="'.htmlspecialchars(urlencode($image), ENT_QUOTES, 'UTF-8').'" data-cmd="gallery" rel="'.htmlspecialchars($rel_id, ENT_QUOTES, 'UTF-8').'">';
 				echo '<img src="'.$thumb_path.'" alt="'.$img_alt.'" />';
 				echo '<span class="caption">'.$caption.'</span>';
 				echo '</a>';
