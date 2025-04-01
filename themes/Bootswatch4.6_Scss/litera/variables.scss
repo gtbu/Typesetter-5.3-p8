@@ -1,0 +1,75 @@
+// Theme Bootswatch 4 Scss
+// Layout Litera 4.0.0
+//
+// For all Bootstrap 4 variables see /include/thirdparty/Bootstrap4/scss/bootstrap/_variables.scss
+
+// Color system
+$white:     #fff;
+$gray-100:  #f8f9fa;
+$gray-200:  #e9ecef;
+$gray-300:  #ddd;
+$gray-400:  #ced4da;
+$gray-500:  #adb5bd;
+$gray-600:  #868e96;
+$gray-700:  #495057;
+$gray-800:  #343a40;
+$gray-900:  #212529;
+$black:     #000;
+
+$blue:      #4582EC;
+$indigo:    #6610f2;
+$purple:    #6f42c1;
+$pink:      #e83e8c;
+$red:       #d9534f;
+$orange:    #fd7e14;
+$yellow:    #f0ad4e;
+$green:     #02B875;
+$teal:      #20c997;
+$cyan:      #17a2b8;
+
+$primary:   $blue;
+$secondary: $gray-500;
+$success:   $green;
+$info:      $cyan;
+$warning:   $yellow;
+$danger:    $red;
+$light:     $gray-100;
+$dark:      $gray-800;
+
+// Body
+$body-color: $gray-800;
+
+// Fonts
+$web-font-path: "https://fonts.googleapis.com/css?family=Raleway:400,700";
+$font-family-sans-serif: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$font-family-serif: Georgia, Cambria, "Times New Roman", Times, serif;
+$font-size-base: 1.0625rem;
+$navbar-font-size: 1.0625rem;
+$footer-font-size: 0.875rem;
+$headings-font-weight: 700;
+
+// Tables
+$table-border-color: rgba(0, 0, 0, 0.1);
+
+// Buttons
+$input-btn-padding-y: 0.5rem;
+$input-btn-padding-x: 1.1rem;
+
+// Forms
+$input-border-color: rgba(0, 0, 0, 0.1);
+$input-group-addon-bg: $gray-200;
+
+// Navbar
+$navbar-dark-color: rgba($white, 0.75);
+$navbar-dark-hover-color: $white;
+$navbar-light-hover-color: $body-color;
+$navbar-light-active-color: $body-color;
+
+// Badges
+$badge-font-weight: normal;
+$badge-padding-y: 0.6em;
+$badge-padding-x: 1.2em;
+
+// Footer
+$footer-bg: $gray-400;
+// For more footer variables see /themes/Bootswatch4_Scss/_common/footer.scss

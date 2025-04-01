@@ -1,0 +1,130 @@
+// Theme Bootswatch 4 Scss
+// Layout Slate 4.0.0
+//
+// For all Bootstrap 4 variables see /include/thirdparty/Bootstrap4/scss/bootstrap/_variables.scss
+
+// Color system
+$white:     #fff;
+$gray-100:  #f8f9fa;
+$gray-200:  #e9ecef;
+$gray-300:  #dee2e6;
+$gray-400:  #ced4da;
+$gray-500:  #999;
+$gray-600:  #7A8288;
+$gray-700:  #52575C;
+$gray-800:  #3A3F44;
+$gray-900:  #272B30;
+$black:     #000;
+
+$blue:      #007bff;
+$indigo:    #6610f2;
+$purple:    #6f42c1;
+$pink:      #e83e8c;
+$red:       #ee5f5b;
+$orange:    #fd7e14;
+$yellow:    #f89406;
+$green:     #62c462;
+$teal:      #20c997;
+$cyan:      #5bc0de;
+
+$primary:   $gray-800;
+$secondary: $gray-600;
+$success:   $green;
+$info:      $cyan;
+$warning:   $yellow;
+$danger:    $red;
+$light:     $gray-200;
+$dark:      $gray-900;
+
+// Body
+$body-bg: $gray-900;
+$body-color: #aaa;
+
+// Links
+$link-color: $white;
+
+// Fonts
+$font-size-base: 0.9375rem;
+$navbar-font-size: 0.9375rem;
+$footer-font-size: 0.875rem;
+
+// Tables
+$table-accent-bg: rgba($white, 0.05);
+$table-hover-bg: rgba($white, 0.075);
+$table-border-color: rgba($black, 0.6);
+$table-dark-border-color: $table-border-color;
+$table-dark-color: $white;
+
+// Buttons
+$input-btn-padding-y: 0.75rem;
+$input-btn-padding-x: 1rem;
+
+// Forms
+$input-disabled-bg: #ccc;
+
+// Dropdowns
+$dropdown-bg: $gray-800;
+$dropdown-divider-bg: rgba($black, 0.15);
+$dropdown-link-color: $body-color;
+$dropdown-link-hover-color: $white;
+$dropdown-link-hover-bg: $body-bg;
+
+// Navs
+$nav-tabs-border-color: rgba($black, 0.6);
+$nav-tabs-link-hover-border-color: $nav-tabs-border-color;
+$nav-tabs-link-active-color: $white;
+$nav-tabs-link-active-border-color: $nav-tabs-border-color;
+
+// Navbar
+$navbar-padding-y: 0;
+$navbar-dark-hover-color: $white;
+$navbar-light-hover-color: $gray-800;
+$navbar-light-active-color: $gray-800;
+
+// Pagination
+$pagination-color: $white;
+$pagination-bg: transparent;
+$pagination-border-color: rgba($black, 0.6);
+$pagination-hover-color: $white;
+$pagination-hover-bg: transparent;
+$pagination-hover-border-color: rgba($black, 0.6);
+$pagination-active-bg: transparent;
+$pagination-active-border-color: rgba($black, 0.6);
+$pagination-disabled-bg: transparent;
+$pagination-disabled-border-color: rgba($black, 0.6);
+
+// Jumbotron
+$jumbotron-bg: darken($gray-900, 5%);
+
+// Cards
+$card-border-color: rgba($black, 0.6);
+$card-cap-bg: lighten($gray-800, 10%);
+$card-bg: lighten($body-bg, 5%);
+
+// Popovers
+$popover-bg: lighten($body-bg, 5%);
+
+// Modals
+$modal-content-bg: lighten($body-bg, 5%);
+$modal-header-border-color: rgba(0, 0, 0, 0.2);
+
+// Progress bars
+$progress-bg: darken($gray-900, 5%);
+$progress-bar-color: $gray-600;
+
+// List group
+$list-group-bg: lighten($body-bg, 5%);
+$list-group-border-color: rgba($black, 0.6);
+$list-group-hover-bg: lighten($body-bg, 10%);
+$list-group-active-color: $white;
+$list-group-active-bg: $list-group-hover-bg;
+$list-group-active-border-color: $list-group-border-color;
+$list-group-disabled-color: $gray-700;
+$list-group-action-color: $white;
+
+// Breadcrumbs
+$breadcrumb-active-color: $gray-500;
+
+// Footer
+$footer-bg: $black;
+// For more footer variables see /themes/Bootswatch4_Scss/_common/footer.scss

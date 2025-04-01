@@ -486,6 +486,13 @@ class Combine{
 			'file'			=> '/include/thirdparty/Bootstrap4/js/utils.min.js',
 			'package'		=> 'bootstrap4',
 		],
+							
+		// Bootstrap4.6.2
+		'bootstrap4.6-js' => [
+			'file'			=> '/include/thirdparty/Bootstrap4.6/js/bootstrap.bundle.min.js',
+			'package'		=> 'bootstrap4.6',
+			'exclude'		=> ' ',
+		],
 
       // Bootstrap5.2
 		'bootstrap5.2-js' => [
