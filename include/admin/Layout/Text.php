@@ -100,6 +100,7 @@ class Text extends \gp\admin\Layout{
 
        	echo '<div class="inline_box">';
 		echo '<form action="'.\gp\tool::GetUrl('Admin_Theme_Content/Text').'" method="post">';
+		echo '<input type="hidden" name="nonce" value="'.htmlspecialchars(\gp\tool::new_nonce($nonce_str)).'" />';
 		echo '<input type="hidden" name="cmd" value="savetext" />';
 		echo '<input type="hidden" name="key" value="'.htmlspecialchars($key, ENT_QUOTES).'" />';
 
