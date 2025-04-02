@@ -1979,17 +1979,17 @@ class Layout extends \gp\admin\Addon\Install{
 		return $theme;
 	}
 
+    public function TitlesCount($layout) {
+    $titles_count = 0;
 
-	public function TitlesCount($layout){
-		$titles_count = 0;
-		foreach($this->LayoutArray as $layout_comparison){
-			if( $layout == $layout_comparison ){
-				$titles_count++;
-			}
-		}
-		return $titles_count;
-	}
+    foreach ($this->LayoutArray ?? [] as $layout_comparison) {
+        if ($layout == $layout_comparison) {
+            $titles_count++;
+        }
+    }
 
+    return $titles_count;
+    }
 
 	/**
 	 * Restore a layout to it's default content arrangement

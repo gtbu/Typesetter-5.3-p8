@@ -1000,22 +1000,31 @@ namespace gp\tool{
 
 			echo '<ul class="gp_gallery">';
 
-			foreach($_POST['images'] as $i => $image ){
+            foreach ($_POST['images'] as $i => $image) {
+            // Sanitize and escape the image path
+            $image = htmlspecialchars($image, ENT_QUOTES, 'UTF-8');
 
-				$thumb_path = \gp\tool::ThumbnailPath($image);
-				$caption = $_POST['captions'][$i];
-				\gp\tool\Files::cleanText($caption);
-				$img_alt = str_replace('_', ' ', basename(pathinfo($image, PATHINFO_FILENAME)));
+            // Generate a thumbnail path (assumes this function is safe)
+            $thumb_path = \gp\tool::ThumbnailPath($image);
+            $thumb_path = htmlspecialchars($thumb_path, ENT_QUOTES, 'UTF-8');
 
-				echo '<li>';
-				// echo '<a class="gallery_gallery" data-arg="gallery_gallery" href="'.$image.'" data-cmd="gallery" rel="'.$rel_id.'">'; // title="'.htmlspecialchars($caption).'"
-				echo '<a class="gallery_gallery" data-arg="gallery_gallery" href="'.htmlspecialchars(urlencode($image), ENT_QUOTES, 'UTF-8').'" data-cmd="gallery" rel="'.htmlspecialchars($rel_id, ENT_QUOTES, 'UTF-8').'">';
-				echo '<img src="'.$thumb_path.'" alt="'.$img_alt.'" />';
-				echo '<span class="caption">'.$caption.'</span>';
-				echo '</a>';
-				echo '</li>';
-			}
-			echo '</ul>';
+             // Get and escape captions
+            $caption = isset($_POST['captions'][$i]) ? $_POST['captions'][$i] : '';
+            \gp\tool\Files::cleanText($caption); // Assuming this cleans text correctly
+            $caption = htmlspecialchars($caption, ENT_QUOTES, 'UTF-8');
+
+            // Sanitize the alt text
+            $img_alt = htmlspecialchars(str_replace('_', ' ', basename(pathinfo($image, PATHINFO_FILENAME))), ENT_QUOTES, 'UTF-8');
+
+            echo '<li>';
+            echo '<a class="gallery_gallery" data-arg="gallery_gallery" href="' . $image . '" data-cmd="gallery" rel="' . htmlspecialchars($rel_id, ENT_QUOTES, 'UTF-8') . '">';
+            echo '<img src="' . $thumb_path . '" alt="' . $img_alt . '" />';
+            echo '<span class="caption">' . $caption . '</span>';
+            echo '</a>';
+            echo '</li>';
+            }
+
+            echo '</ul>';
 
 			$section['content'] = ob_get_clean();
 			$section['images'] = $_POST['images'];
