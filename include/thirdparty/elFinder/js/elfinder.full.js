@@ -20423,7 +20423,7 @@ $.fn.elfindersearchbutton = function(cmd) {
 							typeSet.append($('<input id="'+id(i)+'" name="serchcol" type="radio" value="'+fm.escape(i)+'"/><label for="'+id(i)+'">'+fm.i18n(v.name)+'</label>'));
 						});
 					}
-					opts.find('div.buttonset').buttonset();
+					opts.find('div.buttonset').controlgroup();
 					$('#'+id('SearchFromAll')).next('label').attr('title', fm.i18n('searchTarget', fm.i18n('btnAll')));
 					if (sTypes) {
 						$.each(sTypes, function(i, v) {

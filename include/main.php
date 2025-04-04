@@ -43,4 +43,14 @@ switch($type){
 
 \gp\tool\Plugins::Action('PageCreated');
 
+if (session_status() == PHP_SESSION_NONE) {
+        error_log("No active session detected. Attempting session_start()...");
+		if (!session_start()) {
+            error_log("session_start() FAILED.");
+			die("Session could not be started.");
+        } else {
+            error_log("session_start() SUCCEEDED. Session ID: " . session_id());
+        }
+    }
+
 \gp\tool\Output::RunOut();

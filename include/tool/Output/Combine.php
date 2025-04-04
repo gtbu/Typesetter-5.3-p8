@@ -153,55 +153,55 @@ class Combine{
 
 		//jquery ui widgets
 		'accordion' => [
-			'file'			=> '/include/thirdparty/jquery_ui/accordion.js',
+			'file'			=> '/include/thirdparty/jquery_ui/widgets/accordion.js',
 			'requires'		=> 'ui-core,widget,ui-theme',
 			'package'		=> 'jquery_ui',
 		],
 
 		'autocomplete' => [
-			'file'			=> '/include/thirdparty/jquery_ui/autocomplete.js',
+			'file'			=> '/include/thirdparty/jquery_ui/widgets/autocomplete.js',
 			'requires'		=> 'ui-core,widget,position,menu,ui-theme',
 			'package'		=> 'jquery_ui',
 		],
 
 		'button' => [
-			'file'			=> '/include/thirdparty/jquery_ui/button.js',
+			'file'			=> '/include/thirdparty/jquery_ui/widgets/button.js',
 			'requires'		=> 'ui-core,widget,ui-theme',
 			'package'		=> 'jquery_ui',
 		],
 
 		'datepicker' => [
-			'file'			=> '/include/thirdparty/jquery_ui/datepicker.js',
+			'file'			=> '/include/thirdparty/jquery_ui/widgets/datepicker.js',
 			'requires'		=> 'ui-core,ui-theme',
 			'package'		=> 'jquery_ui',
 		],
 
 		'dialog' => [
-			'file'			=> '/include/thirdparty/jquery_ui/dialog.js',
+			'file'			=> '/include/thirdparty/jquery_ui/widgets/dialog.js',
 			'requires'		=> 'ui-core,widget,button,position,ui-theme',
 			'package'		=> 'jquery_ui',
 		],
 
 		'menu' => [
-			'file'			=> '/include/thirdparty/jquery_ui/menu.js',
+			'file'			=> '/include/thirdparty/jquery_ui/widgets/menu.js',
 			'requires'		=> 'ui-core,widget,position,ui-theme',
 			'package'		=> 'jquery_ui',
 		],
 
 		'progressbar' => [
-			'file'			=> '/include/thirdparty/jquery_ui/progressbar.js',
+			'file'			=> '/include/thirdparty/jquery_ui/widgets/progressbar.js',
 			'requires'		=> 'ui-core,widget,ui-theme',
 			'package'		=> 'jquery_ui',
 		],
 
 		'slider' => [
-			'file'			=> '/include/thirdparty/jquery_ui/slider.js',
+			'file'			=> '/include/thirdparty/jquery_ui/widgets/slider.js',
 			'requires'		=> 'ui-core,widget,mouse,ui-theme',
 			'package'		=> 'jquery_ui',
 		],
 
 		'tabs' => [
-			'file'			=> '/include/thirdparty/jquery_ui/tabs.js',
+			'file'			=> '/include/thirdparty/jquery_ui/widgets/tabs.js',
 			'requires'		=> 'ui-core,widget,ui-theme',
 			'package'		=> 'jquery_ui',
 		],
@@ -213,91 +213,91 @@ class Combine{
 		],
 
 		'blind' => [
-			'file'			=> '/include/thirdparty/jquery_ui/effect-blind.js',
+			'file'			=> '/include/thirdparty/jquery_ui/effects/effect-blind.js',
 			'requires'		=> 'effects-core',
 			'package'		=> 'jquery_ui',
 		],
 
 		'bounce' => [
-			'file'			=> '/include/thirdparty/jquery_ui/effect-bounce.js',
+			'file'			=> '/include/thirdparty/jquery_ui/effects/effect-bounce.js',
 			'requires'		=> 'effects-core',
 			'package'		=> 'jquery_ui',
 		],
 
 		'clip' => [
-			'file'			=> '/include/thirdparty/jquery_ui/effect-clip.js',
+			'file'			=> '/include/thirdparty/jquery_ui/effects/effect-clip.js',
 			'requires'	 => ['effects-core'],
 			'package'		=> 'jquery_ui',
 		],
 
 		'drop' => [
-			'file'			=> '/include/thirdparty/jquery_ui/effect-drop.js',
+			'file'			=> '/include/thirdparty/jquery_ui/effects/effect-drop.js',
 			'requires'	 => ['effects-core'],
 			'package'		=> 'jquery_ui',
 		],
 
 		'explode' => [
-			'file'			=> '/include/thirdparty/jquery_ui/effect-explode.js',
+			'file'			=> '/include/thirdparty/jquery_ui/effects/effect-explode.js',
 			'requires'	 => ['effects-core'],
 			'package'		=> 'jquery_ui',
 		],
 
 		'fade' => [
-			'file'			=> '/include/thirdparty/jquery_ui/effect-fade.js',
+			'file'			=> '/include/thirdparty/jquery_ui/effects/effect-fade.js',
 			'requires'	 => ['effects-core'],
 			'package'		=> 'jquery_ui',
 		],
 
 		'fold' => [
-			'file'			=> '/include/thirdparty/jquery_ui/effect-fold.js',
+			'file'			=> '/include/thirdparty/jquery_ui/effects/effect-fold.js',
 			'requires'	 => ['effects-core'],
 			'package'		=> 'jquery_ui',
 		],
 
 		'highlight' => [
-			'file'			=> '/include/thirdparty/jquery_ui/effect-highlight.js',
+			'file'			=> '/include/thirdparty/jquery_ui/effects/effect-highlight.js',
 			'requires'	 => ['effects-core'],
 			'package'		=> 'jquery_ui',
 		],
 
 		'puff' => [
-			'file'			=> '/include/thirdparty/jquery_ui/effect-puff.js',
+			'file'			=> '/include/thirdparty/jquery_ui/effects/effect-puff.js',
 			'requires'	 => ['effects-core'],
 			'package'		=> 'jquery_ui',
 		],
 
 		'pulsate' => [
-			'file'			=> '/include/thirdparty/jquery_ui/effect-pulsate.js',
+			'file'			=> '/include/thirdparty/jquery_ui/effects/effect-pulsate.js',
 			'requires'	 => ['effects-core'],
 			'package'		=> 'jquery_ui',
 		],
 
 		'scale' => [
-			'file'			=> '/include/thirdparty/jquery_ui/effect-scale.js',
+			'file'			=> '/include/thirdparty/jquery_ui/effects/effect-scale.js',
 			'requires'	 => ['effects-core'],
 			'package'		=> 'jquery_ui',
 		],
 
 		'shake' => [
-			'file'			=> '/include/thirdparty/jquery_ui/effect-shake.js',
+			'file'			=> '/include/thirdparty/jquery_ui/effects/effect-shake.js',
 			'requires'	 => ['effects-core'],
 			'package'		=> 'jquery_ui',
 		],
 
 		'size' => [
-			'file'			=> '/include/thirdparty/jquery_ui/effect-size.js',
+			'file'			=> '/include/thirdparty/jquery_ui/effects/effect-size.js',
 			'requires'	 => ['effects-core'],
 			'package'		=> 'jquery_ui',
 		],
 
 		'slide' => [
-			'file'			=> '/include/thirdparty/jquery_ui/effect-slide.js',
+			'file'			=> '/include/thirdparty/jquery_ui/effects/effect-slide.js',
 			'requires'	 => ['effects-core'],
 			'package'		=> 'jquery_ui',
 		],
 
 		'transfer' => [
-			'file'			=> '/include/thirdparty/jquery_ui/effect-transfer.js',
+			'file'			=> '/include/thirdparty/jquery_ui/effects/effect-transfer.js',
 			'requires'	 => ['effects-core'],
 			'package'		=> 'jquery_ui',
 		],
