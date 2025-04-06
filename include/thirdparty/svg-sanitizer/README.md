@@ -1,8 +1,8 @@
-# svg-sanitizer
+# svg-sanitizer 0.21.0
 
-[![Build Status](https://travis-ci.org/darylldoyle/svg-sanitizer.svg?branch=master)](https://travis-ci.org/darylldoyle/svg-sanitizer) [![Test Coverage](https://codeclimate.com/github/darylldoyle/svg-sanitizer/badges/coverage.svg)](https://codeclimate.com/github/darylldoyle/svg-sanitizer/coverage)
+[![Build Status](https://github.com/darylldoyle/svg-sanitizer/actions/workflows/tests.yml/badge.svg?branch=master)](https://travis-ci.org/darylldoyle/svg-sanitizer) [![Test Coverage](https://codeclimate.com/github/darylldoyle/svg-sanitizer/badges/coverage.svg)](https://codeclimate.com/github/darylldoyle/svg-sanitizer/coverage)
 
-This is my attempt at building a decent SVG sanitizer in PHP. The work is laregely borrowed from [DOMPurify](https://github.com/cure53/DOMPurify).
+This is my attempt at building a decent SVG sanitizer in PHP. The work is largely borrowed from [DOMPurify](https://github.com/cure53/DOMPurify).
 
 ## Installation
 
@@ -40,17 +40,17 @@ You may pass your own whitelist of tags and attributes by using the `Sanitizer::
 
 These methods require that you implement the `enshrined\svgSanitize\data\TagInterface` or `enshrined\svgSanitize\data\AttributeInterface`.
 
-## Remove remote references 
+## Remove remote references
 
-You have the option to remove attributes that reference remote files, this will stop HTTP leaks but will add an overhead to the sanitiser.
+You have the option to remove attributes that reference remote files, this will stop HTTP leaks but will add an overhead to the sanitizer.
 
 This defaults to false, set to true to remove references.
 
 `$sanitizer->removeRemoteReferences(true);`
 
-## Viewing Sanitisation Issues
+## Viewing Sanitization Issues
 
-You may use the `getXmlIssues()` method to return an array of issues that occurred during sanitisation.
+You may use the `getXmlIssues()` method to return an array of issues that occurred during sanitization.
 
 This may be useful for logging or providing feedback to the user on why an SVG was refused.
 
@@ -58,7 +58,7 @@ This may be useful for logging or providing feedback to the user on why an SVG w
 
 ## Minification
 
-You can minify the XML output by calling `$sanitiser->minify(true);`.
+You can minify the XML output by calling `$sanitizer->minify(true);`.
 
 ## Demo
 There is a demo available at: [http://svg.enshrined.co.uk/](http://svg.enshrined.co.uk/)
@@ -71,9 +71,14 @@ I've just released a WordPress plugin containing this code so you can sanitize y
 
 [Michael Potter](https://github.com/heyMP) has kindly created a Drupal module for this library which is available at: [https://www.drupal.org/project/svg_sanitizer](https://www.drupal.org/project/svg_sanitizer)
 
+## TYPO3
+
+This SVG sanitizer library is used per default in the core of TYPO3 v9 and later versions.
+See [corresponding changelog entry](https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/9.5.x/Important-94492-IntroduceSVGSanitizer.html) for more details.
+
 ## Tests
 
-You can run these by running `phpunit`
+You can run these by running `vendor/bin/phpunit` from the base directory of this package.
 
 ## Standalone scanning of files via CLI
 
