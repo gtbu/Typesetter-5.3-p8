@@ -1,0 +1,46 @@
+.gpge_box {
+  position:absolute;
+  top:80px;
+  height:100%;
+  max-height:calc(100vh - 180px);
+  width:calc(100vw - 120px);
+  left:calc(265px - 100vw);
+  border-radius:6px;
+  background:#fff;
+  -webkit-box-shadow:0 0 6px rgba(0,0,0,0.4);
+  -moz-box-shadow:0 0 6px rgba(0,0,0,0.4);
+  box-shadow:0 0 6px rgba(0,0,0,0.4);
+  z-index:10000;
+  padding:24px 24px 36px 24px;
+  cursor:move;
+}
+
+.gpge_box #gp_current_images {
+  border:1px solid #ddd;
+  background:#f2f2f2;
+  border-radius:3px;
+  max-height:none;
+  height:100%;
+  cursor:default;
+  padding:3px;
+}
+
+.gpge_box #gp_current_images div {
+  width:calc(20% - 6px)!important;
+  margin:3px!important;
+}
+
+
+#/** Buttons align *********************/
+gp_current_images span{
+	width: 100%;
+	background: none !important;
+}
+
+#gp_current_images span a{
+	background: #ddd;
+}
+
+#gp_admin_html a[data-cmd="gp_gallery_rm"] {
+	float: right;
+}
