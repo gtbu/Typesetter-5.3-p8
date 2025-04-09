@@ -438,9 +438,9 @@ class Tools{
 		// About
 		$content = '<h1>About ' . CMS_NAME . '</h1><p><a href="' . CMS_DOMAIN . '" title="' . CMS_READABLE_DOMAIN . '" rel="nofollow">' . CMS_NAME . '</a> is a complete Content Management System (CMS) that can help you create rich and flexible web sites with a simple and easy to use interface.</p>
 		<h2>' . CMS_NAME . ' How To</h2>
-		<p>Learn how to <a href="' . CMS_DOMAIN . '/Docs/Main/Admin" title="' . CMS_NAME . ' File Management" rel="nofollow">manage your files</a>,
-		<a href="' . CMS_DOMAIN . '/Docs/Main/Creating%20Galleries" title="Creating Galleries in ' . CMS_NAME . '" rel="nofollow">create galleries</a> and more in the
-		<a href="' . CMS_DOMAIN . '/Docs/index.php/" title="' . CMS_NAME . ' Documentation" rel="nofollow">' . CMS_NAME . ' Documentation</a>.
+		<p>Learn how to <a href="' . CMS_DOMAIN . '/Typesetter5.2/wiki/Pagemanager" title="' . CMS_NAME . ' File Management" rel="nofollow">manage your files</a>,
+		<a href="' . CMS_DOMAIN . '/Typesetter5.2/wiki/Sections" title="Creating Galleries in ' . CMS_NAME . '" rel="nofollow">create galleries</a> and more in the
+		<a href="' . CMS_DOMAIN . '/Typesetter5.2/wiki" title="' . CMS_NAME . ' Documentation" rel="nofollow">' . CMS_NAME . ' Documentation</a>.
 		</p>
 
 		<h2>' . CMS_NAME . ' Features</h2>
