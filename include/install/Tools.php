@@ -396,9 +396,8 @@ class Tools{
 		<hr/>
 		<p>' . CMS_READABLE_DOMAIN . ' has a number of resources to help you do even more.</p>
 		<ul>
-		<li>Find more community developed <a href="' . CMS_DOMAIN . '/Themes" title="' . CMS_NAME . ' Themes" rel="nofollow">themes</a> and <a href="' . CMS_DOMAIN . '/Plugins" title="' . CMS_NAME . ' Plugin" rel="nofollow">plugins</a> to enhance your site.</li>
-		<li>Get help in the <a href="' . CMS_DOMAIN . '/Forum" title="' . CMS_NAME . ' Forum" rel="nofollow">' . CMS_NAME . ' forum</a>.</li>
-		<li>Show off your <a href="' . CMS_DOMAIN . '/Showcase" title="Sites Using ' . CMS_NAME . '" rel="nofollow">' . CMS_NAME . ' powered site</a> or list your <a href="' . CMS_DOMAIN . '/Providers" title="Businesses Using ' . CMS_NAME . '" rel="nofollow">' . CMS_NAME . ' related business</a>.</li>
+		<li>Find more community developed <a href="' . CMS_DOMAIN . '/Online-Themes" title="' . CMS_NAME . ' Themes" rel="nofollow">themes</a> and <a href="' . CMS_DOMAIN . '/Online-Plugins" title="' . CMS_NAME . ' Plugin" rel="nofollow">plugins</a> to enhance your site.</li>
+		<li>Get help in the <a href="' . CMS_DOMAIN . '/Typesetter5.2/wiki" title="' . CMS_NAME . ' Wiki" rel="nofollow">' . CMS_NAME . ' wiki</a>.</li>
 		</ul>
 
 		</div>
@@ -408,7 +407,7 @@ class Tools{
 		<hr/>
 		<p>There are many ways to contribute to our project:</p>
 		<ul>
-		<li>Fork ' . CMS_NAME . ' on <a href="https://github.com/Typesetter/Typesetter" target="_blank" rel="nofollow">github</a>.</li>
+		<li>Fork ' . CMS_NAME . ' on <a href="https://github.com/gtbu/Typesetter-5.3-p8" target="_blank" rel="nofollow">github</a>.</li>
 		<li>Like us on <a href="https://www.facebook.com/Typesetter.cms" target="_blank" rel="nofollow">Facebook</a>.</li>
 		<li>Follow us on <a href="https://twitter.com/TypesetterCMS" target="_blank" rel="nofollow">Twitter</a>.</li>
 		</ul>

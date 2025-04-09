@@ -35,7 +35,7 @@ class About{
 
 		echo '<i>Does '.\CMS_NAME.' Work?</i>';
 		echo '<p>Obviously the first step is to get '.\CMS_NAME.' working correctly.';
-		echo ' If it\'s not working for you and you think it\'s because of a bug, you can <a href="https://github.com/Typesetter/Typesetter/issues">report it</a> and we\'ll work on fixing it.';
+		echo ' If it\'s not working for you and you think it\'s because of a bug, you can <a href="https://github.com/gtbu/Typesetter-5.3-p8/issues">report it</a> and we\'ll work on fixing it.';
 		echo '</p>';
 
 		echo '<i>Does '.\CMS_NAME.' Work Well?</i>';
