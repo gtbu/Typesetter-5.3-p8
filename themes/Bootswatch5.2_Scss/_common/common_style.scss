@@ -1,0 +1,133 @@
+// Theme Bootswatch 4 Scss
+// Common styles used in all layouts
+//
+// Instead of Autoprefixer we use vendor-prefix mixins,
+// see /include/thirdparty/Bootstrap4/scss/bootstrap/vp-mixins
+//
+// Migrate to Bootstrap 5.2: check out https://getbootstrap.com/docs/5.2/migration/
+
+
+// Imports
+@if variable-exists(web-font-path) {
+  @import url($web-font-path);
+}
+@import 'contactform.scss';
+@import 'compensate_fixed_navbar.scss'; // default, import only with 'fixed-top' class on navbar in template.php line 44
+@import 'footer.scss';
+@import 'dropdown.scss';
+
+
+// Page Flex Layout for Sticky Footer ==========================================
+html, body {
+  height: 100%;
+}
+
+body {
+  // vendor-prefix mixin
+  @include vp-flexbox();
+  @include vp-flex-direction(column);
+}
+
+// Height fix for Admin Top Bar and hidden admin UI
+html:not(.override_admin_style) body.gpAdmin {
+  height: calc(100% - 29px);
+}
+
+// Navbar =======================================================================
+$navbar-font-size: 1rem !default; // non-standard variable, needs a default value. actual value see layout's variables.scss
+.navbar {
+  font-size: $navbar-font-size;
+}
+
+// Content Area
+.main-content {
+  // vendor-prefix mixin
+  @include vp-flex(1 0 auto);
+}
+
+// Add padding-top to the first content section to prevent content sticking to the navbar
+#gpx_content > .GPAREA:first-child {
+  padding-top: 2rem;
+}
+
+// Main Footer
+footer.main-footer {
+  // vendor-prefix mixin
+  @include vp-flex-shrink(0);
+  // more in footer.scss
+}
+
+// Fix for bad container paddings in navbars (as of Bootstrap 4.1.1)
+@include media-breakpoint-up(sm) {
+  .navbar > .container,
+  .navbar > .container-fluid {
+    padding-right: ($grid-gutter-width / 2);
+    padding-left: ($grid-gutter-width / 2);
+  }
+}
+
+// Align menu right, fix dropdown alignment
+.navbar-right {
+  > .GPAREA:first-child {
+    margin-left: auto;
+  }
+  .dropdown-menu {
+    left: auto;
+    right: 0;
+  }
+}
+
+
+// convert Typesetter grid to become Bootstrap 4 (flex) grid =====================
+.gpRow    { @extend .row; }
+.gpCol-1  { @extend .col-md-1; }
+.gpCol-2  { @extend .col-md-2; }
+.gpCol-3  { @extend .col-md-3; }
+.gpCol-4  { @extend .col-md-4; }
+.gpCol-5  { @extend .col-md-5; }
+.gpCol-6  { @extend .col-md-6; }
+.gpCol-7  { @extend .col-md-7; }
+.gpCol-8  { @extend .col-md-8; }
+.gpCol-9  { @extend .col-md-9; }
+.gpCol-10 { @extend .col-md-10; }
+.gpCol-11 { @extend .col-md-11; }
+.gpCol-12 { @extend .col-12; }
+[class *= "gpCol-"] { margin-bottom: unset; }
+
+// fixes for flex grid
+.filetype-wrapper_section.row {
+  > .gpclear {
+    display: none;
+  }
+  &:after{
+    content: none;
+  }
+}
+
+
+// Extra Content 'Dropdown Divider'
+.gpArea_Extra_Bootstrap_Dropdown_Divider {
+  @extend .dropdown-divider;
+}
+
+
+// Admin Links
+.footer-bottom {
+  > span {
+    margin-right: 0.75em;
+  }
+
+  .sitemap_link > a:before,
+  .login_link > a:before {
+    display: inline-block;
+    font-family: FontAwesome;
+  }
+
+  .sitemap_link > a:before {
+    content: "\f0ca\a0";
+  }
+
+  .login_link > a:before {
+    content: "\f2bd\a0";
+  }
+}

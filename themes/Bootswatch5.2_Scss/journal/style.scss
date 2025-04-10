@@ -1,0 +1,17 @@
+// Theme Bootswatch 5 Scss
+// Layout Cerulean 5.2
+// https://bootswatch.com
+// Migrate to Bootstrap 5: check out https://getbootstrap.com/docs/5.2/migration/
+
+// Import Bootstrap Scss ========================================================
+@import '_variables.scss';
+@import 'include/thirdparty/Bootstrap5.2/scss/_bootstrap.scss';
+@import '_bootswatch.scss';
+
+
+// Variables and Mixins =========================================================
+$navbar-height: ($nav-link-height + $navbar-padding-y * 2);
+
+// Import Common Styles =========================================================
+@import '../_common/common_style.scss';
+

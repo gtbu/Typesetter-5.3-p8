@@ -1,0 +1,55 @@
+/* Bootstrap 5 Multi-Level Dropdown CSS */
+
+.dropdown-submenu {
+  position: relative; /* Needed for submenu positioning */
+}
+
+/* Style the submenu trigger link */
+.dropdown-submenu > .dropdown-item.dropdown-toggle {
+  /* BS5 dropdown-item already uses flex, so alignment is often okay */
+}
+.dropdown-submenu > .dropdown-item.dropdown-toggle::after {
+    content: '▸'; /* Right arrow indicator (or choose another) */
+    display: inline-block;
+    vertical-align: middle; /* Adjust as needed */
+    border: none; /* Override Bootstrap's default caret */
+    margin-inline-start: 0.5em; /* Space between text and arrow (RTL friendly) */
+}
+
+
+/* Hide submenu by default */
+.dropdown-submenu > .dropdown-menu {
+  top: 0;
+  /* Position to the side (RTL friendly) */
+  inset-inline-start: 100%;
+  margin-top: -1px; /* Align top edge (adjust as needed based on borders) */
+  margin-inline-start: 0.1rem; /* Small gap (RTL friendly) */
+  display: none; /* Hide by default */
+  /* min-width: set if needed, BS5 dropdown-menu has its own logic */
+}
+
+/* Show submenu on hover/focus */
+/* Using :hover on the LI and :focus-within for keyboard nav */
+.dropdown-submenu:hover > .dropdown-menu,
+.dropdown-submenu:focus-within > .dropdown-menu {
+  display: block; /* Show */
+}
+
+/* Optional: Adjust positioning for menus aligned to the end (right in LTR) */
+/* This requires the parent dropdown-menu to have .dropdown-menu-end */
+.dropdown-menu.dropdown-menu-end .dropdown-submenu > .dropdown-menu {
+    inset-inline-start: auto; /* Unset side positioning */
+    inset-inline-end: 100%;   /* Position to the left (in LTR) */
+    margin-inline-start: 0;
+    margin-inline-end: 0.1rem;
+}
+
+/* Optional: Ensure dropdown items don't wrap if text is long */
+.dropdown-item {
+    white-space: nowrap;
+}
+
+/* Optional: Improve keyboard navigation focus visibility */
+.dropdown-submenu > a:focus + .dropdown-menu {
+    /* display: block; Might be redundant with focus-within */
+}
