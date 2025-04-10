@@ -1,209 +1,325 @@
 <?php
-
 namespace gp\tool\Output;
 
 defined('is_running') or die('Not an entry point...');
 
-/**
- * Get the contents of $file and fix paths:
- * 	- url(..)
- *	- @import
- * 	- @import url(..)
- */
-class CombineCSS{
+class CombineCSS {
 
-	public $content;
-	public $file;
-	public $full_path;
-	public $imported = array();
-	public $imports = '';
+    // Public properties to access results
+    public $combined_content_raw = ''; // The combined, path-fixed CSS before minification
+    public $final_content = '';      // The final output (minified if requested/possible)
+    public $prepended_imports = '';  // @import rules that were kept (remote, media queries)
+    public $processed_files = [];    // Files processed in this instance to prevent loops
 
-	public function __construct($file){
-		global $dataDir;
+    // Internal properties
+    private $entry_file_path;        // Normalized path relative to $dataDir for the initial file
+    private $minify_output;          // Flag whether to minify the final output
+    private $dataDir_norm;           // Normalized $dataDir path
 
-		includeFile('thirdparty/cssmin_v.1.0.php');
+    /**
+     * Constructor
+     *
+     * @param string $file Path to the entry CSS file, relative to $dataDir
+     * @param bool $minify Whether to minify the final output
+     */
+    public function __construct($file, $minify = true) {
+        global $dataDir;
+        $this->minify_output = $minify;
 
-		$this->file = $file;
-		$this->full_path = $dataDir.$file;
+        // --- Path Normalization ---
+        // Ensure $dataDir ends with a slash and uses forward slashes
+        $this->dataDir_norm = rtrim(str_replace('\\', '/', $dataDir), '/') . '/';
+        // Ensure $file starts without a slash and uses forward slashes
+        $this->entry_file_path = ltrim(str_replace('\\', '/', $file), '/');
 
+        $full_path = $this->dataDir_norm . $this->entry_file_path;
+        $real_full_path = realpath($full_path);
 
-		$this->content = file_get_contents($this->full_path);
-		$this->content = \cssmin::minify($this->content);
+        if (!$real_full_path || !file_exists($real_full_path)) {
+            trigger_error('CombineCSS: Entry file not found: ' . htmlspecialchars($full_path), E_USER_WARNING);
+            $this->final_content = '/* CombineCSS Error: Entry file not found: ' . htmlspecialchars($file) . ' */';
+            return;
+        }
 
-		$this->CSS_Import();
-		$this->CSS_FixUrls();
-	}
+        // --- Load Minifier if needed ---
+        if ($this->minify_output) {
+            // Consider adding a check if the class/function exists after include
+            if (!class_exists('\cssmin')) {
+                 includeFile('thirdparty/cssmin_v.1.0.php');
+                 if (!class_exists('\cssmin')) {
+                      trigger_error('CombineCSS: cssmin class not found after including thirdparty/cssmin_v.1.0.php. Minification disabled.', E_USER_WARNING);
+                      $this->minify_output = false; // Disable minification if class isn't there
+                 }
+            }
+        }
 
+        // --- Start Processing ---
+        $this->processed_files = []; // Reset for this instance
+        $this->prepended_imports = '';
+        $this->combined_content_raw = $this->processFile($real_full_path);
 
-	/**
-	 * Include the css from @imported css
-	 *
-	 * Will include the css from these
-	 * @import "../styles.css";
-	 * @import url("../styles.css");
-	 * @import styles.css;
-	 *
-	 *
-	 * Will preserve the @import rule for these
-	 * @import "styles.css" screen,tv;
-	 * @import url('http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/smoothness/jquery-ui.css.css');
-	 *
-	 */
-	public function CSS_Import($offset=0){
-		global $dataDir;
+        // Prepend any imports that were kept
+        $this->combined_content_raw = $this->prepended_imports . $this->combined_content_raw;
 
-		$pos = strpos($this->content,'@import ',$offset);
-		if( !is_numeric($pos) ){
-			return;
-		}
-		$replace_start = $pos;
-		$pos += 8;
+        // --- Final Minification ---
+        if ($this->minify_output) {
+            try {
+                // Ensure cssmin class exists before calling
+                 if (class_exists('\cssmin')) {
+                     $this->final_content = \cssmin::minify($this->combined_content_raw);
+                 } else {
+                      // Should have been caught earlier, but as a fallback
+                      $this->final_content = $this->combined_content_raw;
+                 }
+            } catch (\Exception $e) {
+                trigger_error('CombineCSS: Minification failed for ' . htmlspecialchars($file) . ': ' . $e->getMessage(), E_USER_WARNING);
+                $this->final_content = $this->combined_content_raw; // Fallback to raw content on error
+            }
+        } else {
+            $this->final_content = $this->combined_content_raw;
+        }
+    }
 
-		$replace_end = strpos($this->content,';',$pos);
-		if( !is_numeric($replace_end) ){
-			return;
-		}
+    /**
+     * Process a single CSS file: read, handle imports, fix URLs.
+     * Returns the processed (but not minified) CSS content.
+     *
+     * @param string $real_path Absolute filesystem path to the CSS file.
+     * @return string Processed CSS content.
+     */
+    private function processFile($real_path) {
+        // --- Prevent Infinite Loops ---
+        if (isset($this->processed_files[$real_path])) {
+            trigger_error('CombineCSS: Recursive import detected and skipped for: ' . htmlspecialchars($real_path), E_USER_WARNING);
+            return '/* CombineCSS Error: Recursive import skipped: ' . htmlspecialchars(basename($real_path)) . ' */';
+        }
+        $this->processed_files[$real_path] = true;
 
-		$import_orig = substr($this->content,$pos,$replace_end-$pos);
-		$import_orig = trim($import_orig);
-		$replace_len = $replace_end-$replace_start+1;
+        // --- Read File ---
+        $content = @file_get_contents($real_path); // Use @ to suppress warning, check result
+        if ($content === false) {
+            trigger_error('CombineCSS: Could not read file: ' . htmlspecialchars($real_path), E_USER_WARNING);
+            unset($this->processed_files[$real_path]); // Allow reprocessing if attempted again? Maybe not.
+            return '/* CombineCSS Error: Could not read file: ' . htmlspecialchars(basename($real_path)) . ' */';
+        }
 
-		//get url(..)
-		$media = '';
-		if( substr($import_orig,0,4) == 'url(' ){
-			$end_url_pos = strpos($import_orig,')');
-			$import = substr($import_orig,4, $end_url_pos-4);
-			$import = trim($import);
-			$import = trim($import,'"\'');
-			$media = substr($import_orig,$end_url_pos+1);
-		}elseif( $import_orig[0] == '"' || $import_orig[0] == "'" ){
-			$end_url_pos = strpos($import_orig,$import_orig[0],1);
-			$import = substr($import_orig,1, $end_url_pos-1);
-			$import = trim($import);
-			$media = substr($import_orig,$end_url_pos+1);
-		}
+        $source_dir = dirname($real_path); // Directory of the current file
+        $output_buffer = '';
+        $offset = 0;
 
+        // --- Process @import Rules ---
+        // Regex to find @import rules, handling url() and quoted strings
+        $import_pattern = '/@import\s+(?:url\(\s*([\'"]?)(.*?)\1\s*\)|([\'"])(.*?)\3)\s*([^;]*);/i';
 
-		// keep @import when the file is on a remote server?
-		if( strpos($import,'//') !== false ){
-			$this->imports .= substr($this->content, $replace_start, $replace_len );
-			$this->content = substr_replace( $this->content, '', $replace_start, $replace_len);
-			$this->CSS_Import($offset);
-			return;
-		}
+        while (preg_match($import_pattern, $content, $matches, PREG_OFFSET_CAPTURE, $offset)) {
+            $match_info = $matches[0]; // [full_match_string, offset]
+            $full_match = $match_info[0];
+            $match_start = $match_info[1];
 
+            // Append the content *before* this @import rule, fixing its URLs
+            $content_before = substr($content, $offset, $match_start - $offset);
+            $output_buffer .= $this->fixUrlsInBlock($content_before, $source_dir);
 
-		//if a media type is set, keep the @import
-		$media = trim($media);
-		if( !empty($media) ){
-			$import = \gp\tool::GetDir(dirname($this->file).'/'.$import);
-			$import = $this->ReduceUrl($import);
-			$this->imports .= '@import url("'.$import.'") '.$media.';';
-			$this->content = substr_replace( $this->content, '', $replace_start, $replace_len);
-			$this->CSS_Import($offset);
-			return;
-		}
+            // Extract import details
+            // Group 2 is URL from url('...'), Group 4 is URL from "..."
+            $import_url = trim(!empty($matches[2][0]) ? $matches[2][0] : $matches[4][0]);
+            $media_query = trim($matches[5][0]);
 
+            $is_remote = preg_match('#^(https?:|//)#i', $import_url);
+            $has_media = !empty($media_query);
 
-		//include the css
-		$full_path = false;
-		if( $import[0] != '/' ){
-			$import = dirname($this->file).'/'.$import;
-			$import = $this->ReduceUrl($import);
-		}
-		$full_path = $dataDir.$import;
+            if ($is_remote || $has_media) {
+                // --- Keep Import Rule ---
+                $resolved_import_url = $import_url;
+                if (!$is_remote && !$this->isAbsoluteUrl($import_url)) {
+                    // Resolve local path relative to *this* file's directory
+                    $resolved_import_url = $this->resolvePath($import_url, $source_dir);
+                }
+                // Add to the list of imports to prepend later
+                $this->prepended_imports .= '@import url("' . $resolved_import_url . '")' . ($has_media ? ' ' . $media_query : '') . ";\n";
 
-		if( file_exists($full_path) ){
+            } else {
+                // --- Inline Import Rule ---
+                if ($this->isAbsoluteUrl($import_url)) {
+                     // Handle root-relative imports (e.g., /css/other.css)
+                     $import_full_path = $this->dataDir_norm . ltrim($import_url, '/');
+                } else {
+                     // Handle relative imports (e.g., ../common.css)
+                     $import_full_path = $source_dir . '/' . $import_url;
+                }
 
-			$temp = new \gp\tool\Output\CombineCss($import);
-			$this->content = substr_replace($this->content,$temp->content,$replace_start,$replace_end-$replace_start+1);
-			$this->imported[] = $full_path;
-			$this->imported = array_merge($this->imported,$temp->imported);
-			$this->imports .= $temp->imports;
+                // Canonicalize and get real path
+                $import_real_path = realpath($this->normalizePath($import_full_path));
 
-			$this->CSS_Import($offset);
-			return;
-		}
+                if ($import_real_path && file_exists($import_real_path)) {
+                    // Recursively process the imported file
+                    $imported_content = $this->processFile($import_real_path);
+                    $output_buffer .= $imported_content; // Append processed content
+                } else {
+                    trigger_error('CombineCSS: Imported file not found or path error: ' . htmlspecialchars($import_full_path) . ' (referenced in ' . htmlspecialchars($real_path) . ')', E_USER_WARNING);
+                    $output_buffer .= '/* CombineCSS Error: Import not found: ' . htmlspecialchars($import_url) . ' */';
+                }
+            }
 
-		$this->CSS_Import($pos);
-	}
+            // Move offset past the processed @import rule
+            $offset = $match_start + strlen($full_match);
 
+        } // End while loop for @import
 
-	public function CSS_FixUrls($offset=0){
-		$pos = strpos($this->content,'url(',$offset);
-		if( !is_numeric($pos) ){
-			return;
-		}
-		$pos += 4;
+        // --- Process Remaining Content ---
+        // Append the rest of the file content (after the last @import), fixing its URLs
+        $content_after = substr($content, $offset);
+        $output_buffer .= $this->fixUrlsInBlock($content_after, $source_dir);
 
-		$pos2 = strpos($this->content,')',$pos);
-		if( !is_numeric($pos2) ){
-			return;
-		}
-		$url = substr($this->content,$pos,$pos2-$pos);
+        // Clean up recursion tracking for this file (allows it to be imported again via a different path if needed, though generally discouraged)
+        // unset($this->processed_files[$real_path]); // Optional: Decide if a file should *never* be processed twice per instance
 
-		$this->CSS_FixUrl($url,$pos,$pos2);
+        return $output_buffer;
+    }
 
-		return $this->CSS_FixUrls($pos2);
-	}
+    /**
+     * Finds all url() references in a block of CSS and fixes relative paths.
+     *
+     * @param string $content_block CSS content segment.
+     * @param string $source_dir Absolute directory path of the file this content came from.
+     * @return string CSS content segment with URLs fixed.
+     */
+    private function fixUrlsInBlock($content_block, $source_dir) {
+        if (empty($content_block) || strpos($content_block, 'url(') === false) {
+            return $content_block;
+        }
 
-	public function CSS_FixUrl($url,$pos,$pos2){
-		global $dataDir;
+        // Regex to find url(...) patterns, handling optional quotes
+        $url_pattern = '/url\(\s*([\'"]?)(.*?)\1\s*\)/i';
 
-		$url = trim($url);
-		$url = trim($url,'"\'');
+        return preg_replace_callback(
+            $url_pattern,
+            function ($matches) use ($source_dir) {
+                $original_match = $matches[0]; // The full url(...) match
+                $url = trim($matches[2]);     // The actual URL inside
 
-		if( empty($url) ){
-			return;
-		}
+                // Don't modify absolute URLs, data URIs, or empty URLs
+                if (empty($url) || $this->isAbsoluteUrl($url) || strncasecmp($url, 'data:', 5) === 0) {
+                    return $original_match; // Return the original match unchanged
+                }
 
-		//relative url
-		if( $url[0] == '/' ){
-			return;
-		}elseif( strpos($url,'://') > 0 ){
-			return;
-		}elseif( preg_match('/^data:/i', $url) ){
-			return;
-		}
+                // Resolve the relative path
+                $resolved_url = $this->resolvePath($url, $source_dir);
 
+                // Return the corrected url() string, always quoted for safety
+                return 'url("' . $resolved_url . '")';
+            },
+            $content_block
+        );
+    }
 
-		//use a relative path so sub.domain.com and domain.com/sub both work
-		$replacement = \gp\tool::GetDir(dirname($this->file).'/'.$url);
-		$replacement = $this->ReduceUrl($replacement);
+    /**
+     * Resolves a relative URL from a CSS file to be relative to the web root ($dataDir).
+     *
+     * @param string $relative_url The relative URL found in the CSS.
+     * @param string $source_dir The absolute directory path where the CSS file resides.
+     * @return string The resolved URL, typically starting with '/' relative to the web root.
+     */
+    private function resolvePath($relative_url, $source_dir) {
+    // Separate query string and fragment
+    $query_fragment = '';
+    $path_only = $relative_url;
+    if (($pos = strpos($relative_url, '?')) !== false || ($pos = strpos($relative_url, '#')) !== false) {
+         $query_fragment = substr($relative_url, $pos);
+         $path_only = substr($relative_url, 0, $pos);
+    }
 
+    $combined_path = $source_dir . '/' . $path_only;
+    $reduced_path = $this->reducePath($this->normalizePath($combined_path));
 
-		$replacement = '"'.$replacement.'"';
-		$this->content = substr_replace($this->content,$replacement,$pos,$pos2-$pos);
-	}
+    error_log("--- resolvePath Check ---");
+    error_log("Relative URL: " . $relative_url);
+    error_log("Source Dir: " . $source_dir);
+    error_log("Reduced FS Path: " . $reduced_path);
+    error_log("DataDir Norm: " . $this->dataDir_norm);
 
-	/**
-	 * Canonicalize a path by resolving references to '/./', '/../'
-	 * Does not remove leading "../"
-	 * @param string path or url
-	 * @return string Canonicalized path
-	 *
-	 */
-	public function ReduceUrl($url){
+    $starts_with_check = (stripos($reduced_path, $this->dataDir_norm) === 0);
+    error_log("Does Reduced start w/ DataDir (Case-Insensitive)? " . ($starts_with_check ? 'YES' : 'NO'));
 
-		$temp = explode('/',$url);
-		$result = array();
-		foreach($temp as $i => $path){
-			if( $path == '.' ){
-				continue;
-			}
-			if( $path == '..' ){
-				for($j=$i-1;$j>0;$j--){
-					if( isset($result[$j]) ){
-						unset($result[$j]);
-						continue 2;
-					}
-				}
-			}
-			$result[$i] = $path;
-		}
+    if ($starts_with_check) {
+        // Get path part after dataDir
+        $path_relative_to_datadir = substr($reduced_path, strlen($this->dataDir_norm));
 
-		return implode('/',$result);
-	}
+        // --- Use Typesetter's Base URL ---
+        // Assumes \gp\tool::GetUrl('') returns http://localhost/T53test5g5/
+        // Or use \gp\tool::GetDir('') if that returns /T53test5g5/
+        $base_url = \gp\tool::GetDir(''); // Get base path like /T53test5g5/
+        $final_web_path = rtrim($base_url, '/') . '/' . ltrim($path_relative_to_datadir, '/');
+        // --- End Modification ---
 
+        error_log("Resolved Web Path (Using Base Path): " . $final_web_path . $query_fragment);
+        return $final_web_path . $query_fragment;
+    } else {
+        // ... (existing trigger_error code) ...
+        $fallback_path = $path_only;
+        error_log("Resolved Fallback Path (Outside dataDir): " . $fallback_path . $query_fragment);
+        return $fallback_path . $query_fragment;
+    }
+}
 
+    /**
+     * Normalizes a path: forward slashes, no duplicate slashes.
+     *
+     * @param string $path
+     * @return string
+     */
+    private function normalizePath($path) {
+        return preg_replace('#/+#', '/', str_replace('\\', '/', $path));
+    }
+
+    /**
+     * Canonicalizes a path by resolving '/./' and '/../'.
+     *
+     * @param string $path Normalized path.
+     * @return string Canonicalized path.
+     */
+    private function reducePath($path) {
+        $parts = explode('/', $path);
+        $result = [];
+        $is_absolute = str_starts_with($path, '/');
+
+        foreach ($parts as $part) {
+            if ($part === '.' || $part === '') {
+                continue;
+            }
+            if ($part === '..') {
+                // Only pop if result is not empty and the last element is not '..'
+                // This prevents going above the root in relative paths like ../../file
+                 if (!empty($result) && end($result) !== '..') {
+                    array_pop($result);
+                } elseif (!$is_absolute) {
+                    // Keep '..' if path is relative and we are at the start or after other '..'
+                     $result[] = '..';
+                }
+                 // If absolute, popping '..' at the root does nothing
+            } else {
+                $result[] = $part;
+            }
+        }
+
+        // Handle the case of an absolute path resolving to root ('/')
+        $final_path = implode('/', $result);
+        if ($is_absolute) {
+             return '/' . $final_path;
+        } else {
+             // Handle empty result for relative path (e.g. "dir/..") -> "."
+             return ($final_path === '') ? '.' : $final_path;
+        }
+    }
+
+    /**
+     * Checks if a URL is absolute (protocol-relative, http, https, data, or root-relative).
+     *
+     * @param string $url
+     * @return bool
+     */
+    private function isAbsoluteUrl($url) {
+        // Scheme relative (//), http/https, data URI, or root relative (/)
+        return preg_match('#^(\/\/|https?:|data:|/)#i', $url);
+    }
 }

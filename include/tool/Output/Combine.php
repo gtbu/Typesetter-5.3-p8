@@ -669,7 +669,7 @@ class Combine{
 	/**
 	 * Combine CSS files
 	 */
-	public function CombineCSS($full_paths){
+	public function CombineCSSold($full_paths){
 
 		$imports			= '';
 		$combined_content	= '';
@@ -698,6 +698,24 @@ class Combine{
 		return $combined_content;
 	}
 
+
+    public function CombineCSS($full_paths){ // Renamed for clarity, use your actual function name
+
+    $all_prepended_imports = ''; 
+    $combined_content    = '';
+    // $new_imported        = []; // Caching logic needs rethinking based on new class
+
+    foreach($full_paths as $file => $full_path){
+        $temp = new \gp\tool\Output\CombineCss($file);
+        $combined_content .= "\n/* " . htmlspecialchars($file) . " */\n";
+        $combined_content .= $temp->final_content; //  final_content instead of content
+        $all_prepended_imports .= $temp->prepended_imports; // prepended_imports instead of imports
+    }
+
+    $combined_content = $all_prepended_imports . $combined_content;
+	
+    return $combined_content;
+    }
 
 	/**
 	 * Combine JS files

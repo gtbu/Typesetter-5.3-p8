@@ -1,10 +1,9 @@
   <?php
-/**
- * Theme Bootswatch 5 Scss 5.2.3
- * Typesetter CMS theme template
- * based on https://bootswatch.com
- *
+ 
+ /**
+  * Typesetter CMS theme template
  */
+ 
 global $page, $config;
 $path = $page->theme_dir . '/drop_down_menu.php';
 //include_once($path);
