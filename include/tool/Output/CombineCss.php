@@ -4,225 +4,206 @@ namespace gp\tool\Output;
 
 defined('is_running') or die('Not an entry point...');
 
-includeFile('thirdparty/cssmin_v.1.0.php');
-
 /**
- * Combines CSS files, handling @import rules and fixing relative url() paths.
+ * Get the contents of $file and fix paths:
+ * 	- url(..)
+ *	- @import
+ * 	- @import url(..)
  */
-class CombineCSS {
+class CombineCSS{
 
-    private string $base_dir;
-    private string $entry_file_rel; // Relative path from base_dir
-    private array $processed_files = []; // Prevent infinite loops
-    private string $final_css = '';
-    private string $preserved_imports = ''; // For external or media-specific imports
+	public $content;
+	public $file;
+	public $full_path;
+	public $imported = array();
+	public $imports = '';
 
-    /**
-     * Constructor
-     *
-     * @param string $entry_file Relative path to the main CSS file from $dataDir.
-     */
-    public function __construct(string $entry_file) {
-        global $dataDir; // Assuming $dataDir ends *without* a slash
+	public function __construct($file){
+		global $dataDir;
 
-        if (!class_exists('\cssmin')) {
-            throw new \Exception('cssmin class not found. Ensure thirdparty/cssmin_v.1.0.php is included correctly.');
-        }
-        if (empty($dataDir) || !is_dir($dataDir)) {
-             throw new \Exception('$dataDir is not a valid directory.');
-        }
+		includeFile('thirdparty/cssmin_v.1.0.php');
 
-        $this->base_dir = rtrim($dataDir, '/');
-        $this->entry_file_rel = ltrim($entry_file, '/');
-
-        $full_entry_path = $this->base_dir . '/' . $this->entry_file_rel;
-
-        if (!file_exists($full_entry_path) || !is_readable($full_entry_path)) {
-            trigger_error('CombineCSS: Entry file not found or not readable: ' . $full_entry_path, E_USER_WARNING);
-            $this->final_css = '/* CombineCSS Error: Entry file not found: ' . htmlspecialchars($entry_file) . ' */';
-            return;
-        }
-
-        $this->processFile($this->entry_file_rel);
-
-        // Minify *after* all processing
-        $this->final_css = \cssmin::minify($this->preserved_imports . $this->final_css);
-    }
-
-    /**
-     * Public getter for the combined and minified CSS content.
-     *
-     * @return string
-     */
-    public function getContent(): string {
-        return $this->final_css;
-    }
-
-    /**
-     * Recursively processes a CSS file, handling imports and fixing URLs.
-     * @param string $file_rel Relative path of the CSS file from base_dir.
-     * @return string The processed CSS content of this file and its imports.
-     */
-    private function processFile(string $file_rel): string {
-        $full_path = $this->base_dir . '/' . $file_rel;
-        $real_path = realpath($full_path); // Resolve symlinks, etc. for accurate tracking
-
-        // Prevent infinite loops for circular imports
-        if (!$real_path || isset($this->processed_files[$real_path])) {
-            trigger_error('CombineCSS: Skipped duplicate or invalid import: ' . $file_rel, E_USER_NOTICE);
-            return '/* CombineCSS Warning: Skipped duplicate import of ' . htmlspecialchars($file_rel) . ' */' . "\n";
-        }
-
-        if (!is_readable($full_path)) {
-             trigger_error('CombineCSS: Could not read file: ' . $full_path, E_USER_WARNING);
-             return '/* CombineCSS Error: Could not read ' . htmlspecialchars($file_rel) . ' */' . "\n";
-        }
-
-        $this->processed_files[$real_path] = true; // Mark as processed
-
-        $content = file_get_contents($full_path);
-        if ($content === false) {
-             trigger_error('CombineCSS: Failed to get contents of: ' . $full_path, E_USER_WARNING);
-             return '/* CombineCSS Error: Failed read for ' . htmlspecialchars($file_rel) . ' */' . "\n";
-        }
-
-        // 1. Process @import rules first
-        $content = $this->processImports($content, $file_rel);
-
-        // 2. Fix relative url() paths
-        $content = $this->processUrls($content, $file_rel);
-
-        // Remove this file from processed list *after* processing its children
-        // Allows the same file to be imported via different paths if needed, though generally avoided
-        // unset($this->processed_files[$real_path]);
-        
-        return $content;
-    }
-
-    /**
-     * Finds and processes @import rules within CSS content.
-     * @return string CSS content with local imports replaced.
-     */
-    private function processImports(string $content, string $file_rel): string {
-        
-        $regex = '/@import\s+(?:url\(\s*(?:(["\']?)([^)"\'\s]+)\1?)\s*\)|(["\'])([^"\']+)\3)\s*([^;]*)?;/i';
-
-        return preg_replace_callback($regex, function ($matches) use ($file_rel) {
-            $import_statement = $matches[0];
-            $url = !empty($matches[2]) ? trim($matches[2]) : trim($matches[4]);
-            $media_query = isset($matches[5]) ? trim($matches[5]) : '';
-
-            // --- Conditions to PRESERVE @import ---
-            // 1. External URL
-            if (str_contains($url, '//') || str_starts_with($url, 'http:') || str_starts_with($url, 'https:')) {
-                // Add unique preserved imports
-                 if (strpos($this->preserved_imports, $import_statement) === false) {
-                    $this->preserved_imports .= $import_statement . "\n";
-                }
-                return ''; // Remove from current content
-            }
-
-            // 2. Media Query is present
-            if (!empty($media_query)) {
-                // Resolve the path relative to the *current* file for the preserved import
-                $import_file_rel = $this->resolvePath(dirname($file_rel), $url);
-                $preserved_import_rule = '@import url("' . htmlspecialchars($import_file_rel) . '") ' . $media_query . ';';
-                 if (strpos($this->preserved_imports, $preserved_import_rule) === false) {
-                    $this->preserved_imports .= $preserved_import_rule . "\n";
-                }
-                return ''; // Remove from current content
-            }
-
-            // --- Condition to INLINE @import ---
-            // Local import without media query
-            $import_file_rel = $this->resolvePath(dirname($file_rel), $url);
-            $import_full_path = $this->base_dir . '/' . $import_file_rel;
-
-            if (!file_exists($import_full_path)) {
-                trigger_error('CombineCSS: Imported file not found: ' . $import_full_path . ' (referenced in ' . $file_rel . ')', E_USER_WARNING);
-                return '/* CombineCSS Error: Import not found: ' . htmlspecialchars($url) . ' */';
-            }
-
-            // Recursively process the imported file
-            return $this->processFile($import_file_rel);
-
-        }, $content);
-    }
+		$this->file = $file;
+		$this->full_path = $dataDir.$file;
 
 
-    /**
-     * Finds and fixes relative url() paths within CSS content.
-     * @return string CSS content with url() paths fixed.
-     */
-    private function processUrls(string $content, string $file_rel): string {
-        
-        $regex = '/url\(\s*(["\']?)(?!(?:["\']?(?:(?:[a-z]+:)?\/\/|\/|data:|#)))([^)"\']+)\1\s*\)/i';
+		$this->content = file_get_contents($this->full_path);
+		$this->content = \cssmin::minify($this->content);
 
-        return preg_replace_callback($regex, function ($matches) use ($file_rel) {
-            $original_url = trim($matches[2]);
-            $quote = $matches[1]; // Preserve original quote style
-
-            // Resolve the path relative to the *current* file's directory
-            $absolute_path = $this->resolvePath(dirname($file_rel), $original_url);
-
-            // Return the corrected url() statement with an absolute path from base_dir
-            
-            return 'url(' . $quote . '/' . ltrim($absolute_path,'/') . $quote . ')';
-
-        }, $content);
-    }
+		$this->CSS_Import();
+		$this->CSS_FixUrls();
+	}
 
 
-    /**
-     * Resolves a relative path or URL against a base directory path.
-     * Handles "../", "./", and ensures the path is relative to the base_dir.
-     * @return string The canonicalized path relative to $this->base_dir.
-     */
-    private function resolvePath(string $base_path, string $relative_path): string {
-        // Normalize base path (remove trailing '.', ensure it's a dir)
-        if ($base_path === '.') {
-            $base_path = '';
-        } else {
-           $base_path = rtrim($base_path, '/');
-        }
+	/**
+	 * Include the css from @imported css
+	 *
+	 * Will include the css from these
+	 * @import "../styles.css";
+	 * @import url("../styles.css");
+	 * @import styles.css;
+	 *
+	 *
+	 * Will preserve the @import rule for these
+	 * @import "styles.css" screen,tv;
+	 * @import url('http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/smoothness/jquery-ui.css.css');
+	 *
+	 */
+	public function CSS_Import($offset=0){
+		global $dataDir;
 
-        // If relative path is already absolute (shouldn't happen with URL regex but check anyway)
-        if (str_starts_with($relative_path, '/')) {
-             return ltrim($relative_path, '/');
-        }
+		$pos = strpos($this->content,'@import ',$offset);
+		if( !is_numeric($pos) ){
+			return;
+		}
+		$replace_start = $pos;
+		$pos += 8;
 
-        $full_path = $base_path ? $base_path . '/' . $relative_path : $relative_path;
+		$replace_end = strpos($this->content,';',$pos);
+		if( !is_numeric($replace_end) ){
+			return;
+		}
 
-        // Canonicalize the path (resolve ../ and ./) - Stack-based approach
-        $parts = explode('/', $full_path);
-        $absolutes = [];
-        foreach ($parts as $part) {
-            if ('.' == $part || '' == $part) {
-                continue;
-            }
-            if ('..' == $part) {
-                array_pop($absolutes);
-            } else {
-                $absolutes[] = $part;
-            }
-        }
-        return implode('/', $absolutes);
-    }
+		$import_orig = substr($this->content,$pos,$replace_end-$pos);
+		$import_orig = trim($import_orig);
+		$replace_len = $replace_end-$replace_start+1;
 
-    /**
-     * Public access to the list of processed files (absolute paths).
-     * Useful for debugging or cache invalidation.
-     * @return array
-     */
-    public function getProcessedFiles(): array {
-        return array_keys($this->processed_files);
-    }
+		//get url(..)
+		$media = '';
+		if( substr($import_orig,0,4) == 'url(' ){
+			$end_url_pos = strpos($import_orig,')');
+			$import = substr($import_orig,4, $end_url_pos-4);
+			$import = trim($import);
+			$import = trim($import,'"\'');
+			$media = substr($import_orig,$end_url_pos+1);
+		}elseif( $import_orig[0] == '"' || $import_orig[0] == "'" ){
+			$end_url_pos = strpos($import_orig,$import_orig[0],1);
+			$import = substr($import_orig,1, $end_url_pos-1);
+			$import = trim($import);
+			$media = substr($import_orig,$end_url_pos+1);
+		}
 
-    /**
-     * Public access to the preserved @import rules.
-     * @return string
-     */
-     public function getPreservedImports(): string {
-         return $this->preserved_imports;
-     }
+
+		// keep @import when the file is on a remote server?
+		if( strpos($import,'//') !== false ){
+			$this->imports .= substr($this->content, $replace_start, $replace_len );
+			$this->content = substr_replace( $this->content, '', $replace_start, $replace_len);
+			$this->CSS_Import($offset);
+			return;
+		}
+
+
+		//if a media type is set, keep the @import
+		$media = trim($media);
+		if( !empty($media) ){
+			$import = \gp\tool::GetDir(dirname($this->file).'/'.$import);
+			$import = $this->ReduceUrl($import);
+			$this->imports .= '@import url("'.$import.'") '.$media.';';
+			$this->content = substr_replace( $this->content, '', $replace_start, $replace_len);
+			$this->CSS_Import($offset);
+			return;
+		}
+
+
+		//include the css
+		$full_path = false;
+		if( $import[0] != '/' ){
+			$import = dirname($this->file).'/'.$import;
+			$import = $this->ReduceUrl($import);
+		}
+		$full_path = $dataDir.$import;
+
+		if( file_exists($full_path) ){
+
+			$temp = new \gp\tool\Output\CombineCss($import);
+			$this->content = substr_replace($this->content,$temp->content,$replace_start,$replace_end-$replace_start+1);
+			$this->imported[] = $full_path;
+			$this->imported = array_merge($this->imported,$temp->imported);
+			$this->imports .= $temp->imports;
+
+			$this->CSS_Import($offset);
+			return;
+		}
+
+		$this->CSS_Import($pos);
+	}
+
+
+	public function CSS_FixUrls($offset=0){
+		$pos = strpos($this->content,'url(',$offset);
+		if( !is_numeric($pos) ){
+			return;
+		}
+		$pos += 4;
+
+		$pos2 = strpos($this->content,')',$pos);
+		if( !is_numeric($pos2) ){
+			return;
+		}
+		$url = substr($this->content,$pos,$pos2-$pos);
+
+		$this->CSS_FixUrl($url,$pos,$pos2);
+
+		return $this->CSS_FixUrls($pos2);
+	}
+
+	public function CSS_FixUrl($url,$pos,$pos2){
+		global $dataDir;
+
+		$url = trim($url);
+		$url = trim($url,'"\'');
+
+		if( empty($url) ){
+			return;
+		}
+
+		//relative url
+		if( $url[0] == '/' ){
+			return;
+		}elseif( strpos($url,'://') > 0 ){
+			return;
+		}elseif( preg_match('/^data:/i', $url) ){
+			return;
+		}
+
+
+		//use a relative path so sub.domain.com and domain.com/sub both work
+		$replacement = \gp\tool::GetDir(dirname($this->file).'/'.$url);
+		$replacement = $this->ReduceUrl($replacement);
+
+
+		$replacement = '"'.$replacement.'"';
+		$this->content = substr_replace($this->content,$replacement,$pos,$pos2-$pos);
+	}
+
+	/**
+	 * Canonicalize a path by resolving references to '/./', '/../'
+	 * Does not remove leading "../"
+	 * @param string path or url
+	 * @return string Canonicalized path
+	 *
+	 */
+	public function ReduceUrl($url){
+
+		$temp = explode('/',$url);
+		$result = array();
+		foreach($temp as $i => $path){
+			if( $path == '.' ){
+				continue;
+			}
+			if( $path == '..' ){
+				for($j=$i-1;$j>0;$j--){
+					if( isset($result[$j]) ){
+						unset($result[$j]);
+						continue 2;
+					}
+				}
+			}
+			$result[$i] = $path;
+		}
+
+		return implode('/',$result);
+	}
+
+
 }
