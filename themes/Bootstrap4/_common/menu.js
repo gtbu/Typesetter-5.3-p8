@@ -77,7 +77,10 @@ $(function(){
 		case 'slideover':
 			// console.log('Slide Over Menu');
 
-			$navbar_collapse.touch(); // init jquery-touch
+			 // init jquery-touch
+			 
+			 var $navbar_collapse = $('#navbar_collapse');
+             $navbar_collapse.touch();
 
 			$navbar_collapse.on('show.bs.collapse', function(evt){
 				var set_collapse_top = function(){
