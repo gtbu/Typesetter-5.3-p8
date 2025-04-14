@@ -727,72 +727,116 @@ class Combine{
 	 *
 	 */
 	
-	public function CombineJS($full_paths){
-    global $config;
+	  public function CombineJS($full_paths){
+        global $config;
 
-    ob_start();
-    \gp\tool::jsStart();
+        ob_start();
+        // \gp\tool::jsStart(); // Consider if this is still needed - it might add gp_vars, check its definition
 
-    $minify_stats = [
-        'date' => date('Y-m-d H:i'),
-        'errors' => [],
-        'mem_before' => memory_get_peak_usage(true),
-        'size_before' => 0,
-        'size_after' => 0,
-        'allocated_memory' => 0,
-        'compression_rate' => '0%',
-    ];
+        $minify_stats = [
+            'date'                  => date('Y-m-d H:i'),
+            'errors'                => [],
+            'mem_before'            => memory_get_peak_usage(true), // Initial peak memory
+            'size_before'           => 0, // Total size of files attempted to be minified
+            'size_minified_after'   => 0, // Total size of files after attempted minification
+            'size_after'            => 0, // Total size of the final combined content
+            'allocated_memory'      => 0, // Memory specifically allocated by the minifier
+            'compression_rate'      => '0%',
+        ];
 
-    $minify_enabled = $config['minifyjs'];
+        $minify_enabled = !empty($config['minifyjs']); // Ensure it's explicitly true
 
-    foreach ($full_paths as $full_path) {
-        $content = file_get_contents($full_path);
-        $is_minified = substr_compare($full_path, '.min.js', -7) === 0;
-
-        if (!$is_minified && $minify_enabled) {
-            $original_size = strlen($content);
-            $minify_stats['size_before'] += $original_size;
-
-            try {
-                $mem_before = memory_get_peak_usage(true);
-                $minified_content = \JShrink\Minifier::minify($content, ['flaggedComments' => false]);
-                $mem_after = memory_get_peak_usage(true);
-
-                $minified_size = strlen($minified_content);
-                $minify_stats['size_after'] += $minified_size;
-                $minify_stats['allocated_memory'] += ($mem_after - $mem_before);
-
-                $content = $minified_content;
-            } catch (Exception $e) {
-                $minify_stats['errors'][] = $e->getMessage();
-                $minify_stats['size_after'] += $original_size;
+        foreach ($full_paths as $full_path) {
+            // Basic check if the path is valid before trying to read
+            if( empty($full_path) || !is_string($full_path) ){
+                // msg('Invalid path provided to CombineJS'); // Optional: Log this if needed
+                continue;
             }
-        } else {
-            $minify_stats['size_after'] += strlen($content);
+
+            $content = false;
+            if( file_exists($full_path) && is_readable($full_path) ){
+                $content = file_get_contents($full_path);
+            }
+
+            if ($content === false) {
+                // Log or handle the error if a file is unreadable
+                $minify_stats['errors'][] = $full_path . ': Failed to read file or file not found.';
+                continue; // Skip this file
+            }
+
+            $file_size = strlen($content);
+            $is_minified = substr_compare($full_path, '.min.js', -7) === 0;
+
+            if (!$is_minified && $minify_enabled) {
+                $minify_stats['size_before'] += $file_size;
+
+                try {
+                    // Track memory specifically for the minify call
+                    $mem_before_minify = memory_get_peak_usage(true);
+                    $minified_content = \JShrink\Minifier::minify($content, ['flaggedComments' => false]);
+                    $mem_after_minify = memory_get_peak_usage(true);
+
+                    $minified_size = strlen($minified_content);
+                    $minify_stats['size_minified_after'] += $minified_size;
+                    $minify_stats['allocated_memory'] += max(0, $mem_after_minify - $mem_before_minify); // Ensure non-negative
+
+                    $content = $minified_content; // Use the minified content
+                    $file_size = $minified_size; // Update file size for final total
+
+                } catch (\Exception $e) { // Catch specific Exception type if known
+                    $minify_stats['errors'][] = $full_path . ': ' . $e->getMessage();
+                    // If minification failed, use the original size for the minified total
+                    $minify_stats['size_minified_after'] += $file_size;                  
+                }
+            } else {
+                // If skipped minification (already .min or disabled), still add its size to the minified total
+                 if( !$is_minified ){
+                     // Only add to size_minified_after if it *would* have been minified but wasn't (e.g., minify disabled)
+                     $minify_stats['size_minified_after'] += $file_size;
+                 }
+            }
+
+            // Add the size of the content (minified or original) to the final total size
+            $minify_stats['size_after'] += $file_size;
+
+            echo $content . ";\n";
         }
 
-        echo $content . ";\n";
-    }
+        $combined_content = ob_get_clean();
 
-    $combined_content = ob_get_clean();
-
-    if ($minify_enabled) {
-        if ($minify_stats['size_before'] > 0) {
-            $compression_rate = (1 - $minify_stats['size_after'] / $minify_stats['size_before']) * 100;
+        // Calculate compression rate based only on files that were candidates for minification
+        if ($minify_enabled && $minify_stats['size_before'] > 0) {
+            $compression_rate = (1 - ($minify_stats['size_minified_after'] / $minify_stats['size_before'])) * 100;
             $minify_stats['compression_rate'] = round($compression_rate, 1) . '%';
+        } elseif ($minify_enabled) {
+             $minify_stats['compression_rate'] = 'N/A (No files to minify)';
+        } else {
+             $minify_stats['compression_rate'] = 'N/A (Minify disabled)';
         }
 
-        $minify_stats['size_before'] = \gp\admin\Tools::FormatBytes($minify_stats['size_before']);
-        $minify_stats['size_after'] = \gp\admin\Tools::FormatBytes($minify_stats['size_after']);
-        $minify_stats['allocated_memory'] = \gp\admin\Tools::FormatBytes($minify_stats['allocated_memory']);
-        $minify_stats['errors'] = empty($minify_stats['errors']) ? 'none' : implode(', ', $minify_stats['errors']);
 
-        $combined_content = 'var minify_js_stats = ' . json_encode($minify_stats) . ";\n\n" . $combined_content;
-    }
+        // Format stats and prepend them if minification is enabled
+        if ($minify_enabled) {
+            // Use final peak memory, not just allocated during minify
+            $minify_stats['mem_final'] = memory_get_peak_usage(true);
 
-    return $combined_content;
-}
+            // Format bytes for readability
+            $minify_stats['size_before'] = \gp\admin\Tools::FormatBytes($minify_stats['size_before']);
+            $minify_stats['size_minified_after'] = \gp\admin\Tools::FormatBytes($minify_stats['size_minified_after']); // Format this too
+            $minify_stats['size_after'] = \gp\admin\Tools::FormatBytes($minify_stats['size_after']); // Final combined size
+            $minify_stats['allocated_memory'] = \gp\admin\Tools::FormatBytes($minify_stats['allocated_memory']);
+            $minify_stats['mem_before'] = \gp\admin\Tools::FormatBytes($minify_stats['mem_before']);
+            $minify_stats['mem_final'] = \gp\admin\Tools::FormatBytes($minify_stats['mem_final']);
+            $minify_stats['errors'] = empty($minify_stats['errors']) ? 'none' : implode('; ', $minify_stats['errors']);
 
+            // Prepend stats as a JS comment
+            $combined_content = '/* Minify JS Stats: ' . json_encode($minify_stats) . " */\n\n" . $combined_content;
+        }
+
+        return $combined_content;
+    } 
+
+	
 	/**
 	 * Make sure the file is a css or js file and that it exists
 	 *
