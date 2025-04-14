@@ -573,6 +573,11 @@ class Combine{
 		'jquery-touch' => [
 			'file'			=> '/include/thirdparty/jquery.touch/jquery.touch.min.js',
 		],
+		
+		// hammer - touch gestures
+		'hammer' => [
+			'file'			=> '/include/thirdparty/jquery.touch/hammer/hammer.min.js',
+		],
 
 	];
 
@@ -721,62 +726,72 @@ class Combine{
 	 * Combine JS files
 	 *
 	 */
+	
 	public function CombineJS($full_paths){
-		global $config;
+    global $config;
 
-		ob_start();
-		\gp\tool::jsStart();
+    ob_start();
+    \gp\tool::jsStart();
 
-		foreach($full_paths as $full_path){
-			readfile($full_path);
-			echo ";\n";
-		}
-		$combined_content = ob_get_clean();
+    $minify_stats = [
+        'date' => date('Y-m-d H:i'),
+        'errors' => [],
+        'mem_before' => memory_get_peak_usage(true),
+        'size_before' => 0,
+        'size_after' => 0,
+        'allocated_memory' => 0,
+        'compression_rate' => '0%',
+    ];
 
-		//minify js
-		if( $config['minifyjs'] ){
+    $minify_enabled = $config['minifyjs'];
 
-			$minify_stats = [
-				'date'		=> date('Y-m-d H:i'),
-				'errors'	=> 'none',
-			];
+    foreach ($full_paths as $full_path) {
+        $content = file_get_contents($full_path);
+        $is_minified = substr_compare($full_path, '.min.js', -7) === 0;
 
-			$minify_stats['mem_before'] = memory_get_peak_usage(true);
-			$minify_stats['size_before'] = strlen($combined_content);
+        if (!$is_minified && $minify_enabled) {
+            $original_size = strlen($content);
+            $minify_stats['size_before'] += $original_size;
 
-			try{
-				$combined_content = \JShrink\Minifier::minify(
-					$combined_content,
-					['flaggedComments'=>false]
-				);
-			}catch( Exception $e ){
-				$minify_stats['errors'] = $e->getMessage();
-			}
+            try {
+                $mem_before = memory_get_peak_usage(true);
+                $minified_content = \JShrink\Minifier::minify($content, ['flaggedComments' => false]);
+                $mem_after = memory_get_peak_usage(true);
 
-			$minify_stats['mem_after'] = memory_get_peak_usage(true);
-			$minify_stats['size_after'] = strlen($combined_content);
+                $minified_size = strlen($minified_content);
+                $minify_stats['size_after'] += $minified_size;
+                $minify_stats['allocated_memory'] += ($mem_after - $mem_before);
 
-			$minify_stats['compression_rate'] = (
-				round(
-					(1 - $minify_stats['size_after'] / $minify_stats['size_before']) * 1000) / 10
-				) .
-			'%';
+                $content = $minified_content;
+            } catch (Exception $e) {
+                $minify_stats['errors'][] = $e->getMessage();
+                $minify_stats['size_after'] += $original_size;
+            }
+        } else {
+            $minify_stats['size_after'] += strlen($content);
+        }
 
-			$minify_stats['size_before'] = \gp\admin\Tools::FormatBytes($minify_stats['size_before']);
-			$minify_stats['size_after'] = \gp\admin\Tools::FormatBytes($minify_stats['size_after']);
+        echo $content . ";\n";
+    }
 
-			$minify_stats['allocated_memory'] = \gp\admin\Tools::FormatBytes(
-				$minify_stats['mem_after'] - $minify_stats['mem_before']
-			);
+    $combined_content = ob_get_clean();
 
-			unset($minify_stats['mem_before'], $minify_stats['mem_after']);
+    if ($minify_enabled) {
+        if ($minify_stats['size_before'] > 0) {
+            $compression_rate = (1 - $minify_stats['size_after'] / $minify_stats['size_before']) * 100;
+            $minify_stats['compression_rate'] = round($compression_rate, 1) . '%';
+        }
 
-			$combined_content = 'var minify_js_stats = ' . json_encode($minify_stats) . ';' . "\n\n" . $combined_content;
-		}
+        $minify_stats['size_before'] = \gp\admin\Tools::FormatBytes($minify_stats['size_before']);
+        $minify_stats['size_after'] = \gp\admin\Tools::FormatBytes($minify_stats['size_after']);
+        $minify_stats['allocated_memory'] = \gp\admin\Tools::FormatBytes($minify_stats['allocated_memory']);
+        $minify_stats['errors'] = empty($minify_stats['errors']) ? 'none' : implode(', ', $minify_stats['errors']);
 
-		return $combined_content;
-	}
+        $combined_content = 'var minify_js_stats = ' . json_encode($minify_stats) . ";\n\n" . $combined_content;
+    }
 
+    return $combined_content;
+}
 
 	/**
 	 * Make sure the file is a css or js file and that it exists
