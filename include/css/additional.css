@@ -1,7 +1,6 @@
 .gpclear {
 	clear: both;
 }
-
 body .messages {
 	position: absolute;
 	position: fixed;
@@ -13,7 +12,6 @@ body .messages {
 	overflow: visible;
 	margin-top: -1px;
 }
-
 body .messages * {
 	text-align: left;
 	margin: 0;
@@ -21,7 +19,6 @@ body .messages * {
 	font-weight: normal;
 	color: #333 !important;
 }
-
 body .messages > div {
 	position: relative;
 	width: 700px;
@@ -41,12 +38,10 @@ body .messages > div {
 	overflow-x: visible;
 	overflow-y: auto;
 }
-
 body .messages ul {
 	margin: 0;
 	padding: 4px 15px;
 }
-
 body .messages li {
 	list-style: none;
 	padding: 0;
@@ -60,12 +55,10 @@ body .messages li {
 	text-decoration: none;
 	float: none;
 }
-
 body .messages li li {
 	list-style: disc;
 	margin-left: 2em;
 }
-
 body .messages .msg_controls {
 	display: block;
 	position: absolute;
@@ -75,7 +68,6 @@ body .messages .msg_controls {
 	margin: 0 0 0 auto !important;
 	z-index: 2;
 }
-
 body .messages a.close_message,
 body .messages a.copy_message {
 	position: absolute;
@@ -90,26 +82,21 @@ body .messages a.copy_message {
 	width: 24px;
 	box-sizing: border-box;
 }
-
 body .messages a.close_message {
 	right: 0;
 	background: url('../imgs/cancel.png') 50% 50% no-repeat;
 }
-
 body .messages a.copy_message {
 	right: 24px;
 	background: url('../imgs/copy.png') 50% 50% no-repeat;
 }
-
 body .messages a {
 	color: #111 !important;
 	text-decoration: underline !important;
 }
-
 body .msg_buttons {
 	white-space: nowrap;
 }
-
 body .msg_buttons a {
 	display: inline-block;
 	border-radius: 3px;
@@ -119,17 +106,14 @@ body .msg_buttons a {
 	border: 1px solid rgba(0,0,0,0.15);
 	background: rgba(0,0,0,0.075);
 }
-
 .contactform {
 	margin: 0;
 	width: 50%;
 }
-
 .contactform div.captchaForm {
 	padding: 0;
 	margin: 0;
 }
-
 .contactform label {
 	width: 98%;
 	display: block;
@@ -137,71 +121,53 @@ body .msg_buttons a {
 	clear: left;
 	margin: 5px 0;
 }
-
 .contactform label span.title {
 	width: 30%;
 	display: block;
 	float: left;
 	margin-right: 10px;
 }
-
 .contactform input,.contactform textarea {
 	padding: 5px;
 }
-
 .contactform input {
 	float: left;
 	width: 60%;
 }
-
 .contactform textarea {
 	height: 180px;
 	width: 98%;
 }
-
 .contactform .submit {
 	width: 50%;
 	cursor: pointer;
 	margin: 12px 0;
 	float: right;
 }
-
-
 .STCLASS .req_script {
 	display: block !important; /* needs to be block and not inherit for IE */
 }
-
 .STCLASS .without_script {
 	display: none !important;
 }
-
-
 .siteinfo {
 	font-size: 85%;
 }
-
 .siteinfo a {
 	text-decoration: none;
 }
-
 .siteinfo li {
 	list-style: none;
 }
-
-
 .clear {
 	clear: both;
 }
-
 .sitemap_xml {
 	float: right;
 }
-
 .nodisplay {
 	display: none;
 }
-
-
 div.GPAREA:after {
 	content: '';
 	display: block;
@@ -210,12 +176,10 @@ div.GPAREA:after {
 	visibility: hidden;
 	overflow: hidden;
 }
-
 /* for IE7... does not validate */
 div.GPAREA {
 	zoom: 1;
 }
-
 /* clearfix */
 .cf:before,
 .cf:after {
@@ -229,34 +193,23 @@ div.GPAREA {
 	zoom:1
 }
 
-
 /**
- *	Typesetter Grid (floating, like Bootstrap 3)
- *	12-columns, percent based widths, 15px side padding
- *
- *	CLASSES:
- *	gpRow -> for wrappers
- *	gpCol-1 - gpCol-12 -> for grid sections
- *
- *	all columns render full width below 768px viewport width
+ *	Typesetter Grid (floating, like Bootstrap 3) :	12-columns, percent based widths, 15px side padding
+ *	CLASSES: *	gpRow -> for wrappers ; *	gpCol-1 - gpCol-12 -> for grid sections
+ *  all columns render full width below 768px viewport width
  */
-
 .gpRow img {
 	max-width: 100%;
 	height: auto!important;
 }
-
 /* Prevents height distortion in IE<=8 */
 @media screen {
 	.gpRow img {
 		width: auto;
 	}
 }
-
 /* MEDIA QUERIES / BREAKPOINTS */
-
 @media (min-width: 768px) {
-
 	.gpRow {
 		margin-left: -15px;
 		margin-right: -15px;
@@ -264,16 +217,13 @@ div.GPAREA {
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
 	}
-
-	.gpRow:before,
-	.gpRow:after {
+	.gpRow:before, .gpRow:after {
 		content: '';
 		display: table;
 		-webkit-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
 	}
-
 	.gpCol-1,  .gpCol-2,  .gpCol-3,
 	.gpCol-4,  .gpCol-5,  .gpCol-6,
 	.gpCol-7,  .gpCol-8,  .gpCol-9,
@@ -287,7 +237,6 @@ div.GPAREA {
 		-moz-box-sizing: border-box;
 		box-sizing: border-box;
 	}
-
 	.gpCol-1   { width: 8.33333333%; }
 	.gpCol-2   { width: 16.66666667%; }
 	.gpCol-3   { width: 25%; }
@@ -300,10 +249,7 @@ div.GPAREA {
 	.gpCol-10  { width: 83.33333333%; }
 	.gpCol-11  { width: 91.66666667%; }
 	.gpCol-12  { width: 100%; }
-
 }
-
-
 /**
  * Make Bootstrap buttons selectable for editing
  *
@@ -314,8 +260,6 @@ div.GPAREA {
 	-ms-user-select: text;
 	user-select: text;
 }
-
-
 /**
  * Search results
  *
@@ -323,26 +267,21 @@ div.GPAREA {
 ul.search_nav_bottom {
 	list-style: none;
 }
-
 ul.search_nav_bottom li {
 	display: inline;
 }
-
 ul.search_nav_bottom li > * {
 	display: inline-block;
 	padding-left: 0.5em;
 	padding-right: 0.5em;
 }
-
 .search-matches-count {
 	font-size: 82.5%;
 	font-weight: normal;
 }
-
 .search-matches-count:before {
 	content: '(';
 }
-
 .search-matches-count:after {
 	content: ')';
 }
