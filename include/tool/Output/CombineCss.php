@@ -63,21 +63,29 @@ class CombineCSS {
 
         // --- Final Minification ---
         if ($this->minify_output) {
-            try {
-                // Ensure cssmin class exists before calling
-                 if (class_exists('\cssmin')) {
-                     $this->final_content = \cssmin::minify($this->combined_content_raw);
-                 } else {
-                      // Should have been caught earlier, but as a fallback
-                      $this->final_content = $this->combined_content_raw;
-                 }
-            } catch (\Exception $e) {
-                trigger_error('CombineCSS: Minification failed for ' . htmlspecialchars($file) . ': ' . $e->getMessage(), E_USER_WARNING);
-                $this->final_content = $this->combined_content_raw; // Fallback to raw content on error
+    try {
+        if (class_exists('\cssmin')) {
+            // --- Start: Check if content looks already minified ---
+            $first_chunk = substr($this->combined_content_raw, 0, 15);
+            $space_count = substr_count($first_chunk, ' ');
+
+            if ($space_count < 3) {
+                 $this->final_content = $this->combined_content_raw;
+            } else {
+                 $this->final_content = \cssmin::minify($this->combined_content_raw);
             }
-        } else {
-            $this->final_content = $this->combined_content_raw;
-        }
+            
+         } else {
+              $this->final_content = $this->combined_content_raw;
+         }
+      } catch (\Exception $e) {
+        $errorFile = isset($file) ? htmlspecialchars($file) : 'unknown source';
+        trigger_error('CombineCSS: Minification failed for ' . $errorFile . ': ' . $e->getMessage(), E_USER_WARNING);
+        $this->final_content = $this->combined_content_raw; // Fallback to raw content on error
+      }
+    } else {
+    $this->final_content = $this->combined_content_raw;
+    }
     }
 
     /**
