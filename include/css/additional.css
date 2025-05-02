@@ -31,7 +31,8 @@ body .messages > div {
 	background-color: #FEF9B0;
 	border: 1px solid  #f2e098;
 	border-top: 0 none;
-	box-shadow: 0 0 7px rgba(0, 0, 0, 0.1);
+	-webkit-box-shadow: 0 0 7px rgba(0, 0, 0, 0.1);
+	        box-shadow: 0 0 7px rgba(0, 0, 0, 0.1);
 	border-radius: 0 0 7px 7px;
 	resize: both;
 	overflow: auto;
@@ -80,7 +81,8 @@ body .messages a.copy_message {
 	border: 0 none !important;
 	height: 24px;
 	width: 24px;
-	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
 }
 body .messages a.close_message {
 	right: 0;
@@ -214,14 +216,12 @@ div.GPAREA {
 		margin-left: -15px;
 		margin-right: -15px;
 		-webkit-box-sizing: border-box;
-		-moz-box-sizing: border-box;
 		box-sizing: border-box;
 	}
 	.gpRow:before, .gpRow:after {
 		content: '';
 		display: table;
 		-webkit-box-sizing: border-box;
-		-moz-box-sizing: border-box;
 		box-sizing: border-box;
 	}
 	.gpCol-1,  .gpCol-2,  .gpCol-3,
@@ -234,7 +234,6 @@ div.GPAREA {
 		padding-right: 15px;
 		margin-bottom: 15px;
 		-webkit-box-sizing: border-box;
-		-moz-box-sizing: border-box;
 		box-sizing: border-box;
 	}
 	.gpCol-1   { width: 8.33333333%; }

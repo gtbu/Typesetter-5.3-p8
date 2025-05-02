@@ -62,31 +62,30 @@ class CombineCSS {
         $this->combined_content_raw = $this->prepended_imports . $this->combined_content_raw;
 
         // --- Final Minification ---
-        if ($this->minify_output) {
+        
+		if ($this->minify_output) {
     try {
         if (class_exists('\cssmin')) {
-            // --- Start: Check if content looks already minified ---
+            $content_size_bytes = strlen($this->combined_content_raw);
+            $size_limit_bytes = 10 * 1024;
             $first_chunk = substr($this->combined_content_raw, 0, 15);
             $space_count = substr_count($first_chunk, ' ');
-
-            if ($space_count < 3) {
-                 $this->final_content = $this->combined_content_raw;
+            if ($content_size_bytes >= $size_limit_bytes && $space_count < 3) {
+                $this->final_content = $this->combined_content_raw;
             } else {
                  $this->final_content = \cssmin::minify($this->combined_content_raw);
-            }
-            
-         } else {
+                   }
+        } else {
+            $this->final_content = $this->combined_content_raw;
+               }
+        } catch (\Exception $e) { // potential exceptions from cssmin::minify
+              error_log("CSS Minification failed: " . $e->getMessage()); 
               $this->final_content = $this->combined_content_raw;
-         }
-      } catch (\Exception $e) {
-        $errorFile = isset($file) ? htmlspecialchars($file) : 'unknown source';
-        trigger_error('CombineCSS: Minification failed for ' . $errorFile . ': ' . $e->getMessage(), E_USER_WARNING);
-        $this->final_content = $this->combined_content_raw; // Fallback to raw content on error
-      }
-    } else {
-    $this->final_content = $this->combined_content_raw;
-    }
-    }
+              }
+        } else {
+            $this->final_content = $this->combined_content_raw;
+             }		
+ }
 
     /**
      * Process a single CSS file: read, handle imports, fix URLs.
