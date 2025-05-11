@@ -49,7 +49,7 @@
 @font-size-small:         ceil(@font-size-base * 0.85); // ~12px
 
 @line-height-base:        1.428571429; // 20/14
-@line-height-computed:    floor(@font-size-base * @line-height-base); // ~20px
+@line-height-computed:    floor((@font-size-base * @line-height-base)); // ~20px
 
 @headings-font-family:    @font-family-base;
 @headings-font-weight:    500;
@@ -242,7 +242,7 @@
 @navbar-default-bg:                @brand-primary;
 @navbar-default-border:            darken(@navbar-default-bg, 6.5%);
 @navbar-border-radius:             @border-radius-base;
-@navbar-padding-horizontal:        floor(@grid-gutter-width / 2);  // ~15px
+@navbar-padding-horizontal:        floor((@grid-gutter-width / 2));  // ~15px
 @navbar-padding-vertical:          ((@navbar-height - @line-height-computed) / 2);
 
 // Navbar links
