@@ -738,11 +738,13 @@ class Session{
 		}
 
 		//alias
-		if( isset($_COOKIE['gp_alias']) ){
-			$GLOBALS['gpAdmin']['useralias'] = $_COOKIE['gp_alias'];
-		}else{
-			$GLOBALS['gpAdmin']['useralias'] = $GLOBALS['gpAdmin']['username'];
-		}
+		 if( isset($_COOKIE['gp_alias']) ){
+       $GLOBALS['gpAdmin']['useralias'] = $_COOKIE['gp_alias'];
+    } else { 
+      if (isset($GLOBALS['gpAdmin']['username'])) { 
+	  $GLOBALS['gpAdmin']['useralias'] = $GLOBALS['gpAdmin']['username'];
+       } else { $GLOBALS['gpAdmin']['useralias'] = '';  }
+    }
 
 	}
 
@@ -966,7 +968,7 @@ class Session{
 		if( stripos($doc_start, '<!doctype html>') !== false ){
 			return '<meta charset="UTF-8" />';
 		}
-		return '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
+		return '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
 	}
 
 
