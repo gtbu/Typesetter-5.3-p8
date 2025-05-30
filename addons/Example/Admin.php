@@ -18,7 +18,7 @@ class Admin{
 		echo \common::Link('Special_Example','An Example Link');
 		echo '</p>';
 
-		echo '<p>You can download <a href="https://github.com/gtbu/Online-Plugins/blob/main/Plugin%20Examples.zip"> a plugin with addtional examples</a> from typesettercms.com </p>';
+		echo '<p>You can download <a href="https://github.com/gtbu/Online-Plugins/blob/main/Plugin%20Examples.zip"> a plugin with addtional examples</a> from github.com/gtbu </p>';
 	}
 }
 
