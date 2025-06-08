@@ -228,46 +228,46 @@ class CombineCSS {
      * @return string The resolved URL, typically starting with '/' relative to the web root.
      */
     private function resolvePath($relative_url, $source_dir) {
-    // Separate query string and fragment
-    $query_fragment = '';
-    $path_only = $relative_url;
-    if (($pos = strpos($relative_url, '?')) !== false || ($pos = strpos($relative_url, '#')) !== false) {
-         $query_fragment = substr($relative_url, $pos);
-         $path_only = substr($relative_url, 0, $pos);
-    }
+    	// Separate query string and fragment
+    	$query_fragment = '';
+    	$path_only = $relative_url;
+    	if (($pos = strpos($relative_url, '?')) !== false || ($pos = strpos($relative_url, '#')) !== false) {
+         	$query_fragment = substr($relative_url, $pos);
+         	$path_only = substr($relative_url, 0, $pos);
+    	}
 
-    $combined_path = $source_dir . '/' . $path_only;
-    $reduced_path = $this->reducePath($this->normalizePath($combined_path));
+    	$combined_path = $source_dir . '/' . $path_only;
+    	$reduced_path = $this->reducePath($this->normalizePath($combined_path));
 
-    error_log("--- resolvePath Check ---");
-    error_log("Relative URL: " . $relative_url);
-    error_log("Source Dir: " . $source_dir);
-    error_log("Reduced FS Path: " . $reduced_path);
-    error_log("DataDir Norm: " . $this->dataDir_norm);
+		//error_log("--- resolvePath Check ---");
+    	//error_log("Relative URL: " . $relative_url);
+    	//error_log("Source Dir: " . $source_dir);
+    	//error_log("Reduced FS Path: " . $reduced_path);
+    	//error_log("DataDir Norm: " . $this->dataDir_norm);
 
-    $starts_with_check = (stripos($reduced_path, $this->dataDir_norm) === 0);
-    error_log("Does Reduced start w/ DataDir (Case-Insensitive)? " . ($starts_with_check ? 'YES' : 'NO'));
+    	$starts_with_check = (stripos($reduced_path, $this->dataDir_norm) === 0);
+    	//error_log("Does Reduced start w/ DataDir (Case-Insensitive)? " . ($starts_with_check ? 'YES' : 'NO'));
 
-    if ($starts_with_check) {
-        // Get path part after dataDir
-        $path_relative_to_datadir = substr($reduced_path, strlen($this->dataDir_norm));
+    	if ($starts_with_check) {
+	        // Get path part after dataDir
+        	$path_relative_to_datadir = substr($reduced_path, strlen($this->dataDir_norm));
 
-        // --- Use Typesetter's Base URL ---
-        // Assumes \gp\tool::GetUrl('') returns http://localhost/T53test5g5/
-        // Or use \gp\tool::GetDir('') if that returns /T53test5g5/
-        $base_url = \gp\tool::GetDir(''); // Get base path like /T53test5g5/
-        $final_web_path = rtrim($base_url, '/') . '/' . ltrim($path_relative_to_datadir, '/');
-        // --- End Modification ---
+        	// --- Use Typesetter's Base URL ---
+        	// Assumes \gp\tool::GetUrl('') returns http://localhost/T53test5g5/
+        	// Or use \gp\tool::GetDir('') if that returns /T53test5g5/
+        	$base_url = \gp\tool::GetDir(''); // Get base path like /T53test5g5/
+        	$final_web_path = rtrim($base_url, '/') . '/' . ltrim($path_relative_to_datadir, '/');
+        	// --- End Modification ---
 
-        error_log("Resolved Web Path (Using Base Path): " . $final_web_path . $query_fragment);
-        return $final_web_path . $query_fragment;
-    } else {
-        // ... (existing trigger_error code) ...
-        $fallback_path = $path_only;
-        error_log("Resolved Fallback Path (Outside dataDir): " . $fallback_path . $query_fragment);
-        return $fallback_path . $query_fragment;
-    }
-}
+        	//error_log("Resolved Web Path (Using Base Path): " . $final_web_path . $query_fragment);
+        	return $final_web_path . $query_fragment;
+    	} else {
+        	// ... (existing trigger_error code) ...
+        	$fallback_path = $path_only;
+        	//error_log("Resolved Fallback Path (Outside dataDir): " . $fallback_path . $query_fragment);
+        	return $fallback_path . $query_fragment;
+    	}
+	}
 
     /**
      * Normalizes a path: forward slashes, no duplicate slashes.
