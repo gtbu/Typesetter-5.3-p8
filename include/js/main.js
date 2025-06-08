@@ -425,19 +425,16 @@ $(function(){
 	});
 
 
-	/**
+		/**
 	 *	Handle AJAX errors
-	 *
-	 */
+	*/
 	$document.ajaxError(function(event, XMLHttpRequest, ajaxOptions, thrownError){
 		$gp.loaded();
 
-		//
 		if( XMLHttpRequest.statusText == 'abort' ){
 			return;
 		}
 
-		// don't use this error handler if another one is set for the ajax request
 		if( typeof(ajaxOptions.error) === 'function' ){
 			return;
 		}
@@ -446,79 +443,66 @@ $(function(){
 			return;
 		}
 
-		// collect some debug info
 		var debug_info = {
 			thrownError		: thrownError
 		};
-
-		// add error details
 		var detail_keys = ['name', 'message', 'fileName', 'lineNumber', 'columnNumber', 'stack'];
 		for(var i = 0; i < detail_keys.length; i++){
 			if( thrownError.hasOwnProperty(detail_keys[i]) ){
 				debug_info[detail_keys[i]] = thrownError[detail_keys[i]];
 			}
 		}
-
-		//get the location of the error
 		if( thrownError.hasOwnProperty('lineNumber') ){
 			var num					= thrownError.lineNumber;
 			var lines				= XMLHttpRequest.responseText.split('\n');
-
 			debug_info['Line-' + (num-1)]	= lines[num - 2];
 			debug_info['Line-' + num]		= lines[num - 1];
 			debug_info['Line-' + (num+1)]	= lines[num];
 		}
-
 		debug_info.responseStatus	= XMLHttpRequest.status;
 		debug_info.statusText		= XMLHttpRequest.statusText;
 		debug_info.url				= ajaxOptions.url;
 		debug_info.type				= ajaxOptions.type;
 		debug_info.browser			= navigator.userAgent;
 		debug_info.responseText		= XMLHttpRequest.responseText;
-
 		if( ajaxOptions.data ){
 			debug_info.ajaxdata		= ajaxOptions.data.substr(0, 100);
 		}
 
-		// log everything if possible
 		if( window.console && console.log ){
-			console.log(debug_info);
+			console.log('Typesetter AJAX Error:', debug_info);
 		}
 
-		// send to Typesetter bug tracker
-		if( typeof(debugjs) !== 'undefined' && debugjs === 'send' ){
+		if( typeof($gp.AdminBoxC) !== 'undefined' && typeof(JSON) != 'undefined' ){
 
-			if( ajaxOptions.data ){
-				debug_info.data = ajaxOptions.data;
+			var formatted_debug = JSON.stringify(debug_info, null, 2); // Pretty print JSON
+
+			function escapeHtml(text) {
+				if( typeof(text) !== 'string' ) return '';
+				return text
+					.replace(/&/g, "&amp;")
+					.replace(/</g, "&lt;")
+					.replace(/>/g, "&gt;")
+					.replace(/"/g, "&quot;")
+					.replace(/'/g, "&#039;");
 			}
 
-			debug_info.cmd = 'javascript_error';
-			$.ajax({
-				type	: 'POST',
-				url		: 'https://www.typesettercms.com/Resources',
-				data	: debug_info,
-				success	: function(){},
-				error	: function(){}
-			});
-		}
+			var dialog_content =
+				'<div class="inline_box">' +
+					'<h3>AJAX Request Error</h3>' +
+					'<p>' + $gp.error + ' See details below and in your browser\'s developer console (F12).</p>' +
+					'<div style="max-height: 400px; overflow-y: auto; border: 1px solid #ccc; background: #f5f5f5; padding: 10px; margin-top:15px;">' +
+						'<pre style="white-space: pre-wrap; word-wrap: break-word;">' +
+							'<code>' + escapeHtml(formatted_debug) + '</code>' +
+						'</pre>' +
+					'</div>' +
+				'</div>';
 
-		//display message to user
-		if( typeof($gp.AdminBoxC) !== 'undefined' && typeof(JSON) != 'undefined' ){
-			delete debug_info.responseText; //otherwise it's too long
+			$gp.AdminBoxC(dialog_content);
 
-			var _debug	= JSON.stringify(debug_info);
-			_debug		= b64Encode(_debug);
-			_debug		= _debug.replace(/\=/g, '');
-			_debug		= _debug.replace(/\+/g, '-').replace(/\//g, '_');
-			var url		= 'https://www.typesettercms.com/index.php/Debug?data=' + _debug;
-			$gp.AdminBoxC(
-				'<div class="inline_box"><h3>Error</h3><p>' + $gp.error + '</p>' +
-				'<a href="' + url + '" target="_blank">More Info<?a></div>'
-			);
 		}else{
-			alert($gp.error);
+			alert($gp.error + '\n\nAn AJAX error occurred. Check the browser console for more details.');
 		}
-
 	});
 
 
