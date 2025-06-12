@@ -1350,19 +1350,23 @@ use function \intltime\strftime;
 		 * @param int $len length of string to return
 		 * @param bool $cases Whether or not to use upper and lowercase characters
 		 */
-		public static function RandomString($len=40, $cases=true){
+		public static function RandomString($len = 40, $cases = true)
+        {
+        $string = 'abcdefghijklmnopqrstuvwxyz1234567890';
+        if ($cases) {
+        $string .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        }
 
-			$string = 'abcdefghijklmnopqrstuvwxyz1234567890';
-			if( $cases ){
-				$string .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-			}
+        $result = '';
+        $max = strlen($string) - 1;
 
-			$string = str_repeat($string, (int)round($len / 2));
-			$string = str_shuffle($string);
-			$start = mt_rand(1, (strlen($string) - $len));
+        for ($i = 0; $i < $len; $i++) {
+        // random_int is cryptographically secure
+        $result .= $string[random_int(0, $max)];
+        }
 
-			return substr($string, $start, $len);
-		}
+        return $result;
+        }
 
 
 		/**
