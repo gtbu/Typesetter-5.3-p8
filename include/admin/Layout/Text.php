@@ -87,7 +87,7 @@ class Text extends \gp\admin\Layout{
 
 
 	public function EditText(){
-		global $config, $langmessage;
+		global $config, $langmessage, $nonce_str;
 
 		if( !isset($_GET['key']) ){
 			msg($langmessage['OOPS'].' (0)');
