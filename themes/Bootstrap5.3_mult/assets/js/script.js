@@ -1,15 +1,44 @@
+document.addEventListener("DOMContentLoaded", function() {
+     
+    // Add 'dropdown-item' class
+    document.querySelectorAll('div.gpMenu ul.dropdown-menu li a').forEach(el => {
+        el.classList.add('dropdown-item');
+    });
 
-$( "div.gpMenu ul.dropdown-menu li a").addClass("dropdown-item");
+    // Add 'submenu' class to nested dropdowns
+    document.querySelectorAll('div.gpMenu ul.navbar-nav ul.dropdown-menu ul.dropdown-menu').forEach(el => {
+        el.classList.add('submenu');
+    });
 
-$( "div.gpMenu ul.navbar-nav ul.dropdown-menu ul.dropdown-menu" ).addClass("submenu");
-$( "div.gpMenu ul.navbar-nav ul.dropdown-menu ul.dropdown-menu ul.dropdown-menu").addClass("submenu");
+    document.querySelectorAll('div.gpMenu ul.navbar-nav ul.dropdown-menu ul.dropdown-menu ul.dropdown-menu').forEach(el => {
+        el.classList.add('submenu');
+    });
 
-$( "div.gpMenu ul.navbar-nav li.nav-item a" ).addClass("nav-link px-3 px-lg-2");
-$( "div.gpMenu ul:not(.dropdown-menu) li.nav-item.dropdown a:not(.dropdown-item)" ).attr("id","dropdown").attr("data-bs-toggle","dropdown");
+    // Add nav-link classes
+    document.querySelectorAll('div.gpMenu ul.navbar-nav li.nav-item a').forEach(el => {
+        el.classList.add('nav-link', 'px-3', 'px-lg-2');
+    });
 
-$( "div.gpMenu ul.dropdown-menu").attr("aria-labelledby", "navbarDropdown");
-$( "div.gpMenu ul.dropdown-menu li").removeClass("nav-item");
-$( "div.gpMenu ul.dropdown-menu li a").removeClass("nav-link");
+    // Set attributes for dropdown toggle
+    document.querySelectorAll('div.gpMenu ul:not(.dropdown-menu) li.nav-item.dropdown a:not(.dropdown-item)').forEach(el => {
+        el.id = 'dropdown';
+        el.setAttribute('data-bs-toggle', 'dropdown');
+    });
+
+    // Set aria-labelledby
+    document.querySelectorAll('div.gpMenu ul.dropdown-menu').forEach(el => {
+        el.setAttribute('aria-labelledby', 'navbarDropdown');
+    });
+
+    // Remove classes from dropdown menu items
+    document.querySelectorAll('div.gpMenu ul.dropdown-menu li').forEach(el => {
+        el.classList.remove('nav-item');
+    });
+
+    document.querySelectorAll('div.gpMenu ul.dropdown-menu li a').forEach(el => {
+        el.classList.remove('nav-link');
+    });
+});
 
 
 /*
@@ -18,9 +47,17 @@ $(document).ready(function() {
     $('div.offcanvas-body.sidebar ul:last').addClass('dropdown-menu-right').attr('data-bs-popper' , 'none');
   }
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    if (window.innerWidth >= 992) {
+        const menu = document.querySelector('div.offcanvas-body.sidebar ul:last-of-type');
+        if (menu) {
+            menu.classList.add('dropdown-menu-right');
+            menu.setAttribute('data-bs-popper', 'none');
+        }
+    }
+});
 */
-
-
 
 /* --from -- https://github.com/engrasel/bs5-offcanvas-menu/  MIT License---  */
 
