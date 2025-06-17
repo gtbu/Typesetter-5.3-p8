@@ -21,6 +21,7 @@ $footer-nav-link-active-bg:     transparent !default;
 
 
 footer.main-footer {
+  @extend .fixed-bottom; 
   font-size: $footer-font-size;
   background: $footer-bg;
   border-top: $footer-border-top;
