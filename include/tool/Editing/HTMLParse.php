@@ -1,330 +1,276 @@
 <?php
-
+declare(strict_types=1);
 namespace gp\tool\Editing;
-
 defined('is_running') or die('Not an entry point...');
 
-
-class HTMLParse{
-
-	public $doc = '';
-	public $dom_array = array();
-	public $errors = array();
-
-	public $random;
-	public $mark_double_slash;
-	public $mark_escaped_single;
-	public $mark_escaped_double;
-
-	public function __construct($text){
-		$this->doc = $text;
-		$this->Init_Parse();
-		$this->Parse();
-	}
-
-
-	public function Parse(){
-
-		$offset = 0;
-
-		do{
-			$continue = true;
-			$pos = strpos($this->doc,'<',$offset);
-
-
-			//no more tags
-			if( $pos === false ){
-				$continue = false;
-				break;
-			}
-
-			//comment
-			if( substr($this->doc,$pos,4) === '<!--' ){
-				$this->dom_array[] = substr($this->doc,$offset,$pos-$offset); //get content before comment
-				$offset = $pos + 4;
-				$this->CommentContent($offset);
-				continue;
-			}
-
-			//get tag name
-			$tag_name = $this->TagName($pos+1,$name_len);
-			if( !$tag_name ){
-				$this->doc = substr_replace($this->doc,'&lt;',$pos,1);
-				continue;
-			}
-
-			//content
-			if( $pos > $offset ){
-				$this->dom_array[] = substr($this->doc,$offset,$pos-$offset);
-			}
-
-
-			//advance offset to just after <tag_name
-			$offset = $pos+1+$name_len;
-			$new_element = array();
-			$new_element['tag'] = $tag_name;
-
-			//attributes
-			if( $tag_name[0] != '/' ){
-				$new_element['attributes'] = $this->GetAttributes($offset);
-			}
-
-			//tag closing and self-closing?
-			$pos = strpos($this->doc,'>',$offset);
-			if( $pos !== false ){
-				if( $pos > 0 && $this->doc[$pos-1] == '/' ){
-					$new_element['self_closing'] = true;
-				}
-				$offset = $pos+1;
-			}
-
-			$this->dom_array[] = $new_element;
-
-
-			//content
-			switch(strtolower($tag_name)){
-				case 'script':
-				case 'style';
-					$this->NonHtmlContent($offset,$tag_name);
-				break;
-			}
-
-		}while($continue);
-
-		//content after
-		if( $offset < strlen($this->doc) ){
-			$this->dom_array[] = substr($this->doc,$offset);
-		}
-
-	}
-
-
-	/**
-	 * Parse an html tag name
-	 *
-	 */
-	public function TagName($pos,&$name_len){
-		$tag_name = false;
-		$name_len = strspn($this->doc,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/!:--',$pos);
-		if( $name_len > 0 ){
-			$tag_name = substr($this->doc,$pos,$name_len);
-		}
-		return $tag_name;
-	}
-
-
-	/**
-	 * Parse html attributes
-	 * match name="value", name=value or name
-	 * accounts for name="value ' value"
-	 *
-	 */
-	public function GetAttributes(&$offset){
-
-		$this->doc		= substr($this->doc,$offset);
-		$pattern_name	= '#^\s+([^\'"<>=\s/]+)\s*(=?)\s*#';
-		$attributes		= array();
-
-
-		while( preg_match($pattern_name, $this->doc, $matches) ){
-
-			$attr_name	= $matches[1];
-			$attr_value = null;
-			$offset		= strlen($matches[0]);
-
-			//get attribute value
-			if( !empty($matches[2]) ){
-
-				$attr_match			= $this->MatchAttribute($offset);
-				if( $attr_match ){
-					$offset += strlen($attr_match[0]);
-					$attr_value = $attr_match[1];
-				}
-			}
-
-
-			if( !isset($attributes[$attr_name]) ){
-				$attributes[$attr_name] = $attr_value;
-			}
-
-			$this->doc = substr($this->doc,$offset);
-			$offset = 0;
-		}
-
-
-		$offset = 0;
-
-		return $attributes;
-	}
-
-	/**
-	 * Get an html attribute value
-	 *
-	 */
-	protected function MatchAttribute(&$offset){
-
-		$char = $this->doc[$offset];
-
-		//double quote
-		if( $char === '"' ){
-			if( preg_match('#\\G"([^"]*)"#', $this->doc, $matches, 0, $offset) ){
-				return $matches;
-			}
-			return;
-		}
-
-		//single quote
-		if( $char == "'" ){
-			if( preg_match('#\\G\'([^\']*)\'#', $this->doc, $matches, 0, $offset) ){
-				return $matches;
-			}
-			return;
-		}
-
-
-
-		//not quoted
-		if( preg_match('#\\G\s*([^\'"<>=\s/]+)#', $this->doc, $matches, 0, $offset) ){
-			return $matches;
-		}
-
-	}
-
-
-	/**
-	 * Parse HTML comments <!-- comments go here -->
-	 * Does not support full sgml comments <!------> second comment -->
-	 *
-	 */
-	public function CommentContent(&$offset){
-
-		$this->doc = substr($this->doc,$offset);
-		$offset = 0;
-
-		$pos = strpos($this->doc,'-->');
-		if( $pos === false ){
-			$pos = strlen($this->doc);
-		}
-
-		$comment_content = substr($this->doc,0,$pos);
-		$this->doc = substr($this->doc,$pos+3);
-
-		$new_element = array();
-		$new_element['comment'] = $comment_content;
-		$this->dom_array[] = $new_element;
-	}
-
-	public function NonHtmlContent(&$offset,$untill){
-
-		$this->doc = substr($this->doc,$offset);
-		$offset = 0;
-		$this->doc = $this->EscapeQuotes($this->doc);
-		$full_length = strlen($this->doc);
-		$untill_length = strlen($untill);
-
-		do{
-
-			$continue = false;
-			$end_string = false;
-
-			$pos_quote1 = $this->strpos_min("'",$offset,$full_length);
-			$pos_quote2 = $this->strpos_min('"',$offset,$full_length);
-			$pos_scomment = $this->strpos_min('//',$offset,$full_length);
-			$pos_mcomment = $this->strpos_min('/*',$offset,$full_length);
-
-			$min_pos = min($pos_quote1, $pos_quote2, $pos_scomment, $pos_mcomment);
-
-			$pos_close = strpos($this->doc,'</',$offset);
-
-			// found </script>
-			if( ($pos_close !== false)
-				&& ($pos_close <= $min_pos)
-				&& (strtolower(substr($this->doc,$pos_close+2,$untill_length)) == $untill)
-				){
-					$offset = $pos_close;
-					break;
-			}
-
-			// nothing else found
-			if( $min_pos === $full_length ){
-				$offset = $full_length;
-				break;
-			}
-
-
-			if( $min_pos === $pos_quote1 ){
-				$end_string = "'";
-			}elseif( $min_pos === $pos_quote2 ){
-				$end_string = '"';
-			}elseif( $min_pos === $pos_scomment ){
-				$end_string = "\n";
-			}elseif( $min_pos === $pos_mcomment ){
-				$end_string = '*/';
-			}
-
-			$end_pos = strpos($this->doc,$end_string,$min_pos+1);
-			if( $end_pos === false ){
-				$offset = $full_length;
-			}else{
-				$offset = $full_length;
-				$offset = $end_pos + strlen($end_string);
-				$continue = true;
-			}
-
-
-		}while($continue);
-
-		$code = substr($this->doc,0,$offset);
-		$this->doc = substr($this->doc,$offset);
-		$this->doc = $this->UnescapeQuotes($this->doc);
-		$this->dom_array[] = $this->UnescapeQuotes($code);
-		$offset = 0;
-	}
-
-
-	public function strpos_min($needle,$offset,$length){
-		$pos = strpos($this->doc,$needle,$offset);
-		if( $pos === false ){
-			return $length;
-		}
-		return $pos;
-	}
-
-
-	public function EscapeQuotes($string){
-
-		$search = array('\\\\','\\\'','\\"');
-		$replace = array( $this->mark_double_slash, $this->mark_escaped_single, $this->mark_escaped_double);
-
-		return str_replace($search, $replace, $string);
-	}
-
-	public function UnescapeQuotes($string){
-		$search = array( $this->mark_double_slash, $this->mark_escaped_single, $this->mark_escaped_double);
-		$replace = array('\\\\','\\\'','\\"');
-		return str_replace($search, $replace, $string);
-	}
-
-	/*
-	 * Init
-	 *
-	 */
-	public function Init_Parse(){
-		$this->GetRandom();
-		$this->mark_double_slash = $this->GetMarker();
-		$this->mark_escaped_single = $this->GetMarker();
-		$this->mark_escaped_double = $this->GetMarker();
-	}
-
-
-	public function GetRandom(){
-		do{
-			$this->random = dechex(mt_rand(0, 0x7fffff));
-		}while(strpos($this->doc,$this->random) !== false);
-	}
-
-	public function GetMarker(){
-		static $n = 0;
-		return $this->random . sprintf('%08X', $n++);
-	}
+/**
+ * A custom, non-validating HTML parser that converts an HTML string into an array structure.
+ * It's designed to be fast and handle real-world, often imperfect, HTML.
+ */
+class HTMLParse
+{
+    public string $doc = '';
+    public array $dom_array = [];
+    public array $errors = [];
+
+    private int $doc_length;
+    private int $position = 0;
+
+    private string $mark_double_slash;
+    private string $mark_escaped_single;
+    private string $mark_escaped_double;
+
+    public function __construct(string $text)
+    {
+        $this->doc = $text;
+        $this->doc_length = strlen($text);
+        $this->Init_Parse();
+        $this->Parse();
+    }
+
+    public function Init_Parse(): void
+    {
+        $this->generateMarkers();
+    }
+
+    private function generateMarkers(): void
+    {
+        $this->mark_double_slash = $this->uniqueMarker();
+        $this->mark_escaped_single = $this->uniqueMarker();
+        $this->mark_escaped_double = $this->uniqueMarker();
+    }
+
+    private function uniqueMarker(): string
+    {
+        static $counter = 0;
+        return "\x01".hash('xxh3', microtime().$counter++)."\x02";
+    }
+
+    private function addError(string $message): void
+    {
+        $this->errors[] = "Error at position {$this->position}: {$message}";
+    }
+
+    public function Parse(): void
+    {
+        while ($this->position < $this->doc_length) {
+            $char = $this->doc[$this->position];
+
+            if ($char !== '<') {
+                $this->parseTextContent();
+                continue;
+            }
+
+            if ($this->handleCommentIfAny()) {
+                continue;
+            }
+
+            $tag_info = $this->parseTag();
+            if ($tag_info === null) {
+                // If parseTag fails, treat the '<' as literal text
+                $this->dom_array[] = '&lt;';
+                $this->position++;
+                continue;
+            }
+
+            // If it's an opening tag for a special content element...
+            if ($tag_info['name'][0] !== '/' && !$tag_info['self_closing']) {
+                 $this->handleSpecialContent($tag_info['name']);
+            }
+        }
+    }
+
+    private function parseTextContent(): void
+    {
+        $next_tag_pos = strpos($this->doc, '<', $this->position);
+        if ($next_tag_pos === false) {
+            $text = substr($this->doc, $this->position);
+            $this->position = $this->doc_length;
+        } else {
+            $text = substr($this->doc, $this->position, $next_tag_pos - $this->position);
+            $this->position = $next_tag_pos;
+        }
+
+        if ($text !== '') {
+            $this->dom_array[] = $text;
+        }
+    }
+
+    private function handleCommentIfAny(): bool
+    {
+        if (substr_compare($this->doc, '<!--', $this->position, 4) === 0) {
+            $end_pos = strpos($this->doc, '-->', $this->position + 4);
+            if ($end_pos === false) {
+                $content = substr($this->doc, $this->position + 4);
+                $this->position = $this->doc_length;
+                $this->addError("Unclosed HTML comment.");
+            } else {
+                $content = substr($this->doc, $this->position + 4, $end_pos - ($this->position + 4));
+                $this->position = $end_pos + 3;
+            }
+            $this->dom_array[] = ['comment' => $content];
+            return true;
+        }
+        return false;
+    }
+
+    /** @return ?array{name: string, self_closing: bool} */
+    private function parseTag(): ?array
+    {
+        $original_tag_start_pos = $this->position;
+        $this->position++; // Skip '<'
+
+        if ($this->position >= $this->doc_length) {
+            $this->position = $original_tag_start_pos; // backtrack
+            return null;
+        }
+
+        $is_closing_tag_char = ($this->doc[$this->position] === '/');
+        if ($is_closing_tag_char) {
+            $this->position++; // Skip '/' for tag name parsing
+        }
+
+        $tag_name = $this->parseTagName();
+
+        if ($tag_name === null || $tag_name === '') {
+            $this->position = $original_tag_start_pos; // backtrack
+            return null;
+        }
+
+        $element = ['tag' => $tag_name];
+        $self_closing = false;
+
+        if ($is_closing_tag_char) {
+            $element['tag'] = '/' . $tag_name;
+        } else { // Only parse attributes for opening tags
+            $element['attributes'] = $this->parseAttributes();
+        }
+
+        // Find the end of the tag
+        $gt_pos = strpos($this->doc, '>', $this->position);
+        if ($gt_pos === false) {
+            $this->addError("Unclosed tag '{$element['tag']}'.");
+            $this->position = $this->doc_length; // Consume rest of document
+            $element['self_closing'] = false;
+            $this->dom_array[] = $element;
+            return ['name' => $element['tag'], 'self_closing' => false];
+        }
+
+        // Check for XML-style self-closing tags like <br />
+        if (!$is_closing_tag_char) {
+            $before_gt_segment = substr($this->doc, $this->position, $gt_pos - $this->position);
+            $trimmed_before_gt = rtrim($before_gt_segment);
+
+            // CHANGE 3: Use substr() for a cleaner, more modern check.
+            if (substr($trimmed_before_gt, -1) === '/') {
+                $self_closing = true;
+            }
+        }
+        
+        $element['self_closing'] = $self_closing;
+        $this->dom_array[] = $element;
+        $this->position = $gt_pos + 1;
+
+        return ['name' => $element['tag'], 'self_closing' => $self_closing];
+    }
+
+    private function parseTagName(): ?string
+    {
+        $name_len = strspn(
+            $this->doc,
+            'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_:.-',
+            $this->position
+        );
+
+        if ($name_len === 0) {
+            return null;
+        }
+
+        $name = substr($this->doc, $this->position, $name_len);
+        $this->position += $name_len;        
+       
+        return strtolower($name);
+    }
+
+    /** @return array<string, string|null> */
+    private function parseAttributes(): array
+    {
+        $attributes = [];
+        // This regex finds attributes one by one, from the current position.
+        $pattern = '/
+            \G             # Anchor to the current position in the string
+            \s+            # Require at least one space before an attribute
+            (?!/?>)        # Negative lookahead: ensure we are not at the end of the tag (/> or >)
+            ([^\s=<>\/]+)  # Capture group 1: The attribute name
+            (?:            # Optional group for the value part
+                \s*=\s*    # The equals sign, with optional whitespace
+                (?:
+                    "([^"]*)"  # Capture group 2: Double-quoted value
+                    |          # OR
+                    \'([^\']*)\'  # Capture group 3: Single-quoted value
+                    |          # OR
+                    ([^\s"\'=<>`]+) # Capture group 4: Unquoted value
+                )
+            )?             # The entire value part is optional (for boolean attributes)
+        /ix'; // Case-insensitive and extended mode
+
+        while (preg_match($pattern, $this->doc, $matches, PREG_OFFSET_CAPTURE, $this->position)) {
+            $name = strtolower($matches[1][0]);
+
+            $value = $matches[2][0] ?? $matches[3][0] ?? $matches[4][0] ?? null;
+
+            if (!isset($attributes[$name])) {
+                 $attributes[$name] = $value !== null ?
+                    htmlspecialchars_decode($value, ENT_QUOTES) :
+                    null; // Store null for boolean attributes like 'disabled'
+            }
+
+            $this->position = $matches[0][1] + strlen($matches[0][0]);
+        }
+        return $attributes;
+    }
+
+    private function handleSpecialContent(string $tag_name_from_parser): void
+    {        
+        if (!in_array($tag_name_from_parser, ['script', 'style'])) {
+            return;
+        }
+
+        $content_start_pos = $this->position;
+        // Use the already-lowercased tag name
+        $end_tag_to_find = "</{$tag_name_from_parser}>";
+
+        $remaining_doc_part = substr($this->doc, $content_start_pos);
+        if ($remaining_doc_part === false || $remaining_doc_part === '') {
+            $this->addError("Unclosed special tag '<{$tag_name_from_parser}>'.");
+            return;
+        }
+
+        // IMPORTANT: This logic correctly handles cases like `var x = "</script>";` inside a script tag.
+        // It temporarily escapes certain sequences to prevent a premature match.
+        $escaped_remaining_part = str_replace(
+            ['\\\\', '\\\'', '\\"', '</'],
+            [$this->mark_double_slash, $this->mark_escaped_single, $this->mark_escaped_double, "<\\/"],
+            $remaining_doc_part
+        );
+
+        $end_tag_pos_in_escaped_part = stripos($escaped_remaining_part, $end_tag_to_find);
+
+        $actual_content = '';
+        if ($end_tag_pos_in_escaped_part === false) {
+            $this->addError("Unclosed special tag '<{$tag_name_from_parser}>'.");
+            // Consume the rest of the document as content of this tag
+            $actual_content = $remaining_doc_part;
+            $this->position = $this->doc_length;
+        } else {
+            
+            $actual_content = substr($remaining_doc_part, 0, $end_tag_pos_in_escaped_part);
+            
+            $this->position = $content_start_pos + strlen($actual_content) + strlen($end_tag_to_find);
+        }
+
+        if ($actual_content !== '') {
+            $this->dom_array[] = $actual_content;
+        }
+    }
 }
