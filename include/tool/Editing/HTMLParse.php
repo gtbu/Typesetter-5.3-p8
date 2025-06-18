@@ -9,6 +9,10 @@ defined('is_running') or die('Not an entry point...');
  */
 class HTMLParse
 {
+	const VOID_ELEMENTS = [
+    'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
+    'link', 'meta', 'param', 'source', 'track', 'wbr'
+    ];
     public string $doc = '';
     public array $dom_array = [];
     public array $errors = [];
@@ -115,7 +119,7 @@ class HTMLParse
     }
 
     /** @return ?array{name: string, self_closing: bool} */
-    private function parseTag(): ?array
+       private function parseTag(): ?array
     {
         $original_tag_start_pos = $this->position;
         $this->position++; // Skip '<'
@@ -161,19 +165,24 @@ class HTMLParse
             $before_gt_segment = substr($this->doc, $this->position, $gt_pos - $this->position);
             $trimmed_before_gt = rtrim($before_gt_segment);
 
-            // CHANGE 3: Use substr() for a cleaner, more modern check.
             if (substr($trimmed_before_gt, -1) === '/') {
                 $self_closing = true;
             }
         }
-        
+
+        // **THE FIX IS HERE**
+        // Ensure HTML5 void elements are always treated as self-closing.
+        if (!$is_closing_tag_char && in_array($tag_name, self::VOID_ELEMENTS)) {
+            $self_closing = true;
+        }
+
         $element['self_closing'] = $self_closing;
         $this->dom_array[] = $element;
         $this->position = $gt_pos + 1;
 
         return ['name' => $element['tag'], 'self_closing' => $self_closing];
     }
-
+	
     private function parseTagName(): ?string
     {
         $name_len = strspn(
@@ -193,15 +202,16 @@ class HTMLParse
     }
 
     /** @return array<string, string|null> */
-    private function parseAttributes(): array
+      private function parseAttributes(): array
     {
         $attributes = [];
-        // This regex finds attributes one by one, from the current position.
-        $pattern = '/
+        // This regex finds attributes one by one.
+        // NOTE: We use ~ as the delimiter to avoid escaping forward slashes /.
+        $pattern = '~
             \G             # Anchor to the current position in the string
             \s+            # Require at least one space before an attribute
             (?!/?>)        # Negative lookahead: ensure we are not at the end of the tag (/> or >)
-            ([^\s=<>\/]+)  # Capture group 1: The attribute name
+            ([^\s=<>/]+)   # Capture group 1: The attribute name (no escape needed for /)
             (?:            # Optional group for the value part
                 \s*=\s*    # The equals sign, with optional whitespace
                 (?:
@@ -212,7 +222,7 @@ class HTMLParse
                     ([^\s"\'=<>`]+) # Capture group 4: Unquoted value
                 )
             )?             # The entire value part is optional (for boolean attributes)
-        /ix'; // Case-insensitive and extended mode
+        ~ix'; // Case-insensitive, extended mode, and ~ as delimiter
 
         while (preg_match($pattern, $this->doc, $matches, PREG_OFFSET_CAPTURE, $this->position)) {
             $name = strtolower($matches[1][0]);
