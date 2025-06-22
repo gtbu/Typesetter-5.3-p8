@@ -4,8 +4,11 @@
  */
 class Less_Visitor_extendFinder extends Less_Visitor {
 
+	/** @var Less_Tree_Selector[] */
 	public $contexts = [];
+	/** @var Less_Tree_Extend[][] */
 	public $allExtendsStack;
+	/** @var bool */
 	public $foundExtends;
 
 	public function __construct() {
@@ -23,7 +26,7 @@ class Less_Visitor_extendFinder extends Less_Visitor {
 		return $root;
 	}
 
-	public function visitRule( $ruleNode, &$visitDeeper ) {
+	public function visitDeclaration( $declNode, &$visitDeeper ) {
 		$visitDeeper = false;
 	}
 
@@ -80,7 +83,7 @@ class Less_Visitor_extendFinder extends Less_Visitor {
 	}
 
 	public function visitRulesetOut( $rulesetNode ) {
-		if ( !is_object( $rulesetNode ) || !$rulesetNode->root ) {
+		if ( !$rulesetNode instanceof Less_Tree_Ruleset || !$rulesetNode->root ) {
 			array_pop( $this->contexts );
 		}
 	}
@@ -94,12 +97,12 @@ class Less_Visitor_extendFinder extends Less_Visitor {
 		array_pop( $this->allExtendsStack );
 	}
 
-	public function visitDirective( $directiveNode ) {
-		$directiveNode->allExtends = [];
-		$this->allExtendsStack[] =& $directiveNode->allExtends;
+	public function visitAtRule( $atRuleNode ) {
+		$atRuleNode->allExtends = [];
+		$this->allExtendsStack[] =& $atRuleNode->allExtends;
 	}
 
-	public function visitDirectiveOut() {
+	public function visitAtRuleOut() {
 		array_pop( $this->allExtendsStack );
 	}
 }

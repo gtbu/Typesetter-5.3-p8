@@ -3,16 +3,27 @@
  * @private
  */
 class Less_Tree_Mixin_Definition extends Less_Tree_Ruleset {
+	/** @var string */
 	public $name;
+	/** @var Less_Tree_Selector[] */
 	public $selectors;
+	/** @var array[] */
 	public $params;
+	/** @var int */
 	public $arity = 0;
+	/** @var Less_Tree[] */
 	public $rules;
-	public $lookups		= [];
-	public $required	= 0;
-	public $frames		= [];
+	/** @var array[][] */
+	public $lookups = [];
+	/** @var int */
+	public $required = 0;
+	/** @var array */
+	public $frames = [];
+	/** @var Less_Tree_Condition|null */
 	public $condition;
+	/** @var bool */
 	public $variadic;
+	/** @var array<string,true> */
 	public $optionalParameters = [];
 
 	public function __construct( $name, $params, $rules, $condition, $variadic = false, $frames = [] ) {
@@ -60,7 +71,7 @@ class Less_Tree_Mixin_Definition extends Less_Tree_Ruleset {
 					foreach ( $params as $j => $param ) {
 						if ( !isset( $evaldArguments[$j] ) && $arg['name'] === $param['name'] ) {
 							$evaldArguments[$j] = $arg['value']->compile( $env );
-							array_unshift( $frame->rules, new Less_Tree_Rule( $arg['name'], $arg['value']->compile( $env ) ) );
+							array_unshift( $frame->rules, new Less_Tree_Declaration( $arg['name'], $arg['value']->compile( $env ) ) );
 							$isNamedFound = true;
 							break;
 						}
@@ -92,12 +103,17 @@ class Less_Tree_Mixin_Definition extends Less_Tree_Ruleset {
 						$varargs[] = $args[$j]['value']->compile( $env );
 					}
 					$expression = new Less_Tree_Expression( $varargs );
-					array_unshift( $frame->rules, new Less_Tree_Rule( $name, $expression->compile( $env ) ) );
+					array_unshift( $frame->rules, new Less_Tree_Declaration( $name, $expression->compile( $env ) ) );
 				} else {
 					$val = ( $arg && $arg['value'] ) ? $arg['value'] : false;
 
 					if ( $val ) {
-						$val = $val->compile( $env );
+						// This was a mixin call, pass in a detached ruleset of it's eval'd rules
+						if ( is_array( $val ) ) {
+							$val = new Less_Tree_DetachedRuleset( new Less_Tree_Ruleset( null, $val ) );
+						} else {
+							$val = $val->compile( $env );
+						}
 					} elseif ( isset( $param['value'] ) ) {
 
 						if ( !$mixinEnv ) {
@@ -110,7 +126,7 @@ class Less_Tree_Mixin_Definition extends Less_Tree_Ruleset {
 						throw new Less_Exception_Compiler( "Wrong number of arguments for " . $this->name . " (" . $argsLength . ' for ' . $this->arity . ")" );
 					}
 
-					array_unshift( $frame->rules, new Less_Tree_Rule( $name, $val ) );
+					array_unshift( $frame->rules, new Less_Tree_Declaration( $name, $val ) );
 					$evaldArguments[$i] = $val;
 				}
 			}
@@ -156,7 +172,7 @@ class Less_Tree_Mixin_Definition extends Less_Tree_Ruleset {
 		$frame = $this->compileParams( $env, $mixinFrames, $args, $_arguments );
 
 		$ex = new Less_Tree_Expression( $_arguments );
-		array_unshift( $frame->rules, new Less_Tree_Rule( '@arguments', $ex->compile( $env ) ) );
+		array_unshift( $frame->rules, new Less_Tree_Declaration( '@arguments', $ex->compile( $env ) ) );
 
 		$ruleset = new Less_Tree_Ruleset( null, $this->rules );
 		$ruleset->originalRuleset = $this->ruleset_id;
@@ -185,7 +201,7 @@ class Less_Tree_Mixin_Definition extends Less_Tree_Ruleset {
 
 		// set array to prevent error on array_merge
 		if ( !is_array( $this->frames ) ) {
-			 $this->frames = [];
+			$this->frames = [];
 		}
 
 		$frame = $this->compileParams( $env, array_merge( $this->frames, $env->frames ), $args );
@@ -205,7 +221,7 @@ class Less_Tree_Mixin_Definition extends Less_Tree_Ruleset {
 	public function makeImportant() {
 		$important_rules = [];
 		foreach ( $this->rules as $rule ) {
-			if ( $rule instanceof Less_Tree_Rule || $rule instanceof self || $rule instanceof Less_Tree_NameValue ) {
+			if ( $rule instanceof Less_Tree_Declaration || $rule instanceof self || $rule instanceof Less_Tree_NameValue ) {
 				$important_rules[] = $rule->makeImportant();
 			} else {
 				$important_rules[] = $rule;

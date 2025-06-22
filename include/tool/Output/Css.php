@@ -272,8 +272,10 @@ class Css{
 		$parser->SetImportDirs($import_dirs);
 
 		/* $parser->cache_method = 'php'; */
-		$parser::$options['cache_method'] == 'php'; 
-		$parser->SetCacheDir($dataDir . '/data/_cache');
+		\Less_Parser::$options['cache_method'] = 'php';
+
+		// $parser->SetCacheDir($dataDir . '/data/_cache');  		
+		\Less_Cache::SetCacheDir( $dataDir . '/data/_cache' );
 
 		// combine files
  		try{
@@ -306,7 +308,7 @@ class Css{
 			gc_collect_cycles();
 		}
 
-		$less_files = $parser->allParsedFiles();
+		$less_files = $parser->getParsedFiles();
 		return [$compiled, $temp_sourcemap_name];
 	}
 

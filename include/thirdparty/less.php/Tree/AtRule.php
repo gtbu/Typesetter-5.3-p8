@@ -1,20 +1,38 @@
 <?php
 /**
  * @private
- * @see less-2.5.3.js#Anonymous.prototype
+ * @see less-3.13.1.js#AtRule.prototype
  */
-class Less_Tree_Directive extends Less_Tree implements Less_Tree_HasValueProperty {
+class Less_Tree_AtRule extends Less_Tree implements Less_Tree_HasValueProperty {
+	/** @var string */
 	public $name;
+	/** @var Less_Tree|null */
 	public $value;
+	/** @var Less_Tree_Ruleset[]|null */
 	public $rules;
+	/** @var int|null */
 	public $index;
+	/** @var bool */
 	public $isReferenced;
+	/** @var bool */
 	public $isRooted;
+	/** @var array|null */
 	public $currentFileInfo;
+	/** @var mixed|null */
 	public $debugInfo;
 
-	public function __construct( $name, $value = null, $rules = null, $index = null, $isRooted = false, $currentFileInfo = null, $debugInfo = null, $isReferenced = false ) {
+	public function __construct(
+		$name,
+		$value = null,
+		$rules = null,
+		$index = null,
+		$isRooted = false,
+		$currentFileInfo = null,
+		$debugInfo = null,
+		$isReferenced = false
+	) {
 		$this->name = $name;
+		// TODO: Less.js 3.13 handles `$value instanceof Less_Tree` and creates Anonymous here.
 		$this->value = $value;
 
 		if ( $rules !== null ) {
@@ -28,6 +46,7 @@ class Less_Tree_Directive extends Less_Tree implements Less_Tree_HasValuePropert
 			foreach ( $this->rules as $rule ) {
 				$rule->allowImports = true;
 			}
+			// TODO: Less.js 3.13 handles setParent() here
 		}
 
 		$this->index = $index;
@@ -106,10 +125,17 @@ class Less_Tree_Directive extends Less_Tree implements Less_Tree_HasValuePropert
 	}
 
 	public function find( $selector ) {
+		// TODO: Less.js 3.13.1 adds multiple variadic arguments here
 		if ( $this->rules ) {
 			return $this->rules[0]->find( $selector, $this );
 		}
 	}
+
+	// TODO: Implement less-3.13.1.js#AtRule.prototype.rulesets
+	// Unused?
+
+	// TODO: Implement less-3.13.1.js#AtRule.prototype.outputRuleset
+	// We have ours in Less_Tree::outputRuleset instead.
 
 	public function markReferenced() {
 		$this->isReferenced = true;
