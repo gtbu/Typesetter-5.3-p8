@@ -425,7 +425,7 @@ class Addons extends \gp\admin\Addon\Install{
 
 	public function Instructions(){
 		echo '<hr/>';
-		echo '<a href="' . \CMS_DOMAIN . '/Docs/Plugins">Plugin Documentation</a>';
+		echo '<a href="' . \CMS_DOMAIN . '/Typesetter5.2/wiki/Plugins">Plugin Documentation</a>';
 	}
 
 
