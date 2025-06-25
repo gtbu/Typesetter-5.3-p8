@@ -10,29 +10,14 @@ class Upgrade{
 	function __construct(){
 		global $config;
 
-
-		if( version_compare($config['gpversion'],'1.6','<') ){
-			die('Please upgrade to version 1.6, then 1.7 before upgrading to this version. You current version is '.$config['gpversion']);
-		}
-
-		if( version_compare($config['gpversion'],'1.7a2','<') ){
-			die('Please upgrade to version 1.7 before upgrading to this version. You current version is '.$config['gpversion']);
-		}
-
-		if( version_compare($config['gpversion'],'1.8a1','<') ){
-			die('Please upgrade to version 2.0 before upgrading to this version. You current version is '.$config['gpversion']);
-		}
-
 		if( version_compare($config['gpversion'],'2.3.4','<') ){
 			$this->Upgrade_234();
 		}
-
 	}
-
 
 	/**
 	 * Update the gp_index, gp_titles and menus so that special pages can be renamed
-	 *
+	 * not for gpeasy 2.3.4 - superflous
 	 */
 	function Upgrade_234(){
 		global $gp_index, $gp_titles, $gp_menu, $config, $dataDir;
@@ -63,7 +48,7 @@ class Upgrade{
 			return;
 		}
 
-		$config['gpversion'] = '2.3.4';
+		$config['gpversion'] = '5.2.1';
 		\gp\admin\Tools::SaveConfig();
 
 

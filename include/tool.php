@@ -1,11 +1,10 @@
 <?php
 
-
 namespace gp{
-
+	
 use intltime;
 use function \intltime\strftime;
-
+  
 	defined('is_running') or die('Not an entry point...');
 
 	class tool{
@@ -1116,7 +1115,7 @@ use function \intltime\strftime;
 			self::GetLangFile();
 			self::GetPagesPHP();
 
-			//upgrade?
+			//upgrade? - now superflous 5.x!
 			if( version_compare($config['gpversion'], '2.3.4', '<') ){
 				new \gp\tool\Upgrade();
 			}
@@ -1350,22 +1349,22 @@ use function \intltime\strftime;
 		 * @param int $len length of string to return
 		 * @param bool $cases Whether or not to use upper and lowercase characters
 		 */
-		public static function RandomString($len = 40, $cases = true)
+		public static function RandomString(int $len = 40, bool $cases = true): string
         {
-        $string = 'abcdefghijklmnopqrstuvwxyz1234567890';
-        if ($cases) {
-        $string .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        }
+         $alphabet = 'abcdefghijklmnopqrstuvwxyz1234567890';
+          if ($cases) {
+          $alphabet .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          }
 
-        $result = '';
-        $max = strlen($string) - 1;
+         $alphabetLength = strlen($alphabet);
+         $result = '';
 
-        for ($i = 0; $i < $len; $i++) {
-        // random_int is cryptographically secure
-        $result .= $string[random_int(0, $max)];
-        }
+         for ($i = 0; $i < $len; $i++) {
+         $index = random_int(0, $alphabetLength - 1);
+         $result .= $alphabet[$index];
+         }
 
-        return $result;
+         return $result;
         }
 
 
