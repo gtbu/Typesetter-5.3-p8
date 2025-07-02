@@ -463,6 +463,12 @@ class Available extends \gp\admin\Layout{
 							'cmd=newlayout&theme=' . rawurlencode($theme),
 							['data-cmd' => 'gpabox', 'class' => 'add_layout']
 						);
+						
+		echo			\gp\tool::Link(
+							'Admin_Theme_Content/Available',
+							'&#171; ' . $langmessage['message']	. ': Wait up to a minute'
+                        );
+						
 		echo		'</div>';
 
 		echo		'<div class="separator"></div>';
