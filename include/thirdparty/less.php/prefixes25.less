@@ -1,0 +1,186 @@
+// Universal Prefixes for LESS - 2025 Edition
+//
+// This file provides a manual alternative to Autoprefixer. 
+// It uses parts of https://github.com/JoelSutherland/LESS-Prefixer   MIT license and of older Bootstrap 3.2 - vendor prefixes
+// It has been updated to remove obsolete prefixes and focuses on those still relevant
+// for modern browser support, primarily `-webkit-` for Safari and iOS.
+// It's recommended to always include the standard, unprefixed property last. [7]
+// 
+//---------------------------------------------------
+// TABLE OF CONTENTS
+//---------------------------------------------------
+//  .animation()
+//  .appearance()
+//  .backface-visibility()
+//  .box-shadow() - (No prefixes needed)
+//  .box-sizing() - (No prefixes needed)
+//  .columns()
+//  .filter()
+//  .flex-block() / .flex-inline() & Flexbox properties
+//  .hyphens()
+//  .keyframes()
+//  .linear-gradient()
+//  .placeholder()
+//  .transform() & related properties
+//  .transition() & related properties
+//  .user-select()
+//---------------------------------------------------
+
+// Animation
+// `-webkit-` is still useful for full compatibility in some scenarios. [5]
+.animation(@animation) {
+  -webkit-animation: @animation;
+          animation: @animation;
+}
+
+.animation-name(@name) {
+  -webkit-animation-name: @name;
+          animation-name: @name;
+}
+
+.animation-duration(@duration) {
+  -webkit-animation-duration: @duration;
+          animation-duration: @duration;
+}
+
+.animation-timing-function(@timing-function) {
+  -webkit-animation-timing-function: @timing-function;
+          animation-timing-function: @timing-function;
+}
+
+// Appearance
+// Used to style form controls. `-webkit-` and `-moz-` are still required.
+.appearance(@appearance) {
+  -webkit-appearance: @appearance;
+     -moz-appearance: @appearance;
+          appearance: @appearance;
+}
+
+// Backface Visibility
+// Prevents flickering in 3D transforms. `-webkit-` is the primary prefix needed.
+.backface-visibility(@visibility) {
+  -webkit-backface-visibility: @visibility;
+          backface-visibility: @visibility;
+}
+
+// Box Shadow
+// Prefixes are no longer needed for modern browsers. [11]
+.box-shadow(@shadow) {
+  box-shadow: @shadow;
+}
+
+// Box Sizing
+// Fully supported in modern browsers without prefixes.
+.box-sizing(@boxmodel) {
+  box-sizing: @boxmodel;
+}
+
+// CSS Columns
+// `-webkit-` and `-moz-` can still be useful for full compatibility. [2]
+.content-columns(@column-count; @column-gap: 20px) {
+  -webkit-column-count: @column-count;
+     -moz-column-count: @column-count;
+          column-count: @column-count;
+  -webkit-column-gap: @column-gap;
+     -moz-column-gap: @column-gap;
+          column-gap: @column-gap;
+}
+
+// Filter
+// `-webkit-` is still necessary for some filter functions in Safari.
+.filter(@filter) {
+  -webkit-filter: @filter;
+          filter: @filter;
+}
+
+// Flexbox
+// The core properties are well-supported, but `-webkit-` can help with older Safari versions.
+.flex-block() {
+  display: -webkit-flex;
+  display: flex;
+}
+
+.flex-inline() {
+  display: -webkit-inline-flex;
+  display: inline-flex;
+}
+
+.flex-direction(@direction: row) {
+  -webkit-flex-direction: @direction;
+          flex-direction: @direction;
+}
+
+.justify-content(@justify) {
+  -webkit-justify-content: @justify;
+          justify-content: @justify;
+}
+
+.align-items(@align) {
+  -webkit-align-items: @align;
+          align-items: @align;
+}
+
+.flex-grow(@grow: 1) {
+  -webkit-flex-grow: @grow;
+          flex-grow: @grow;
+}
+
+// Hyphens
+// Useful for controlling text wrapping.
+.hyphens(@mode: auto) {
+  -webkit-hyphens: @mode;
+     -moz-hyphens: @mode;
+          hyphens: @mode;
+}
+
+// Keyframes
+// Requires `-webkit-` prefix for full compatibility.
+.keyframes(@name; @args) {
+  @-webkit-keyframes @name { @args(); }
+          @keyframes @name { @args(); }
+}
+
+// Gradients
+// Standard syntax is well-supported, but `-webkit-` can be a fallback.
+.linear-gradient(@direction; @start-color; @end-color) {
+  background-color: @end-color; // Fallback
+  background-image: -webkit-linear-gradient(@direction, @start-color, @end-color);
+  background-image: linear-gradient(@direction, @start-color, @end-color);
+}
+
+// Placeholder Text
+// The nested selector approach remains the standard way to style placeholders.
+.placeholder(@color: #aaa) {
+  &::-webkit-input-placeholder { color: @color; }
+  &::-moz-placeholder          { color: @color; opacity: 1; } // Firefox 19+
+  &:-ms-input-placeholder      { color: @color; } // IE 10+
+  &::-ms-input-placeholder     { color: @color; } // Edge
+  &::placeholder               { color: @color; }
+}
+
+// Transformations
+// `-webkit-` is the only prefix with some remaining relevance for transforms.
+.transform(@transform) {
+  -webkit-transform: @transform;
+          transform: @transform;
+}
+
+.transform-origin(@origin) {
+  -webkit-transform-origin: @origin;
+          transform-origin: @origin;
+}
+
+// Transitions
+// `-webkit-` is still useful for ensuring smooth transitions across all browsers.
+.transition(@transition) {
+  -webkit-transition: @transition;
+          transition: @transition;
+}
+
+// User Select
+// Prevents text selection. Prefixes are still necessary for full support.
+.user-select(@select) {
+  -webkit-user-select: @select;
+     -moz-user-select: @select;
+          user-select: @select;
+}
