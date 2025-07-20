@@ -57,8 +57,10 @@ class Port{
 		$this->export_dir		= $dataDir.'/data/_exports';
 		$this->temp_dir			= $dataDir.'/data/_temp';
 
-		// @set_time_limit(90);
+	    // @set_time_limit(90);
+		@set_time_limit(180);
 		// @ini_set('memory_limit','64M');
+	    @ini_set('memory_limit','256M');
 
 		$this->Init();
 		$this->SetExported();
