@@ -13,6 +13,8 @@ set_error_handler('showError');
 
 require_once('thirdparty/time/strftime.php');
 
+require_once('thirdparty/polyfills/bootstrap.php');
+
 require_once('tool.php');
 
 gp_defined('gp_restrict_uploads',		false);
