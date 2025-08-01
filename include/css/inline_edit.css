@@ -166,7 +166,7 @@ html {
  *
  */
 #ckeditor_area {
-	padding: 3px 3px 0 3px;
+	padding: 1px 1px 0 1px;
 	overflow: auto;
 	box-sizing: border-box;
 }

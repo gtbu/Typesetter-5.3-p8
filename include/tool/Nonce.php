@@ -86,12 +86,6 @@ class Nonce{
 		$nonce_tick		= ceil(time() / $factor) - $tick_offset;
 		$nonce			= $nonce . $config['gpuniq'] . $nonce_tick;
 
-
-		//nonces before version 5.0
-		if( gp_nonce_algo === 'legacy' ){
-			return substr( md5($nonce), -12, 10);
-		}
-
 		return \gp\tool::hash($nonce,gp_nonce_algo, 2);
 	}
 }

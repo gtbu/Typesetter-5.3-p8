@@ -22,7 +22,7 @@ gp_defined('gpdebugjs',					gpdebug);
 gp_defined('gp_cookie_cmd',				true);
 gp_defined('gp_browser_auth',			false);
 gp_defined('gp_require_encrypt',		false);
-gp_defined('gp_nonce_algo',				'legacy');	// Since 5.0
+gp_defined('gp_nonce_algo',				'sha512');	// Since 5.0
 gp_defined('gp_chmod_file',				0666);
 gp_defined('gp_chmod_dir',				0755);
 gp_defined('gp_index_filenames',		true);
