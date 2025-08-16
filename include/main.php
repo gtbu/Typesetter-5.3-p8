@@ -49,7 +49,7 @@ if (session_status() == PHP_SESSION_NONE) {
             error_log("session_start() FAILED.");
 			die("Session could not be started.");
         } else {
-            error_log("session_start() SUCCEEDED. Session ID: " . session_id());
+            error_log("session_start() SUCCEEDED ");
         }
     }
 
