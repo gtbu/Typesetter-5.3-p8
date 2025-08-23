@@ -21,16 +21,17 @@ class Login extends \gp\Page{
 		$_REQUEST['gpreq']		= 'admin';
 
 		$this->head .= "\n".'<meta name="robots" content="noindex,nofollow" />';
-		@header( 'X-Frame-Options: SAMEORIGIN' );
+		header( 'X-Frame-Options: SAMEORIGIN' );
 	}
 
 	public function RunScript(){}
 
-	public function GetGpxContent(){
-
+	public function GetGpxContent(){		
+		
+		// https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js
+		$this->head_js[] = '/include/thirdparty/js/crypto-js.min.js'; 		
+				
 		$this->head_js[] = '/include/js/login.js';
-		$this->head_js[] = '/include/js/md5_sha.js';
-		$this->head_js[] = '/include/thirdparty/js/jsSHA.js';
 
 		$this->css_admin[] = '/include/css/login.css';
 		$_POST += array('username'=>'');
