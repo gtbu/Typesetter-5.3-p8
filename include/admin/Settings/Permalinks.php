@@ -739,4 +739,22 @@ RewriteRule .* - [F]
 		}
 		return false;
 	}
+	
+	/**
+	 * Determine if installed on an Nginx Server
+	 *
+	 */
+	
+	public static function Nginx(){
+
+    if (!isset($_SERVER['SERVER_SOFTWARE'])) {
+        return false;
+    }
+
+    if (stripos($_SERVER['SERVER_SOFTWARE'], 'nginx') !== false) {
+        return true;
+    }
+        return false;
+    }
+	
 }

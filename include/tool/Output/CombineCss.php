@@ -239,14 +239,14 @@ class CombineCSS {
     $combined_path = $source_dir . '/' . $path_only;
     $reduced_path = $this->reducePath($this->normalizePath($combined_path));
 
-    error_log("--- resolvePath Check ---");
-    error_log("Relative URL: " . $relative_url);
-    error_log("Source Dir: " . $source_dir);
-    error_log("Reduced FS Path: " . $reduced_path);
-    error_log("DataDir Norm: " . $this->dataDir_norm);
+    // error_log("--- resolvePath Check ---");
+    // error_log("Relative URL: " . $relative_url);
+    // error_log("Source Dir: " . $source_dir);
+    // error_log("Reduced FS Path: " . $reduced_path);
+    // error_log("DataDir Norm: " . $this->dataDir_norm);
 
     $starts_with_check = (stripos($reduced_path, $this->dataDir_norm) === 0);
-    error_log("Does Reduced start w/ DataDir (Case-Insensitive)? " . ($starts_with_check ? 'YES' : 'NO'));
+    // error_log("Does Reduced start w/ DataDir (Case-Insensitive)? " . ($starts_with_check ? 'YES' : 'NO'));
 
     if ($starts_with_check) {
         // Get path part after dataDir
@@ -259,12 +259,12 @@ class CombineCSS {
         $final_web_path = rtrim($base_url, '/') . '/' . ltrim($path_relative_to_datadir, '/');
         // --- End Modification ---
 
-        error_log("Resolved Web Path (Using Base Path): " . $final_web_path . $query_fragment);
+        // error_log("Resolved Web Path (Using Base Path): " . $final_web_path . $query_fragment);
         return $final_web_path . $query_fragment;
     } else {
         // ... (existing trigger_error code) ...
         $fallback_path = $path_only;
-        error_log("Resolved Fallback Path (Outside dataDir): " . $fallback_path . $query_fragment);
+        //error_log("Resolved Fallback Path (Outside dataDir): " . $fallback_path . $query_fragment);
         return $fallback_path . $query_fragment;
     }
 }
