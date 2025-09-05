@@ -44,6 +44,7 @@ class Installer{
 		$this->CheckPHPVersion();
 		$this->CheckEnv();
 		$this->CheckMemory();
+		$this->CheckIntl();
 		$this->CheckImages();
 		$this->CheckArchives();
 		$this->CheckPath();
@@ -342,12 +343,37 @@ class Installer{
 	}
 
 
-	/**
+	 /**
+	 * Check for intl functions
+	 *
+	 */
+	public function CheckIntl(){
+		global $langmessage;
+
+		$checking = '<a href="https://www.php.net/manual/en/book.intl.php" target="_blank">Internationalization (intl)</a>';
+		if( extension_loaded('intl') ){
+			$this->SetStatus($checking, 2, 'Installed');
+		}else{
+			$this->SetStatus($checking, 0, 'Not Installed', 'Required');
+		}
+	}
+	
+
+    /**
 	 * Check for image manipulation functions
 	 *
 	 */
 	public function CheckImages(){
 		global $langmessage;
+
+		// Check for GD Extension
+		$checking = '<a href="https://www.php.net/manual/en/book.image.php" target="_blank">GD Library</a>';
+		if( !extension_loaded('gd') ){
+			$this->SetStatus($checking, 0, 'Not Installed', 'Required');
+			return;
+		}
+		$this->SetStatus($checking, 2, 'Installed');
+
 
 		$supported = array();
 		if( function_exists('imagetypes') ){
@@ -369,7 +395,6 @@ class Installer{
 				$supported[] = 'webp';
 			}
 		}
-
 
 
 		$checking				= '<a href="https://www.php.net/manual/en/book.image.php" target="_blank">'.$langmessage['image_functions'].'</a>';
@@ -477,7 +502,7 @@ class Installer{
 
 
 		// (1)
-		$modDir = ftp_site($this->ftp_connection, 'CHMOD 0777 '. $this->ftp_root );
+		$modDir = $this->setSecurePermissionsFtp($this->ftp_connection, $this->ftp_root);
 		if( !$modDir ){
 			echo '<li><span class="failed">';
 			echo sprintf($langmessage['Could_Not_'],'<em>CHMOD 0777 '. $this->ftp_root.'</em>');
@@ -789,7 +814,7 @@ class Installer{
 
 		echo '</select>';
 		echo '<div class="sm">';
-		echo '<a href="https://github.com/Typesetter/Typesetter/tree/master/include/languages" target="_blank">Help translate '.\CMS_NAME.'</a>';
+		echo '<a href="https://github.com/gtbu/Typesetter-5.3-p8/tree/main/include/languages" target="_blank">Help translate '.\CMS_NAME.'</a>';
 		echo '</div>';
 
 		echo '</form>';
@@ -846,6 +871,58 @@ class Installer{
 
 		return $success;
 	}
+
+     
+   /**
+	 * Iteratively and robustly sets secure file permissions via FTP (not sftp).
+	 * ROBUST against inconsistent FTP server path outputs (basename).
+	 * @param resource $conn The active FTP connection resource.
+	 * @param string $path The starting path to process.
+	 * @return bool True on success, false on failure.
+	 */
+	private function setSecurePermissionsFtp($conn, $path){
+		$dirs_to_process = [];
+		$dirs_to_process[] = rtrim($path, '/');
+
+		while( !empty($dirs_to_process) ){
+			set_time_limit(30); // Prevent timeouts
+
+			$current_dir = array_pop($dirs_to_process);
+
+			// Set permission for the current directory
+			if( @ftp_chmod($conn, 0755, $current_dir) === false ){
+				error_log('[Typesetter Installer] FTP Error: Could not chmod directory to 0755: ' . $current_dir);
+				return false;
+			}
+
+			$contents = ftp_nlist($conn, $current_dir);
+			if( $contents === false ){
+				error_log('[Typesetter Installer] FTP Error: Could not list contents of directory: ' . $current_dir);
+				return false;
+			}
+
+			foreach( $contents as $item ){
+				$base_item = basename($item);
+				if( in_array($base_item, ['.', '..']) ){
+					continue;
+				}
+				$full_path = rtrim($current_dir, '/') . '/' . $base_item;
+
+				if( @ftp_chdir($conn, $full_path) ){
+					ftp_chdir($conn, '..');
+					$dirs_to_process[] = $full_path;
+				} else {
+					if( @ftp_chmod($conn, 0644, $full_path) === false ){
+						error_log('[Typesetter Installer] FTP Error: Could not chmod file to 0644: ' . $full_path);
+						return false;
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
 
 
 }
