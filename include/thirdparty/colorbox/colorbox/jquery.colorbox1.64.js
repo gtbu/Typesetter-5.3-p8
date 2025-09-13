@@ -1,18 +1,8 @@
 /*!
-	Colorbox 1.6.4 - Patched
+	Colorbox 1.6.4
 	license: MIT
 	http://www.jacklmoore.com/colorbox
-	
-	Summary of Changes : github.com/gtbu 9/2025
-    escapeHtml function: Your escapeHtml function is correct and has been retained.
-    title and html: The title and html settings are now sanitized in the prep and load functions respectively, 
-	before being passed to .html().
-    Internationalization Strings: The current, previous, next, and close strings are now sanitized with escapeHtml 
-	before being used to create the UI.
-    Slideshow Controls: The slideshowStart and slideshowStop strings are also sanitized.
-    Error Messages: The imgError and xhrError messages are sanitized to prevent XSS through error conditions.	
 */
-
 (function ($, document, window) {
 	var
 	// Default settings object.
@@ -165,7 +155,7 @@
 	$prev,
 	$close,
 	$groupControls,
-	$events = $({}), // $events = $('<a/>'), - with jQuery 1.4.2
+	$events = $('<a/>'), // $({}) would be prefered, but there is an issue with jQuery 1.4.2
 
 	// Variables for cached values or use across multiple functions
 	settings,
@@ -189,15 +179,6 @@
 	// HELPER FUNCTIONS
 	// ****************
 
-    function escapeHtml(text) {
-      return String(text)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
-	
 	// Convenience function for creating new jQuery objects
 	function $tag(tag, id, css) {
 		var element = document.createElement(tag);
@@ -336,7 +317,7 @@
 
 		function start() {
 			$slideshow
-				.html(escapeHtml(settings.get('slideshowStop')))
+				.html(settings.get('slideshowStop'))
 				.unbind(click)
 				.one(click, stop);
 
@@ -355,7 +336,7 @@
 				.unbind(event_load, clear);
 
 			$slideshow
-				.html(escapeHtml(settings.get('slideshowStart')))
+				.html(settings.get('slideshowStart'))
 				.unbind(click)
 				.one(click, function () {
 					publicMethod.next();
@@ -474,7 +455,7 @@
 			}).show();
 
 			if (settings.get('closeButton')) {
-				$close.html(escapeHtml(settings.get('close'))).appendTo($content);
+				$close.html(settings.get('close')).appendTo($content);
 			} else {
 				$close.appendTo('<div/>'); // replace with .detach() when dropping jQuery < 1.4
 			}
@@ -853,16 +834,16 @@
 			};
 
 
-			$title.html(escapeHtml(settings.get('title'))).show();
+			$title.html(settings.get('title')).show();
 			$loaded.show();
 
 			if (total > 1) { // handle grouping
 				if (typeof settings.get('current') === "string") {
-					$current.html(escapeHtml(settings.get('current')).replace('{current}', index + 1).replace('{total}', total)).show();
+					$current.html(settings.get('current').replace('{current}', index + 1).replace('{total}', total)).show();
 				}
 
-				$next[(settings.get('loop') || index < total - 1) ? "show" : "hide"]().html(escapeHtml(settings.get('next')));
-				$prev[(settings.get('loop') || index) ? "show" : "hide"]().html(escapeHtml(settings.get('previous')));
+				$next[(settings.get('loop') || index < total - 1) ? "show" : "hide"]().html(settings.get('next'));
+				$prev[(settings.get('loop') || index) ? "show" : "hide"]().html(settings.get('previous'));
 
 				slideshow();
 
@@ -984,7 +965,7 @@
 			// to avoid problems with DOM-ready JS that might be trying to run in that iframe.
 			prep(" ");
 		} else if (settings.get('html')) {
-			prep(escapeHtml(settings.get('html')));
+			prep(settings.get('html'));
 		} else if (isImage(settings, href)) {
 
 			href = retinaUrl(settings, href);
@@ -994,14 +975,14 @@
 			$(photo)
 			.addClass(prefix + 'Photo')
 			.bind('error.'+prefix,function () {
-				prep($tag(div, 'Error').html(escapeHtml(settings.get('imgError'))));
+				prep($tag(div, 'Error').html(settings.get('imgError')));
 			})
 			.one('load', function () {
 				if (request !== requests) {
 					return;
 				}
 
-				// A small pause because some browsers will occasionally report a
+				// A small pause because some browsers will occassionaly report a
 				// img.width and img.height of zero immediately after the img.onload fires
 				setTimeout(function(){
 					var percent;
@@ -1049,7 +1030,7 @@
 		} else if (href) {
 			$loadingBay.load(href, settings.get('data'), function (data, status) {
 				if (request === requests) {
-					prep(status === 'error' ? $tag(div, 'Error').html(escapeHtml(settings.get('xhrError'))) : $(this).contents());
+					prep(status === 'error' ? $tag(div, 'Error').html(settings.get('xhrError')) : $(this).contents());
 				}
 			});
 		}

@@ -535,13 +535,13 @@ class Combine{
 			],
 		],
 
-		// Colorbox (1.6.3 MIT)
+		// Colorbox (1.6.4 MIT)
 		'colorbox' => [
 			'file'			=> '/include/thirdparty/colorbox/colorbox/jquery.colorbox.js',
 			'requires'		=> 'gp-main,colorbox-css',
 			'label'			=> 'Colorbox JS',
 			'cdn'			=> [
-				'CloudFlare'	=> 'https://cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.6.3/jquery.colorbox-min.js',
+				'CloudFlare'	=> 'https://cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.6.4/jquery.colorbox-min.js',
 			],
 		],
 
