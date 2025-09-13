@@ -4,7 +4,6 @@
 	http://www.jacklmoore.com/colorbox
 	
 	Summary of Changes : github.com/gtbu 9/2025
-    escapeHtml function: Your escapeHtml function is correct and has been retained.
     title and html: The title and html settings are now sanitized in the prep and load functions respectively, 
 	before being passed to .html().
     Internationalization Strings: The current, previous, next, and close strings are now sanitized with escapeHtml 
@@ -165,8 +164,8 @@
 	$prev,
 	$close,
 	$groupControls,
-	$events = $({}), // $events = $('<a/>'), - with jQuery 1.4.2
-
+	$events = $({}), 
+	
 	// Variables for cached values or use across multiple functions
 	settings,
 	interfaceHeight,
@@ -590,7 +589,6 @@
 					$(document).on('click.'+prefix, '.'+boxElement, clickHandler);
 				} else {
 					// For jQuery 1.3.x -> 1.6.x
-					// This code is never reached in jQuery 1.9, so do not contact me about 'live' being removed.
 					// This is not here for jQuery 1.9, it's here for legacy users.
 					$('.'+boxElement).live('click.'+prefix, clickHandler);
 				}
