@@ -568,7 +568,7 @@ class Users extends \gp\special\Base{
 		echo str_replace(' ','&nbsp;',$langmessage['email_address']);
 		echo '</td><td>';
 		echo '<input type="text" name="email" value="'.htmlspecialchars($values['email']).'" class="gpinput"/>';
-		echo '</td></tr>';
+		echo ' - DMARC compliant address !</td></tr>';
 
 
 		//admin permissions
